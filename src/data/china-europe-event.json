@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "China to Europe 2026 - Scaling Beyond Borders | Jackson & Frank",
+    "description": "China–Europe M&A and cross-border strategic insights. Workforce, compliance, and leadership—presented by local experts. March 18, 2026, The Sukhothai Shanghai.",
+    "path": "/events/china-europe-2026"
+  },
+  "hero": {
+    "title": "China to Europe: Scaling Beyond Borders",
+    "tagline": "China–Europe M&A: Cross-Border Strategic Insights",
+    "subtitle": "Step into the European market and seize global opportunities",
+    "eventTitle": "China to Europe 2026: Scaling Beyond Borders",
+    "eventSubline": "Workforce, compliance, and leadership challenges presented & explained by local experts.",
+    "date": "March 18, 2026",
+    "time": "13:00 – 18:00",
+    "venue": "The Sukhothai Shanghai",
+    "ctaText": "Join Now",
+    "ctaHref": "#register"
+  },
+  "eventBackground": {
+    "title": "Event Background",
+    "paragraphs": [
+      "In recent years, with the rapid growth of China's economy, more Chinese companies are expanding into the international market and accelerating their global expansion.",
+      "The strategy of “going global” is evolving from simple export expansion to deeper international integration, including cross-border mergers and acquisitions, overseas investment, and establishing international operations.",
+      "However, entering the European market also comes with complex challenges such as regulatory compliance, corporate governance, taxation systems, cultural differences, and strategic market positioning.",
+      "Many Chinese companies encounter difficulties in areas such as local regulations, business integration, and operational management when expanding overseas.",
+      "Why should Chinese companies expand into Europe? Europe offers highly developed industrial ecosystems, mature capital markets, and strong legal protection for businesses.",
+      "This seminar is jointly organized by Jackson & Frank, bringing together experts from the fields of law, taxation, and international consulting. Through the three-step strategy framework — PLAN → SETUP → SCALE — we will provide Chinese enterprises with clear strategies and practical guidance for entering the European market.",
+      "On March 18, we will gather leading European experts to help you solve key challenges when expanding into Europe."
+    ],
+    "challenges": [
+      "Regulatory compliance",
+      "Corporate governance",
+      "Taxation systems",
+      "Cultural differences",
+      "Strategic market positioning"
+    ],
+    "frameworkTitle": "Three-step strategy framework",
+    "frameworkSteps": ["PLAN", "SETUP", "SCALE"],
+    "cards": [
+      {
+        "icon": "finance",
+        "title": "Plan",
+        "content": "Define your European market strategy, assess opportunities, and align with local regulatory and commercial requirements."
+      },
+      {
+        "icon": "trade",
+        "title": "Setup",
+        "content": "Establish entities, governance, and operational structures with the support of legal, tax, and HR experts."
+      },
+      {
+        "icon": "strategy",
+        "title": "Scale",
+        "content": "Grow your presence with compliance, talent mobility, and integration best practices for long-term success."
+      }
+    ]
+  },
+  "agenda": [
+    { "time": "13:00 – 13:30", "title": "Registration & Networking", "description": "" },
+    { "time": "13:30 – 14:00", "title": "Welcome Speech", "description": "" },
+    { "time": "14:00 – 14:30", "title": "Strategic Expansion: European M&A Pathways", "description": "Speaker: Pawel Michalkiewicz" },
+    { "time": "14:30 – 14:40", "title": "Networking Break", "description": "" },
+    { "time": "14:40 – 15:00", "title": "Tea Break", "description": "" },
+    { "time": "15:00 – 15:30", "title": "Tax Strategy: Global Expansion & Corporate Development", "description": "Speaker: Paul Halprin" },
+    { "time": "15:30 – 16:00", "title": "Legal Framework: Corporate Governance & Compliance", "description": "Speaker: Martijn van de Hel" },
+    { "time": "16:00 – 16:30", "title": "Market Expansion: European Legal Structures", "description": "Speaker: Xin Shi" },
+    { "time": "16:30 – 17:30", "title": "Expert Panel Discussion", "description": "" },
+    { "time": "17:30 – 18:00", "title": "Networking & Free Discussion", "description": "" }
+  ],
+  "speakers": [
+    {
+      "name": "Pawel Michalkiewicz",
+      "company": "Jackson & Frank",
+      "role": "Founder & Chief Strategy Officer",
+      "bio": "Pawel Michalkiewicz has extensive international market experience and corporate consulting expertise. He previously worked at Randstad, a global leader in HR services. After founding Jackson & Frank, he has helped numerous multinational companies successfully expand into the European market. His expertise focuses on international expansion strategy, talent mobility, and organizational development, helping companies build scalable global operations.",
+      "image": "/speakers/pawel-michalkiewicz.png"
+    },
+    { 
+      "name": "Paul Halprin",
+      "company": "Halprin Law",
+      "role": "Founder",
+      "bio": "Paul Halprin is an experienced international tax lawyer specializing in cross-border taxation and corporate restructuring. Before founding Halprin Law, he worked at DLA Piper, one of the world's largest law firms, advising multinational corporations on international tax matters. Paul has deep expertise in cross-border corporate taxation, international tax planning, and global compliance, and has advised numerous multinational businesses.",
+      "image": "/speakers/paul-halprin.png"
+    },
+    {
+      "name": "Martijn van de Hel",
+      "company": "Maverick Advocate",
+      "role": "Co-Founder",
+      "bio": "Martijn van de Hel is the co-founder of Maverick Advocate and a well-known international lawyer specializing in corporate law, mergers & acquisitions, and cross-border transactions. Previously, he worked at leading international law firms and has advised major global companies on complex cross-border deals. Martijn has been recognized as a “Top 500 Leading Lawyer” and is widely respected for his expertise in international business law.",
+      "image": "/speakers/Martijn-van-de-hel.png"
+    },
+    {
+      "name": "Xin Shi",
+      "company": "Amice Advocaten",
+      "role": "Partner",
+      "bio": "Xin Shi is a partner at Amice Advocaten and focuses on cross-border legal services between China and Europe. He has more than 15 years of legal experience, specializing in helping Chinese enterprises navigate European regulatory systems, legal frameworks, and market entry strategies. Xin Shi has helped many Chinese companies successfully establish and expand their business operations in Europe.",
+      "image": "/speakers/xin-shi.png"
+    }
+  ],
+  "footerCta": {
+    "heading": "Register Now",
+    "subheading": "Scan the QR Code to Register and Secure Your Spot",
+    "registerButtonText": "Register Now",
+    "registerHref": "#register",
+    "speakersButtonText": "Meet the Speakers",
+    "speakersHref": "#speakers",
+    "wechatQrLabel": "Scan to register",
+    "wechatQrImage": "/assets/event.jpeg"
+  }
+}
