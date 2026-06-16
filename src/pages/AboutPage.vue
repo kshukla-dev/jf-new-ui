@@ -36,7 +36,7 @@ const team = [
 ]
 
 const activeMilestone = ref(0)
-let milestoneInterval
+let milestoneInterval: ReturnType<typeof setInterval> | undefined
 
 function nextMilestone() {
   activeMilestone.value = (activeMilestone.value + 1) % milestones.length
@@ -46,7 +46,7 @@ function prevMilestone() {
   activeMilestone.value = (activeMilestone.value - 1 + milestones.length) % milestones.length
 }
 
-function setMilestone(index) {
+function setMilestone(index: number) {
   activeMilestone.value = index
 }
 
