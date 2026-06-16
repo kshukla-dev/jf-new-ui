@@ -1,10 +1,10 @@
-import re
+const fs = require('fs');
 
-with open('d:/J&F/Sanity/jf_vue/src/pages/BlogPage.vue', 'r', encoding='utf-8') as f:
-    content = f.read()
+const path = 'd:/J&F/Sanity/jf_vue/src/pages/BlogPage.vue';
+let content = fs.readFileSync(path, 'utf8');
 
-# 1. Replace the ref/computed section
-old_script = """const blogs = ref<BlogPost[]>([])
+// 1. Replace the ref/computed section
+const old_script = `const blogs = ref<BlogPost[]>([])
 const categories = ref<Category[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
@@ -35,9 +35,9 @@ function blogCategory(b: BlogPost): string {
   const first = (b.category_ids ?? '').split(',')[0]?.trim()
   if (!first) return 'Insights'
   return categoryById.value.get(first) ?? 'Insights'
-}"""
+}`;
 
-new_script = """const blogs = ref<BlogPost[]>([])
+const new_script = `const blogs = ref<BlogPost[]>([])
 const categories = ref<Category[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
@@ -88,15 +88,15 @@ function blogCategory(b: BlogPost): string {
 function getCatId(b: BlogPost): number {
   const first = (b.category_ids ?? '').split(',')[0]?.trim()
   return first ? parseInt(first) : 0
-}"""
+}`;
 
-content = content.replace(old_script, new_script)
+content = content.replace(old_script, new_script);
 
-# 2. Replace Template Section up to Newsletter
-template_start = content.find('  <!-- ============= DARK HERO + FEATURED ============= -->')
-template_end = content.find('  <!-- ============= NEWSLETTER ============= -->')
+// 2. Replace Template Section up to Newsletter
+const template_start = content.indexOf('  <!-- ============= DARK HERO + FEATURED ============= -->');
+const template_end = content.indexOf('  <!-- ============= NEWSLETTER ============= -->');
 
-new_template = """  <!-- ============= CLEAN HERO ============= -->
+const new_template = `  <!-- ============= CLEAN HERO ============= -->
   <header class="blog-clean-hero">
     <div class="container blog-hero-inner">
       <div class="blog-hero-content">
@@ -153,7 +153,7 @@ new_template = """  <!-- ============= CLEAN HERO ============= -->
       <RouterLink
         v-for="post in filteredBlogs"
         :key="post.id"
-        :to="`/blog/${post.slug}`"
+        :to="\`/blog/\${post.slug}\`"
         class="blog-card"
       >
         <div class="blog-card-inner">
@@ -185,15 +185,19 @@ new_template = """  <!-- ============= CLEAN HERO ============= -->
     </div>
   </section>
 
-"""
-if template_start != -1 and template_end != -1:
-    content = content[:template_start] + new_template + content[template_end:]
+`;
 
-# 3. Replace CSS related to the old hero and blog grid
-css_start = content.find('/* ============= DARK HERO ============= */')
-css_end = content.find('/* ============= NEWSLETTER ============= */')
+if (template_start !== -1 && template_end !== -1) {
+    content = content.substring(0, template_start) + new_template + content.substring(template_end);
+} else {
+    console.log("Template markers not found!");
+}
 
-new_css = """/* ============= CLEAN HERO ============= */
+// 3. Replace CSS related to the old hero and blog grid
+const css_start = content.indexOf('/* ============= DARK HERO ============= */');
+const css_end = content.indexOf('/* ============= NEWSLETTER ============= */');
+
+const new_css = `/* ============= CLEAN HERO ============= */
 .blog-clean-hero {
   padding: 120px 0 60px;
   background: var(--bg);
@@ -423,10 +427,13 @@ new_css = """/* ============= CLEAN HERO ============= */
   border: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
-"""
-if css_start != -1 and css_end != -1:
-    content = content[:css_start] + new_css + content[css_end:]
+`;
 
-with open('d:/J&F/Sanity/jf_vue/src/pages/BlogPage.vue', 'w', encoding='utf-8') as f:
-    f.write(content)
-print('Done replacing')
+if (css_start !== -1 && css_end !== -1) {
+    content = content.substring(0, css_start) + new_css + content.substring(css_end);
+} else {
+    console.log("CSS markers not found!");
+}
+
+fs.writeFileSync(path, content, 'utf8');
+console.log("Done");
