@@ -2,7 +2,7 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import navigation from '@/data/navigation.json'
-import { fetchServiceNavigation } from '@/services/navigation'
+// import { fetchServiceNavigation } from '@/services/navigation'
 
 type DropdownKey = 'services' | 'about' | 'insights' | null
 
@@ -79,15 +79,15 @@ onMounted(async () => {
   document.addEventListener('keydown', handleKey)
   
   // Fetch dynamic service navigation from Sanity
-  const sanityNav = await fetchServiceNavigation()
-  if (sanityNav) {
-    if (sanityNav.items && sanityNav.items.length > 0) {
-      services.value = sanityNav.items
-    }
-    if (sanityNav.featuredPreview) {
-      previewMap.value.services = sanityNav.featuredPreview
-    }
-  }
+  // const sanityNav = await fetchServiceNavigation()
+  // if (sanityNav) {
+  //   if (sanityNav.items && sanityNav.items.length > 0) {
+  //     services.value = sanityNav.items
+  //   }
+  //   if (sanityNav.featuredPreview) {
+  //     previewMap.value.services = sanityNav.featuredPreview
+  //   }
+  // }
 })
 
 const currentPreview = computed(() =>
@@ -100,10 +100,10 @@ const currentPreview = computed(() =>
     <div class="container nav-inner">
       <!-- Logo (left) -->
       <RouterLink to="/" class="logo" @click="close">
-        Jackson <em>&amp; Frank</em>
+        Jackson &amp; Frank
       </RouterLink>
 
-      <!-- Center nav (triggers only — the panel is rendered below so it can span full width) -->
+      <!-- Center nav -->
       <div class="nav-links">
         <button
           class="nav-trigger"
@@ -112,19 +112,7 @@ const currentPreview = computed(() =>
           aria-haspopup="true"
           :aria-expanded="openDropdown === 'services'"
         >
-          Services
-          <span class="chev" :class="{ flip: openDropdown === 'services' }">▾</span>
-        </button>
-
-        <button
-          class="nav-trigger"
-          :class="{ active: openDropdown === 'about' }"
-          @click="toggle('about')"
-          aria-haspopup="true"
-          :aria-expanded="openDropdown === 'about'"
-        >
-          About
-          <span class="chev" :class="{ flip: openDropdown === 'about' }">▾</span>
+          Solutions
         </button>
 
         <button
@@ -135,14 +123,27 @@ const currentPreview = computed(() =>
           :aria-expanded="openDropdown === 'insights'"
         >
           Resources
-          <span class="chev" :class="{ flip: openDropdown === 'insights' }">▾</span>
         </button>
+
+        <button
+          class="nav-trigger"
+          :class="{ active: openDropdown === 'about' }"
+          @click="toggle('about')"
+          aria-haspopup="true"
+          :aria-expanded="openDropdown === 'about'"
+        >
+          About Us
+        </button>
+
+        <RouterLink to="/contact" class="nav-trigger" @click="close">
+          Contact
+        </RouterLink>
       </div>
 
       <!-- Right CTA -->
       <div class="nav-right">
-        <RouterLink to="/contact" class="btn-contact" @click="close">
-          Contact us
+        <RouterLink to="/contact" class="btn-consultation" @click="close">
+          Book a consultation
         </RouterLink>
         <button class="mobile-toggle" @click="mobileOpen = !mobileOpen" aria-label="Open menu">
           ☰
@@ -234,20 +235,9 @@ const currentPreview = computed(() =>
       <div v-if="mobileOpen" class="mobile-drawer">
         <button class="mobile-close" @click="mobileOpen = false" aria-label="Close menu">×</button>
         <div class="mobile-section">
-          <span class="dropdown-eyebrow">Services</span>
+          <span class="dropdown-eyebrow">Solutions</span>
           <RouterLink
             v-for="item in services"
-            :key="item.title"
-            :to="item.href"
-            @click="mobileOpen = false"
-          >
-            {{ item.title }}
-          </RouterLink>
-        </div>
-        <div class="mobile-section">
-          <span class="dropdown-eyebrow">About</span>
-          <RouterLink
-            v-for="item in about"
             :key="item.title"
             :to="item.href"
             @click="mobileOpen = false"
@@ -266,8 +256,19 @@ const currentPreview = computed(() =>
             {{ item.title }}
           </RouterLink>
         </div>
-        <RouterLink to="/contact" class="btn-contact mobile-cta" @click="mobileOpen = false">
-          Contact us
+        <div class="mobile-section">
+          <span class="dropdown-eyebrow">About Us</span>
+          <RouterLink
+            v-for="item in about"
+            :key="item.title"
+            :to="item.href"
+            @click="mobileOpen = false"
+          >
+            {{ item.title }}
+          </RouterLink>
+        </div>
+        <RouterLink to="/contact" class="btn-consultation mobile-cta" @click="mobileOpen = false">
+          Book a consultation
         </RouterLink>
       </div>
     </Transition>
@@ -292,10 +293,9 @@ nav {
   gap: 24px;
 }
 .logo {
-  font-family: var(--serif);
-  font-size: 36px;
-      font-family: EB Garamond;
-      font-weight: 500;
+  font-family: 'EB Garamond', var(--serif);
+  font-size: 32px;
+  font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--ink);
   text-decoration: none;
@@ -307,39 +307,47 @@ nav {
 }
 .nav-links {
   display: flex;
-  gap: 8px;
+  gap: 28px;
   align-items: center;
   justify-self: center;
 }
 .nav-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   color: var(--ink);
-  font-size: 18px;
-  font-weight: 500;
-  padding: 9px 18px;
-  border-radius: 999px;
-  transition: color 0.2s, background 0.2s;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 8px 0;
+  transition: color 0.2s;
   font-family: var(--sans);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 .nav-trigger:hover,
 .nav-trigger.active {
-  color: var(--accent);
-  background: var(--accent-soft);
+  color: #b09559;
 }
-.chev {
-  font-size: 16px;
-  line-height: 1;
-  color: var(--ink-muted);
-  transition: transform 0.2s, color 0.2s;
+.btn-consultation {
+  background: #b09559;
+  color: #ffffff !important;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: var(--sans);
+  transition: background-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  white-space: nowrap;
 }
-.nav-trigger:hover .chev,
-.nav-trigger.active .chev {
-  color: var(--accent);
-}
-.chev.flip {
-  transform: rotate(180deg);
+.btn-consultation:hover {
+  background: #a2854b;
+  transform: translateY(-1px);
 }
 
 /* ============================================================
@@ -354,6 +362,7 @@ nav {
   padding-top: 12px;
   padding-bottom: 16px;
   background: var(--bg);
+  border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.12);
 }

@@ -93,7 +93,7 @@ const bgIndex = computed(() => {
 .size-md { width: 48px; height: 48px; font-size: 17px; }
 .size-lg { width: 64px; height: 64px; font-size: 22px; }
 
-.tone-0 { background: linear-gradient(135deg, #143369 0%, #1c4488 100%); }
+.tone-0 { background: linear-gradient(135deg, #b09559 0%, #c8ab72 100%); }
 .tone-1 { background: linear-gradient(135deg, #b07c5a 0%, #d4a373 100%); }
 .tone-2 { background: linear-gradient(135deg, #5a6a7c 0%, #7c8c9c 100%); }
 .tone-3 { background: linear-gradient(135deg, #4a574a 0%, #6c7d6c 100%); }

@@ -172,23 +172,23 @@ const globalDestinations = [
 </script>
 
 <template>
-  <header class="container hero-container">
-    <div class="hero">
-      <div class="hero-copy">
+  <header class="service-hero home-hero">
+    <div class="home-hero-inner">
+      <div class="service-hero-copy">
         <h1>
           Hire anywhere.<br />
           <em>We handle the rest.</em>
         </h1>
-        <p class="hero-lede">
+        <p class="service-hero-lede">
           Jackson &amp; Frank makes global hiring effortless. From onboarding to payroll and compliance — we take care of everything.
         </p>
 
         <div class="cta-row">
-          <RouterLink class="btn-primary btn-hero" to="/contact">
+          <RouterLink class="btn-primary" to="/contact">
             Get started today <span class="arrow">→</span>
           </RouterLink>
           <a
-            class="btn-secondary btn-hero-alt"
+            class="btn-secondary"
             href="https://www.youtube.com/watch?v=yG5fSc3isFs"
             target="_blank"
             rel="noopener"
@@ -220,40 +220,6 @@ const globalDestinations = [
             <span class="ht-logo">ING</span>
             <span class="ht-logo">Shopify</span>
             <span class="ht-logo">DHL</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-visual">
-        <div class="hero-visual-inner">
-          <img
-            src="/services/service-page/about.webp"
-            alt="Global teams hiring with Jackson & Frank"
-            class="hero-photo"
-          />
-          <div class="hero-overlay overlay-tr hover-float">
-            <div class="overlay-glow"></div>
-            <img src="/testimonials/Anya.jpg" alt="Ava Mitchell" class="overlay-avatar" />
-            <div class="overlay-text">
-              <strong>Ava Mitchell</strong>
-              <span>Product Designer · 🇪🇸 Spain</span>
-            </div>
-          </div>
-          <div class="hero-overlay overlay-bl hover-float" style="animation-delay: 1.5s;">
-            <div class="overlay-glow"></div>
-            <img src="/leadership/pawel2.webp" alt="Liam O'Connor" class="overlay-avatar" />
-            <div class="overlay-text">
-              <strong>Liam O'Connor</strong>
-              <span>Software Engineer · 🇮🇪 Ireland</span>
-            </div>
-          </div>
-          <div class="hero-overlay overlay-br hover-float" style="animation-delay: 3s;">
-            <div class="overlay-glow"></div>
-            <img src="/testimonials/lina.jpg" alt="Mei Lin" class="overlay-avatar" />
-            <div class="overlay-text">
-              <strong>Mei Lin</strong>
-              <span>Marketing Manager · 🇸🇬 Singapore</span>
-            </div>
           </div>
         </div>
       </div>
@@ -317,10 +283,7 @@ const globalDestinations = [
     <div class="container ge-inner">
       <div class="ge-top">
         <div class="ge-content">
-          <div class="ge-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            GO GLOBAL
-          </div>
+          
           <h2 class="ge-title">Expand your business globally, <span class="ge-highlight">with confidence</span></h2>
           <p class="ge-subtitle">We help you hire, pay, and manage talent in 160+ countries with local expertise and fully compliant solutions.</p>
           <div class="ge-cta">
@@ -330,7 +293,36 @@ const globalDestinations = [
         </div>
         
         <div class="ge-map-visual">
-          <div class="ge-float-card card-eu">
+          
+          <!-- World Map Image -->
+          <div class="ge-map-svg-wrap">
+            <!-- Premium light world map image -->
+            <img src="/global-map.jpg" alt="Global presence map" class="ge-world-img" />
+          
+            <!-- Stats bar at bottom of map -->
+            <div class="ge-map-stats">
+              <div class="ge-map-stat">
+                <strong>160+</strong>
+                <span>Countries</span>
+              </div>
+              <div class="ge-map-stat-divider"></div>
+              <div class="ge-map-stat">
+                <strong>700+</strong>
+                <span>Businesses</span>
+              </div>
+              <div class="ge-map-stat-divider"></div>
+              <div class="ge-map-stat">
+                <strong>48h</strong>
+                <span>Avg. onboarding</span>
+              </div>
+              <div class="ge-map-stat-divider"></div>
+              <div class="ge-map-stat">
+                <strong>98%</strong>
+                <span>Client retention</span>
+              </div>
+            </div>
+
+            <div class="ge-float-card card-eu">
             <span class="ge-fc-img" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&q=80&w=100');"></span>
             <div>
               <strong>Europe <span class="status-dot"></span></strong>
@@ -352,6 +344,8 @@ const globalDestinations = [
             </div>
           </div>
           
+          </div>
+
           <div class="ge-popular-dest">
             <h5>Popular destinations</h5>
             <ul>
@@ -669,7 +663,6 @@ const globalDestinations = [
           Read all testimonials
         </RouterLink>
         <div class="quote-card">
-          <div class="stars">★ ★ ★ ★ ★</div>
           <blockquote>"{{ featuredTestimonial.review }}"</blockquote>
           <div class="quote-author">
             <img :src="featuredTestimonial.image" :alt="featuredTestimonial.name" class="quote-avatar" />
@@ -754,7 +747,6 @@ const globalDestinations = [
                 <div class="cc-quote-badge" :class="t.metricTheme">“</div>
               </div>
               
-              <div class="cc-stars">★ ★ ★ ★ ★</div>
               
               <p class="cc-body">"{{ t.review }}"</p>
               
@@ -982,66 +974,130 @@ const globalDestinations = [
 /* ============================================================
    HERO
    ============================================================ */
-.hero-container {
-  padding-top: 40px;
-  padding-bottom: 80px;
+.home-hero {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 88px 0 96px;
+  display: block;
+  background-color: #f4f1ec;
+  background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 0%) 30%, rgba(253, 251, 247, 0.4) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/about2.png);
+  background-size: 60% auto;
+  background-position: right 0% center;
+  background-repeat: no-repeat;
+  color: var(--ink);
+  min-height: 700px;
+  overflow: hidden;
 }
-.hero {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 64px;
-  align-items: center;
+
+.home-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.4), transparent 50%);
+  pointer-events: none;
 }
-.hero-copy h1 {
+
+.home-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.home-hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.home-hero .service-hero-copy {
+  max-width: 720px;
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.home-hero h1 {
   font-family: var(--serif);
   font-size: clamp(48px, 5.8vw, 86px);
   line-height: 1.05;
   letter-spacing: -0.02em;
   font-weight: 400;
+  color: var(--ink);
+  text-shadow: none;
 }
-.hero-copy h1 em {
+.home-hero h1 em {
   font-style: italic;
-  color: var(--ink-soft);
-  display: block;
+  color: var(--accent, #b09559);
 }
-.hero-lede {
-  margin-top: 24px;
-  font-size: 18px;
+
+.home-hero .service-hero-lede {
   color: var(--ink-soft);
+  text-shadow: none;
+  font-size: 19px;
+  margin-top: 24px;
   max-width: 520px;
   line-height: 1.6;
 }
-.cta-row {
+
+.home-hero .cta-row {
   display: flex;
   gap: 16px;
   margin-top: 40px;
   flex-wrap: wrap;
 }
-.btn-hero {
+
+.home-hero .btn-primary {
   padding: 14px 28px;
   font-size: 15px;
   border-radius: 999px;
+  background: var(--accent, #b09559);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 8px 24px rgba(176, 149, 89, 0.3);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.btn-hero-alt {
+
+.home-hero .btn-primary:hover {
+  background: #9a824e;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(176, 149, 89, 0.4);
+}
+
+.home-hero .btn-secondary {
   padding: 14px 28px;
   font-size: 15px;
   border-radius: 999px;
   background: transparent;
-  border: 1px solid var(--border);
   color: var(--ink);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.btn-hero-alt:hover {
-  background: var(--bg-card);
-  border-color: var(--ink-muted);
+
+.home-hero .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.08);
 }
-.hero-features-inline {
+
+.home-hero .hero-features-inline {
   display: flex;
   gap: 26px;
   margin-top: 36px;
   flex-wrap: wrap;
 }
-.hf-item {
+.home-hero .hf-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1049,15 +1105,16 @@ const globalDestinations = [
   color: var(--ink);
   font-weight: 500;
 }
-.hf-item svg {
+.home-hero .hf-item svg {
   color: var(--accent);
 }
-.hero-trust {
+
+.home-hero .hero-trust {
   margin-top: 64px;
   border-top: 1px solid var(--border);
   padding-top: 32px;
 }
-.hero-trust-label {
+.home-hero .hero-trust-label {
   display: block;
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -1065,13 +1122,13 @@ const globalDestinations = [
   text-transform: uppercase;
   margin-bottom: 20px;
 }
-.hero-trust-logos {
+.home-hero .hero-trust-logos {
   display: flex;
   align-items: center;
   gap: 36px;
   flex-wrap: wrap;
 }
-.ht-logo {
+.home-hero .ht-logo {
   font-family: var(--sans);
   font-weight: 700;
   font-size: 20px;
@@ -1080,99 +1137,33 @@ const globalDestinations = [
   letter-spacing: -0.03em;
   transition: opacity 0.3s;
 }
-.ht-logo:hover {
+.home-hero .ht-logo:hover {
   opacity: 0.8;
 }
 
-.hero-visual {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@media (max-width: 960px) {
+  .home-hero {
+    padding: 72px 24px 72px;
+    background-size: cover;
+    background-position: right -200px center;
+  }
 }
-.hero-visual-inner {
-  position: relative;
-  width: 100%;
-  border-radius: 24px;
-  overflow: visible;
-  aspect-ratio: 4 / 4.8;
-  background: linear-gradient(135deg, #e0d9cc 0%, #c1b9aa 100%);
-  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.15);
-}
-.hero-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 24px;
-  mix-blend-mode: multiply;
-  opacity: 0.8;
-}
-.hero-overlay {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 999px;
-  padding: 6px 20px 6px 6px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  box-shadow: 0 16px 32px -12px rgba(0, 0, 0, 0.15);
-  z-index: 2;
-  overflow: hidden;
-}
-.overlay-glow {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.5);
-  border-radius: 50%;
-  filter: blur(15px);
-  left: 0;
-  top: 0;
-  z-index: -1;
-}
-.hover-float {
-  animation: float 6s ease-in-out infinite;
-}
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-.overlay-tr {
-  top: 10%;
-  right: -15%;
-}
-.overlay-bl {
-  bottom: 25%;
-  left: -10%;
-}
-.overlay-br {
-  bottom: 8%;
-  right: 15%;
-}
-.overlay-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid white;
-}
-.overlay-text strong {
-  display: block;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 2px;
-  font-size: 14px;
-}
-.overlay-text span {
-  color: var(--ink-soft);
-  font-size: 12px;
+@media (max-width: 640px) {
+  .home-hero {
+    padding: 56px 20px 64px;
+  }
+  .home-hero h1 {
+    font-size: clamp(36px, 8vw, 48px);
+  }
+  .home-hero .cta-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .home-hero .btn-primary,
+  .home-hero .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ============================================================
@@ -2334,7 +2325,270 @@ const globalDestinations = [
     padding: 10px 14px;
   }
 }
+
+/* Light Map UI Adjustments */
+.ge-map-svg-wrap {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: none !important; /* Remove dark box shadow */
+  border: none !important;
+  background: transparent;
+}
+
+.ge-world-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  mix-blend-mode: multiply; /* Blends the cream background of the map with the page */
+  opacity: 0.9; /* Softens the image slightly */
+}
+
+/* Hide the dark overlays since we now use a light map */
+.ge-map-overlay-left, .ge-map-overlay-bottom {
+  display: none !important;
+}
+
+/* Make stats bar sleek and light for the new map */
+.ge-map-stats {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(176, 149, 89, 0.2) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.ge-map-stat strong {
+  color: var(--ink) !important;
+}
+
+.ge-map-stat span {
+  color: var(--ink-soft) !important;
+  font-weight: 600;
+}
+
+.ge-map-stat-divider {
+  background: rgba(176, 149, 89, 0.2) !important;
+}
+
+/* Improve floating cards to match new map */
+.ge-float-card {
+  box-shadow: 0 8px 24px rgba(176, 149, 89, 0.15) !important;
+  border: 1px solid rgba(176, 149, 89, 0.1) !important;
+}
+
+/* Refine dots */
+.map-dot-label {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(176, 149, 89, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* =======================================
+   Restored Map Visual CSS
+   ======================================= */
+.ge-map-visual {
+  position: relative;
+  height: 480px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ge-map-svg-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.ge-world-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+}
+
+/* Stats Bar */
+.ge-map-stats {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 16px 32px;
+  border-radius: 99px;
+  border: 1px solid rgba(176, 149, 89, 0.2);
+  box-shadow: 0 10px 40px rgba(176, 149, 89, 0.1);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.ge-map-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ge-map-stat strong {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.ge-map-stat span {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.ge-map-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(176, 149, 89, 0.2);
+}
+
+/* Floating Cards */
+.ge-float-card {
+  position: absolute;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(176, 149, 89, 0.15);
+  border: 1px solid rgba(176, 149, 89, 0.1);
+  z-index: 5;
+  transition: transform 0.3s;
+}
+
+.ge-float-card:hover {
+  transform: translateY(-4px);
+}
+
+.ge-fc-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+}
+
+.ge-float-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ge-float-card strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.ge-float-card span:last-child {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.card-eu { top: 20%; right: 15%; }
+.card-na { top: 40%; left: 10%; }
+.card-ap { bottom: 30%; right: 5%; }
+
+/* Popular Destinations Dropdown/List styling if needed */
+.ge-popular-dest {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 240px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+  z-index: 10;
+}
+
+.ge-popular-dest h5 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.ge-popular-dest ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ge-popular-dest li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.ge-popular-dest .flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ge-popular-dest .flag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ge-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ge-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .ge-map-visual {
+    display: none;
+  }
+}
 </style>
+
 
 <style scoped>
 /* ============= LATEST INSIGHTS & RESOURCES ============= */
@@ -3294,7 +3548,6 @@ const globalDestinations = [
 .ge-popular-dest ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 16px 0;
 }
 .ge-popular-dest li {
   font-size: 14px;

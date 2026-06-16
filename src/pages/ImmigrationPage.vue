@@ -17,25 +17,35 @@ const trustAvatars = [
 
 <template>
   <!-- ============= HERO ============= -->
-  <header class="container service-hero">
+  <header class="container service-hero immigration-hero hero-premium">
     <div class="service-hero-copy">
-      <span class="tag">Service · Immigration</span>
       <h1>
-        Work visas,<br /><em>handled</em> for you
+        Hire, Relocate & Expand Globally <br /><em>Without Boundaries</em>
       </h1>
-      <p class="service-hero-lede">{{ immigration.definition.description }}</p>
-      <div class="service-hero-features">
-        <div v-for="(f, i) in immigration.definition.keyFeatures" :key="i" class="hero-feature">
-          <span class="hero-feature-dot" />
-          {{ f }}
-        </div>
-      </div>
+      <p class="service-hero-lede">
+        From Employer of Record and Global Payroll to Immigration and Visa Support, Jackson & Frank helps businesses and talent move across borders with confidence.
+      </p>
+          <!--  <div class="hero-stat-grid">
+              <div class="hero-stat-card">
+                <strong>10,000+</strong>
+                <span>Successful applications</span>
+              </div>
+              <div class="hero-stat-card">
+                <strong>25+</strong>
+                <span>Countries covered</span>
+              </div>
+              <div class="hero-stat-card">
+                <strong>98%</strong>
+                <span>Client satisfaction</span>
+              </div>
+            </div>
+            -->
       <div class="cta-row">
         <RouterLink to="/contact?reason=immigration_services" class="btn-primary">
-          {{ immigration.definition.primaryButtonText }} <span class="arrow">→</span>
+          Get Free Consultation <span class="arrow">→</span>
         </RouterLink>
-        <RouterLink to="/contact?reason=consultation" class="btn-secondary">
-          {{ immigration.definition.secondaryButtonText }}
+        <RouterLink to="/services" class="btn-secondary">
+          Explore Services
         </RouterLink>
       </div>
       <div class="trust-row">
@@ -52,14 +62,7 @@ const trustAvatars = [
         </span>
       </div>
     </div>
-    <div class="service-hero-visual">
-      <img :src="immigration.definition.image" :alt="immigration.definition.imageAlt" />
-      <div class="service-hero-shape">I</div>
-      <div class="service-hero-badge">
-        <strong>14 days average</strong>
-        <span>Visa processing time</span>
-      </div>
-    </div>
+    <div class="service-hero-visual hero-visual-bg"></div>
   </header>
 
   <!-- ============= MAIN DESCRIPTION ============= -->
@@ -201,113 +204,241 @@ const trustAvatars = [
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
 }
 .service-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 36px;
+  background: linear-gradient(180deg, #fffaf3 0%, #f8f1e7 100%);
+  border: 1px solid rgba(160, 125, 77, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 34px 30px;
+  box-shadow: 0 20px 40px rgba(115, 78, 42, 0.08);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 50px rgba(115, 78, 42, 0.12);
 }
 .service-card-num {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
   font-family: var(--serif);
   font-style: italic;
-  font-size: 36px;
-  color: var(--accent);
-  margin-bottom: 16px;
+  font-size: 20px;
+  margin-bottom: 22px;
 }
 .service-card h3 {
   font-family: var(--serif);
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 400;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  color: var(--ink);
 }
 .service-card p {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--ink-soft);
-  line-height: 1.6;
-  margin-bottom: 18px;
+  line-height: 1.75;
+  margin-bottom: 20px;
 }
 .service-card ul {
   list-style: none;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border-top: 1px solid var(--border);
-  padding-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+  border-top: 1px solid rgba(160, 125, 77, 0.12);
+  padding-top: 18px;
+  margin-top: 18px;
 }
 .service-card li {
   font-size: 13px;
   color: var(--ink-soft);
   position: relative;
-  padding-left: 18px;
+  padding-left: 22px;
 }
 .service-card li::before {
   content: '✓';
   position: absolute;
   left: 0;
+  top: 2px;
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .how-grid-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.how-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(158, 118, 80, 0.14);
+  border-radius: var(--radius-lg);
+  padding: 34px 32px;
+  box-shadow: 0 18px 40px rgba(105, 72, 41, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.how-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px rgba(105, 72, 41, 0.12);
+}
+.how-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: auto;
+  width: 6px;
+  background: linear-gradient(180deg, var(--accent), #b69a72);
+  border-radius: 999px;
+}
+.how-card-num {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--accent);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+.how-card h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 12px;
+  color: var(--ink);
+  position: relative;
+  z-index: 1;
+}
+.how-card p {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+.how-card ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+.how-card li {
+  font-size: 13px;
+  color: var(--ink-soft);
+  position: relative;
+  padding-left: 20px;
+}
+.how-card li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 3px;
+  color: var(--accent);
+  font-size: 18px;
 }
 
 /* EOR bridge */
 .eor-bridge {
-  background: var(--ink);
-  color: var(--bg);
-  padding: 100px 0;
+  color: var(--ink);
+  padding: 120px 0;
 }
-.eor-bridge .tag { color: var(--accent-warm); }
-.eor-bridge .section-title { color: var(--bg); }
-.eor-bridge .section-title em { color: var(--accent-warm); }
-.eor-bridge .section-lead { color: rgba(255, 255, 255, 0.7); }
+.eor-bridge .section-head {
+  max-width: 720px;
+  margin-bottom: 42px;
+}
+.eor-bridge .tag {
+  color: var(--accent-warm);
+}
+.eor-bridge .section-title {
+  color: var(--ink);
+}
+.eor-bridge .section-title em {
+  color: var(--accent);
+}
+.eor-bridge .section-lead {
+  color: var(--ink-soft);
+  line-height: 1.75;
+  max-width: 680px;
+}
 .eor-bridge-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-bottom: 48px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-bottom: 52px;
 }
 .eor-bridge-card {
-  background: var(--dark-soft);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius);
-  padding: 32px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(130, 94, 58, 0.14);
+  border-radius: var(--radius-lg);
+  padding: 34px;
+  box-shadow: 0 22px 55px rgba(77, 52, 30, 0.08);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.eor-bridge-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 65px rgba(77, 52, 30, 0.12);
 }
 .eor-bridge-mark {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
   font-family: var(--serif);
   font-style: italic;
-  font-size: 32px;
-  color: var(--accent-warm);
-  margin-bottom: 14px;
+  font-size: 20px;
+  color: var(--bg);
+  background: var(--accent);
+  margin-bottom: 18px;
 }
 .eor-bridge-card h3 {
   font-family: var(--serif);
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 400;
-  margin-bottom: 10px;
-  color: var(--bg);
+  margin-bottom: 14px;
+  color: var(--ink);
 }
 .eor-bridge-card p {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.75;
 }
 .eor-bridge-cta {
   text-align: center;
 }
 .eor-bridge-cta .btn-primary {
-  background: var(--bg);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--bg);
+  border: 1px solid transparent;
 }
 .eor-bridge-cta .btn-primary:hover {
-  background: var(--accent-warm);
+  background: #9d7b4f;
+  color: var(--bg);
+}
+.eor-bridge-cta .btn-secondary {
+  margin-left: 12px;
+  border-color: rgba(26, 26, 26, 0.16);
+  color: var(--ink);
+}
+.eor-bridge-cta .btn-secondary:hover {
+  background: rgba(26, 26, 26, 0.04);
   color: var(--ink);
 }
 
@@ -318,4 +449,5 @@ const trustAvatars = [
     grid-template-columns: 1fr;
   }
 }
+
 </style>

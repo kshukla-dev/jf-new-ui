@@ -1,418 +1,720 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import eor from '@/data/eor.json'
 
 // FAQ accordion state
-const openFaq = ref(0)
-function toggleFaq(i: number) {
-  openFaq.value = openFaq.value === i ? -1 : i
-}
+const openFaq = ref<number | null>(0)
 
-// Trust avatars from real testimonials
-const trustAvatars = [
-  '/testimonials/lina.jpg',
-  '/testimonials/Anya.jpg',
-  '/testimonials/priya.jpg',
+const faqs = [
+  {
+    question: 'What is an Employer of Record (EOR)?',
+    answer: 'An Employer of Record is the legal employer for your workers in a country where you do not have your own entity. We handle contracts, international payroll, taxes and contributions where applicable, and core HR while you manage day-to-day work.'
+  },
+  {
+    question: 'How quickly can we start hiring with EOR?',
+    answer: 'Most clients onboard first hires in about 48–72 hours after scope is clear — far faster than incorporating and standing up payroll locally.'
+  },
+  {
+    question: 'Do we need a local entity for Employer of Record?',
+    answer: 'No. That is the main point of EOR: hire without entity setup. We employ under our in-country structure so you can enter markets without a subsidiary.'
+  },
+  {
+    question: 'Which countries do you support?',
+    answer: 'We deliver Employer of Record and global hiring support in 160+ countries, including major European and APAC hubs. Contact us for your specific locations.'
+  },
+  {
+    question: 'Who manages day-to-day work?',
+    answer: 'You do. The EOR handles legal employment, payroll, and employment compliance execution — not how people do their jobs.'
+  },
+  {
+    question: 'What compliance does the EOR cover?',
+    answer: 'We apply local labour rules, statutory benefits, social contributions, and filing obligations for employed staff in scope so international payroll and HR stay aligned with each jurisdiction.'
+  },
+  {
+    question: 'Can we switch from another EOR to Jackson & Frank?',
+    answer: 'Yes. We plan transfers, contract continuity, and payroll handoffs so there is no gap for employees.'
+  },
+  {
+    question: 'Do you offer immigration support with EOR?',
+    answer: 'Yes. We coordinate work permits and visas alongside employment so relocation and global hiring stay in one programme.'
+  }
 ]
 
-const heroImage = eor.definition.image
+function toggleFaq(i: number) {
+  openFaq.value = openFaq.value === i ? null : i
+}
+
+const topCountries = [
+  { code: 'us', name: 'United States' },
+  { code: 'gb', name: 'United Kingdom' },
+  { code: 'de', name: 'Germany' },
+  { code: 'nl', name: 'Netherlands' },
+  { code: 'fr', name: 'France' },
+  { code: 'au', name: 'Australia' },
+  { code: 'sg', name: 'Singapore' },
+  { code: 'in', name: 'India' },
+  { code: 'ae', name: 'UAE' },
+  { code: 'ca', name: 'Canada' },
+  { code: 'es', name: 'Spain' },
+  { code: 'it', name: 'Italy' },
+  { code: 'pl', name: 'Poland' },
+  { code: 'br', name: 'Brazil' },
+  { code: 'jp', name: 'Japan' },
+  { code: 'mx', name: 'Mexico' },
+]
 </script>
 
 <template>
-  <!-- ============= HERO ============= -->
-  <header class="container service-hero">
-    <div class="service-hero-copy">
-      <span class="tag">Service · Employer of Record</span>
-      <h1>
-        Hire <em>globally</em>,<br />without local entities
-      </h1>
-      <p class="service-hero-lede">
-        {{ eor.definition.description }}
-      </p>
-      <div class="service-hero-features">
-        <div v-for="(f, i) in eor.definition.keyFeatures" :key="i" class="hero-feature">
-          <span class="hero-feature-dot" />
-          {{ f }}
+  <div class="eor-modern-page">
+    
+    <!-- HERO -->
+    <header class="service-hero eor-premium-hero">
+      <div class="eor-premium-hero-inner">
+        <div class="service-hero-copy">
+          <h1>
+            Employer of Record<br /><em>(EOR) Services</em>
+          </h1>
+          <p class="service-hero-lede">Simplify global expansion. We handle the complexity of hiring, payroll, and compliance so you can focus on growth.</p>
+          <div class="cta-row">
+            <a href="/contact" class="btn-primary">Get started today <span class="arrow">→</span></a>
+            <a href="#what-is-eor" class="btn-secondary">Learn how it works</a>
+          </div>
         </div>
       </div>
-      <div class="cta-row">
-        <RouterLink to="/contact?reason=eor_services" class="btn-primary">
-          {{ eor.definition.primaryButtonText }} <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/contact?reason=consultation" class="btn-secondary">
-          {{ eor.definition.secondaryButtonText }}
-        </RouterLink>
-      </div>
-      <div class="trust-row">
-        <div class="avatars">
-          <div
-            v-for="(src, i) in trustAvatars"
-            :key="i"
-            class="avatar"
-            :style="{ backgroundImage: `url('${src}')` }"
-          />
+    </header>
+
+    <!-- STATS BAR -->
+    <section class="eor-stats-bar">
+      <div class="eor-container eor-stats-inner">
+        <div class="eor-stat">
+          <strong>160+</strong>
+          <span>Countries covered</span>
         </div>
-        <span class="trust-text">
-          Trusted by <strong>700+</strong> teams across 160+ countries
-        </span>
-      </div>
-    </div>
-    <div class="service-hero-visual">
-      <img :src="heroImage" :alt="eor.definition.imageAlt" />
-      <div class="service-hero-shape">E</div>
-      <div class="service-hero-badge">
-        <strong>48–72 hour</strong>
-        <span>Typical first hire go-live</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- ============= DEFINITION / WHAT IS EOR ============= -->
-  <section class="section container">
-    <div class="definition-block">
-      <div>
-        <span class="tag">What is EOR</span>
-        <h2 class="section-title">{{ eor.mainDescription.title }}</h2>
-      </div>
-      <div class="definition-text">
-        <p v-for="(p, i) in eor.mainDescription.paragraphs" :key="i">{{ p }}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============= TRUST SIGNALS STATS ============= -->
-  <section class="stats-strip">
-    <div class="container stats-strip-inner">
-      <div v-for="(s, i) in eor.definition.trustSignals.stats" :key="i" class="stat-item">
-        <strong>{{ s.value }}</strong>
-        <span v-if="s.label" class="stat-label">{{ s.label }}</span>
-        <span class="stat-desc">{{ s.description }}</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============= HOW IT WORKS ============= -->
-  <section class="section container">
-    <div class="section-head">
-      <span class="tag">{{ eor.howItWorks.subtitle || 'How it works' }}</span>
-      <h2 class="section-title">{{ eor.howItWorks.title }}</h2>
-      <p v-if="eor.howItWorks.description" class="section-lead">
-        {{ eor.howItWorks.description }}
-      </p>
-    </div>
-    <div class="how-grid">
-      <div v-for="step in eor.howItWorks.steps" :key="step.number" class="how-card">
-        <span class="how-card-num">0{{ step.number }}</span>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.description }}</p>
-        <ul>
-          <li v-for="d in step.details" :key="d">{{ d }}</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============= WHAT'S INCLUDED ============= -->
-  <section class="section container">
-    <div class="section-head">
-      <span class="tag">What's included</span>
-      <h2 class="section-title">{{ eor.included.title }}</h2>
-      <p v-if="eor.included.description" class="section-lead">
-        {{ eor.included.description }}
-      </p>
-    </div>
-    <div class="included-grid">
-      <div v-for="(f, i) in eor.included.features" :key="i" class="included-card">
-        <span class="included-card-mark">{{ String(i + 1).padStart(2, '0') }}</span>
-        <h3>{{ f.title }}</h3>
-        <p>{{ f.description }}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============= COMPARISON ============= -->
-  <section class="section container">
-    <div class="section-head">
-      <span class="tag">{{ eor.comparison.subtitle }}</span>
-      <h2 class="section-title">{{ eor.comparison.title }}</h2>
-      <p class="section-lead">{{ eor.comparison.description }}</p>
-    </div>
-    <div class="comparison-grid">
-      <div
-        v-for="opt in eor.comparison.options"
-        :key="opt.type"
-        class="comparison-card"
-        :class="{ 'is-featured': opt.type.includes('Employer of Record') }"
-      >
-        <div class="comparison-card-head">
-          <h3>{{ opt.type }}</h3>
-          <p>{{ opt.description }}</p>
+        <div class="eor-stat-divider"></div>
+        <div class="eor-stat">
+          <strong>48–72h</strong>
+          <span>Avg. onboarding time</span>
         </div>
-        <ul>
-          <li v-for="f in opt.features" :key="f">
-            <span class="li-mark" aria-hidden>✓</span> {{ f }}
-          </li>
-        </ul>
-        <div class="comparison-bestfor">
-          <span>Best for</span>
-          <strong>{{ opt.bestFor }}</strong>
+        <div class="eor-stat-divider"></div>
+        <div class="eor-stat">
+          <strong>700+</strong>
+          <span>Businesses served</span>
+        </div>
+        <div class="eor-stat-divider"></div>
+        <div class="eor-stat">
+          <strong>98%</strong>
+          <span>Client retention rate</span>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============= COUNTRIES STRIP ============= -->
-  <section class="countries-strip">
-    <div class="container">
-      <div class="countries-strip-head">
-        <span class="tag">{{ eor.countries.subtitle }}</span>
-        <h2 class="section-title">{{ eor.countries.title }}</h2>
-        <p class="section-lead">{{ eor.countries.description }}</p>
-      </div>
-      <div class="countries-grid">
-        <div v-for="c in eor.countries.items" :key="c.name" class="country-chip">
-          <img :src="c.flag" :alt="c.name + ' flag'" class="country-flag" loading="lazy" />
-          <span>{{ c.name }}</span>
+    <!-- WHAT IS EOR -->
+    <section class="eor-section eor-container">
+      <div class="what-is-eor">
+        <div class="what-is-eor-text">
+          <h2>What is Employer of Record (EOR)?</h2>
+          <p>
+            An Employer of Record (EOR) is a third-party organization that legally employs your international workforce on your behalf. We assume all employer responsibilities, including payroll, taxes, benefits, and compliance with local labor laws, allowing you to hire talent anywhere in the world without establishing a local entity.
+          </p>
+        </div>
+        <div class="what-is-eor-diagram">
+          <svg width="100%" viewBox="0 0 400 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Curved Arrow on Top (Right to Left) -->
+            <path d="M 330 40 Q 200 0 100 40" stroke="#ba8878" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M 100 40 L 110 32 M 100 40 L 110 48" stroke="#ba8878" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            
+            <!-- Bridge cables and pillars -->
+            <path d="M 50 120 L 50 80 M 150 120 L 150 60 M 250 120 L 250 60 M 350 120 L 350 80" stroke="#c5c6cf" stroke-width="2" />
+            <path d="M 50 80 Q 100 120 150 60 Q 200 120 250 60 Q 300 120 350 80" stroke="#c5c6cf" stroke-width="2" fill="none"/>
+            <!-- Bridge base -->
+            <path d="M 40 120 L 360 120" stroke="#c5c6cf" stroke-width="6" stroke-linecap="round" />
+            <path d="M 40 124 L 360 124" stroke="#75777f" stroke-width="1" />
+            
+            <!-- Company Node (Left) -->
+            <rect x="20" y="80" width="40" height="40" fill="white" stroke="#061639" stroke-width="2"/>
+            <rect x="30" y="70" width="20" height="10" fill="white" stroke="#061639" stroke-width="2"/>
+            <path d="M 28 90 h 4 v 4 h -4 z M 38 90 h 4 v 4 h -4 z M 48 90 h 4 v 4 h -4 z" fill="#061639"/>
+            <path d="M 28 100 h 4 v 4 h -4 z M 38 100 h 4 v 4 h -4 z M 48 100 h 4 v 4 h -4 z" fill="#061639"/>
+            <rect x="34" y="110" width="12" height="10" fill="none" stroke="#061639" stroke-width="2"/>
+            
+            <!-- JF Node (Center) -->
+            <circle cx="200" cy="110" r="30" fill="#061639" />
+            <text x="200" y="116" fill="#ba8878" font-family="'Libre Caslon Text', serif" font-size="20" font-weight="bold" font-style="italic" text-anchor="middle">JF</text>
+            
+            <!-- Global Node (Right) -->
+            <circle cx="350" cy="100" r="20" fill="white" stroke="#061639" stroke-width="2"/>
+            <path d="M 330 100 A 20 20 0 0 0 370 100 M 350 80 A 10 20 0 0 0 350 120 M 350 80 A 10 20 0 0 1 350 120 M 332 90 L 368 90 M 332 110 L 368 110" stroke="#061639" stroke-width="1" fill="none"/>
+            <path d="M 338 100 l 4 8 l 4 -8 z M 354 100 l 4 8 l 4 -8 z" fill="none" stroke="#ba8878" stroke-width="1.5"/>
+
+            <!-- Labels -->
+            <text x="40" y="145" fill="#061639" font-family="'Hanken Grotesk', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Your Company</text>
+            <text x="200" y="150" fill="#061639" font-family="'Hanken Grotesk', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Jackson &amp; Frank</text>
+            <text x="200" y="165" fill="#061639" font-family="'Hanken Grotesk', sans-serif" font-size="12" font-weight="600" text-anchor="middle">EOR</text>
+            <text x="350" y="150" fill="#061639" font-family="'Hanken Grotesk', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Global</text>
+            <text x="350" y="165" fill="#061639" font-family="'Hanken Grotesk', sans-serif" font-size="12" font-weight="600" text-anchor="middle">talent pool</text>
+          </svg>
         </div>
       </div>
-      <p class="countries-note">{{ eor.countries.note }}</p>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============= WHO NEEDS EOR ============= -->
-  <section class="section container">
-    <div class="section-head">
-      <span class="tag">Who it's for</span>
-      <h2 class="section-title">{{ eor.whoNeeds.title }}</h2>
-      <p class="section-lead">{{ eor.whoNeeds.description }}</p>
-    </div>
-    <div class="whoneeds-grid">
-      <div v-for="(a, i) in eor.whoNeeds.audiences" :key="i" class="whoneeds-card">
-        <span class="whoneeds-icon" aria-hidden>◆</span>
-        <h4>{{ a.userType }}</h4>
-        <div class="whoneeds-pain">
-          <span class="tag-small">Pain</span>
-          <p>{{ a.pain }}</p>
+    <!-- DETAILED PROCESS STEPS -->
+    <section class="eor-section eor-container eor-process-panel" id="what-is-eor">
+      <div class="eor-process-header">
+        <span class="eor-eyebrow">How our Employer of Record works</span>
+        <h2>Three focused steps from agreement to payroll</h2>
+        <p class="eor-process-sub">You define the roles, we employ and run international payroll compliantly.</p>
+      </div>
+      <div class="eor-process-steps">
+        <div class="eor-process-step">
+          <div class="eps-number">01</div>
+          <div class="eps-body">
+            <h3>Agree scope</h3>
+            <p>We align on countries, roles, and commercials so Employer of Record coverage matches your global hiring plan.</p>
+            <ul class="eps-bullets">
+              <li>Countries and headcount</li>
+              <li>Commercials and SLAs</li>
+              <li>Compliance touchpoints</li>
+            </ul>
+          </div>
         </div>
-        <div class="whoneeds-solution">
-          <span class="tag-small">Solution</span>
-          <p>{{ a.solution }}</p>
+        <div class="eor-process-step">
+          <div class="eps-number">02</div>
+          <div class="eps-body">
+            <h3>Onboard employees</h3>
+            <p>Local contracts, payroll setup, and registrations ready for day one in each market.</p>
+            <ul class="eps-bullets">
+              <li>Compliant employment agreements</li>
+              <li>Payroll and benefits setup</li>
+              <li>Tax and social registrations</li>
+            </ul>
+          </div>
+        </div>
+        <div class="eor-process-step">
+          <div class="eps-number">03</div>
+          <div class="eps-body">
+            <h3>Run payroll & HR</h3>
+            <p>Monthly payroll, filings, changes, and HR lifecycle support while you manage performance.</p>
+            <ul class="eps-bullets">
+              <li>Payroll and contributions</li>
+              <li>Ongoing employment compliance</li>
+              <li>Leavers, moves, and adjustments</li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+    <section class="eor-section eor-container">
+      <h2 class="how-it-works-title">How it Works: Your Global Hiring Journey</h2>
+      <div class="how-steps-grid">
+        
+        <div class="how-step">
+          <div class="how-icon-row">
+            <div class="how-icon">
+              <!-- Globe with Magnifying Glass -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-navy">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                <!-- Magnifying glass overlaying bottom right -->
+                <circle cx="16" cy="16" r="5" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+                <line x1="19.5" y1="19.5" x2="24" y2="24" stroke="#ba8878" stroke-width="2"></line>
+              </svg>
+            </div>
+            <div class="how-arrow">
+              <svg width="60" height="12" viewBox="0 0 60 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 6L56 6" stroke="#c5c6cf" stroke-width="1"/>
+                <path d="M52 2L58 6L52 10" stroke="#c5c6cf" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <h3>Talent Discovery</h3>
+          <p>Find your ideal candidate. We assist in compliant offer letters and contracts.</p>
+        </div>
 
-  <!-- ============= COMPLIANCE TRUST ============= -->
-  <section class="section container">
-    <div class="compliance-block">
-      <div>
-        <span class="tag">Trust &amp; compliance</span>
-        <h2 class="section-title">{{ eor.complianceTrust.title }}</h2>
-        <p v-for="(p, i) in eor.complianceTrust.intro" :key="i" class="section-lead compliance-para">
-          {{ p }}
-        </p>
+        <div class="how-step">
+          <div class="how-icon-row">
+            <div class="how-icon">
+              <!-- Handshake / Paper -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-navy">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <!-- Handshake overlay -->
+                <path d="M8 14l4-4 4 4" stroke="#ba8878" stroke-width="2"></path>
+                <path d="M12 10v10" stroke="#ba8878" stroke-width="2"></path>
+              </svg>
+            </div>
+            <div class="how-arrow">
+              <svg width="60" height="12" viewBox="0 0 60 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 6L56 6" stroke="#c5c6cf" stroke-width="1"/>
+                <path d="M52 2L58 6L52 10" stroke="#c5c6cf" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <h3>Seamless Onboarding</h3>
+          <p>We handle all paperwork, visa sponsorship, and local registration quickly and compliantly.</p>
+        </div>
+
+        <div class="how-step">
+          <div class="how-icon-row">
+            <div class="how-icon">
+              <!-- Calculator & Money Bag -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-navy">
+                <rect x="4" y="2" width="12" height="20" rx="2" ry="2"></rect>
+                <line x1="8" y1="6" x2="12" y2="6"></line>
+                <line x1="8" y1="10" x2="8.01" y2="10"></line>
+                <line x1="12" y1="10" x2="12.01" y2="10"></line>
+                <!-- Money bag -->
+                <path d="M16 12s-4 2-4 6c0 3 2.5 4 6 4s6-1 6-4c0-4-4-6-4-6" fill="white" stroke="#ba8878" stroke-width="1.5"></path>
+                <path d="M18 12v-2a2 2 0 0 0-4 0" stroke="#ba8878" stroke-width="1.5"></path>
+                <text x="18" y="19" font-size="6" fill="#ba8878" stroke="none" text-anchor="middle">$</text>
+              </svg>
+            </div>
+            <div class="how-arrow">
+              <svg width="60" height="12" viewBox="0 0 60 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 6L56 6" stroke="#c5c6cf" stroke-width="1"/>
+                <path d="M52 2L58 6L52 10" stroke="#c5c6cf" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <h3>Payroll & Benefits</h3>
+          <p>We manage monthly payroll, tax filings, and comprehensive benefits packages in local currency.</p>
+        </div>
+
+        <div class="how-step">
+          <div class="how-icon-row">
+            <div class="how-icon">
+              <!-- User & Gears -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-navy">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+                <!-- Gears -->
+                <circle cx="20" cy="8" r="2" stroke="#ba8878" stroke-width="1.5" fill="white"></circle>
+                <path d="M20 4v2 M20 10v2 M16 8h2 M22 8h2" stroke="#ba8878" stroke-width="1.5"></path>
+                <circle cx="16" cy="12" r="2" stroke="#ba8878" stroke-width="1.5" fill="white"></circle>
+              </svg>
+            </div>
+            <!-- Last item has no arrow -->
+          </div>
+          <h3>Ongoing Support</h3>
+          <p>Dedicated account management, HR support, and risk mitigation for your global team.</p>
+        </div>
+
       </div>
-      <div class="compliance-bullets">
-        <div v-for="(b, i) in eor.complianceTrust.bullets" :key="i" class="compliance-bullet">
-          <span class="compliance-mark" aria-hidden>✓</span>
-          <p>{{ b }}</p>
+    </section>
+
+    <!-- KEY BENEFITS -->
+    <section class="eor-section eor-container">
+      <div class="benefits-wrapper">
+        <h2 class="benefits-title">Key Benefits of Our EOR Service</h2>
+        <div class="benefits-grid">
+          
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <!-- Rocket SVG -->
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ba8878" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+              </svg>
+            </div>
+            <h3>Speed to Market</h3>
+            <p>Hire and onboard international talent in days, not months, with our established global infrastructure.</p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <!-- Shield SVG -->
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ba8878" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </div>
+            <h3>Compliance Management</h3>
+            <p>Mitigate risk with our deep understanding of local labor laws, tax regulations, and employment standards across 160+ countries.</p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <!-- Coins SVG -->
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ba8878" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                <path d="M21 8.5c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              </svg>
+            </div>
+            <h3>Cost-Effective</h3>
+            <p>Eliminate the high costs and administrative burden of setting up and maintaining legal entities in multiple countries.</p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <!-- Scalability SVG -->
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ba8878" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+                <polyline points="21 15 21 21 15 21"></polyline>
+                <polyline points="3 9 3 3 9 3"></polyline>
+                <line x1="21" y1="21" x2="14" y2="14"></line>
+                <line x1="3" y1="3" x2="10" y2="10"></line>
+              </svg>
+            </div>
+            <h3>Scalability & Flexibility</h3>
+            <p>Easily scale your global workforce up or down based on your business needs, with no long-term commitments.</p>
+          </div>
+
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============= FAQ ============= -->
-  <section class="section container">
-    <div class="faq-block">
-      <div class="faq-head">
-        <span class="tag">FAQs</span>
-        <h2 class="section-title">{{ eor.faqs.title }}</h2>
+    <!-- EOR VS LOCAL ENTITY -->
+    <section class="eor-section eor-container">
+      <div class="eor-compare-header">
+        <span class="eor-eyebrow">Why EOR?</span>
+        <h2>EOR vs. Setting Up a Local Entity</h2>
+        <p class="eor-compare-sub">Establishing your own entity takes months and hundreds of thousands in setup costs. EOR gets you there in days.</p>
       </div>
-      <div class="faq-list">
-        <button
-          v-for="(item, i) in eor.faqs.items"
-          :key="i"
-          class="faq-item"
-          :class="{ open: openFaq === i }"
-          @click="toggleFaq(i)"
-          :aria-expanded="openFaq === i"
-        >
-          <span class="faq-q">{{ item.question }}</span>
-          <span class="faq-toggle" aria-hidden>{{ openFaq === i ? '−' : '+' }}</span>
-          <p v-show="openFaq === i" class="faq-a">{{ item.answer }}</p>
-        </button>
+      <div class="eor-compare-table">
+        <div class="ect-header">
+          <div class="ect-label"></div>
+          <div class="ect-col eor-col">Jackson &amp; Frank EOR</div>
+          <div class="ect-col entity-col">Local Entity Setup</div>
+        </div>
+        <div class="ect-row">
+          <div class="ect-label">Time to hire</div>
+          <div class="ect-col eor-col"><span class="ect-good">✓ 48–72 hours</span></div>
+          <div class="ect-col entity-col"><span class="ect-bad">✗ 3–6 months</span></div>
+        </div>
+        <div class="ect-row">
+          <div class="ect-label">Upfront cost</div>
+          <div class="ect-col eor-col"><span class="ect-good">✓ No setup fees</span></div>
+          <div class="ect-col entity-col"><span class="ect-bad">✗ $20,000–$50,000+</span></div>
+        </div>
+        <div class="ect-row">
+          <div class="ect-label">Local entity required</div>
+          <div class="ect-col eor-col"><span class="ect-good">✓ Not needed</span></div>
+          <div class="ect-col entity-col"><span class="ect-bad">✗ Mandatory</span></div>
+        </div>
+        <div class="ect-row">
+          <div class="ect-label">Compliance risk</div>
+          <div class="ect-col eor-col"><span class="ect-good">✓ Fully managed by JF</span></div>
+          <div class="ect-col entity-col"><span class="ect-bad">✗ Company bears all risk</span></div>
+        </div>
+        <div class="ect-row">
+          <div class="ect-label">Scalability</div>
+          <div class="ect-col eor-col"><span class="ect-good">✓ Scale instantly</span></div>
+          <div class="ect-col entity-col"><span class="ect-bad">✗ Slow &amp; complex</span></div>
+        </div>
+        <div class="ect-row">
+          <div class="ect-label">Exit flexibility</div>
+          <div class="ect-col eor-col"><span class="ect-good">✓ Flexible offboarding</span></div>
+          <div class="ect-col entity-col"><span class="ect-bad">✗ Complex wind-down</span></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============= WARM CTA ============= -->
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>{{ eor.cta.title }}</h2>
-      <p>{{ eor.cta.description }}</p>
-      <div class="cta-warm-features">
-        <span v-for="f in eor.cta.features" :key="f" class="cta-feature">
-          <span class="cta-feature-mark" aria-hidden>✓</span> {{ f }}
-        </span>
+    <!-- WHO IS EOR FOR -->
+    <section class="eor-section eor-container">
+      <div class="eor-audience-header">
+        <span class="eor-eyebrow">Built for every stage</span>
+        <h2>Who is EOR <em>designed for?</em></h2>
       </div>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact?reason=eor_services" class="btn-primary">
-          {{ eor.cta.primaryButtonText }} <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/cost-calculator" class="btn-secondary">Estimate cost</RouterLink>
+      <div class="eor-audience-grid">
+        <div class="eor-audience-card">
+          <div class="eac-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+              <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+            </svg>
+          </div>
+          <h3>Startups entering new markets</h3>
+          <p>Test international markets without the commitment of a legal entity. Hire your first overseas employee in days and validate before you invest.</p>
+          <ul class="eac-list">
+            <li>No entity setup required</li>
+            <li>Hire in any country from day 1</li>
+            <li>Cancel anytime, no penalties</li>
+          </ul>
+        </div>
+        <div class="eor-audience-card">
+          <div class="eac-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3>Growing companies scaling globally</h3>
+          <p>Add headcount across borders without setting up subsidiaries in each country. Our EOR structure supports rapid, compliant global expansion.</p>
+          <ul class="eac-list">
+            <li>One partner across 160+ countries</li>
+            <li>Consistent HR processes globally</li>
+            <li>Scale up or down as needed</li>
+          </ul>
+        </div>
+        <div class="eor-audience-card">
+          <div class="eac-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18"/>
+              <path d="M9 21V9"/>
+            </svg>
+          </div>
+          <h3>Enterprises with distributed teams</h3>
+          <p>Centralize compliance across multiple jurisdictions. Replace fragmented local setups with one globally consistent EOR programme.</p>
+          <ul class="eac-list">
+            <li>Centralized payroll &amp; reporting</li>
+            <li>Standardized benefits globally</li>
+            <li>Single point of accountability</li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- COUNTRIES COVERAGE -->
+    <section class="eor-section eor-countries-section">
+      <div class="eor-container">
+        <div class="eor-countries-header">
+          <span class="eor-eyebrow">Global coverage</span>
+          <h2>Hire in <em>160+ Countries</em></h2>
+          <p class="eor-countries-sub">From Amsterdam to Singapore, New York to Mumbai — if the talent is there, we'll get them hired compliantly.</p>
+        </div>
+        <div class="eor-countries-grid">
+          <div class="ecg-item" v-for="country in topCountries" :key="country.code">
+            <img :src="`https://hatscripts.github.io/circle-flags/flags/${country.code}.svg`" :alt="country.name" class="ecg-flag" />
+            <span>{{ country.name }}</span>
+          </div>
+        </div>
+        <div class="eor-countries-cta">
+          <a href="/contact" class="gh-btn-gold">Explore all countries →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+
+    <section class="eor-section eor-container">
+      <div class="faq-section">
+        <h2 class="faq-title mb-6">Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div v-for="(faq, i) in faqs" :key="i" class="faq-item">
+            <button class="faq-button" @click="toggleFaq(i)" :aria-expanded="openFaq === i">
+              <span class="faq-icon">[{{ openFaq === i ? '-' : '+' }}]</span>
+              <span class="faq-question">{{ faq.question }}</span>
+              <span class="faq-indicator">
+                <svg v-if="openFaq !== i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+              </span>
+            </button>
+            <div v-show="openFaq === i" class="faq-answer">
+              <p>{{ faq.answer }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="eor-container eor-cta-section">
+      <div class="cta-banner eor-container2 cta-hiring-panel">
+        <div class="cta-top-copy">
+          <h2>Ready to expand your team globally?</h2>
+          <p>1,000+ companies use us for international payroll and employment compliance. Most first hires go live in 48–72 hours.</p>
+        </div>
+        <div class="cta-feature-grid">
+          <div class="cta-feature-card">
+            <div class="cta-feature-icon">$</div>
+            <span>No setup fees</span>
+          </div>
+          <div class="cta-feature-card">
+            <div class="cta-feature-icon">⚡</div>
+            <span>48–72 hour typical go-live</span>
+          </div>
+          <div class="cta-feature-card">
+            <div class="cta-feature-icon">🌍</div>
+            <span>Hire without entity</span>
+          </div>
+          <div class="cta-feature-card">
+            <div class="cta-feature-icon">🛡️</div>
+            <span>Employment compliance in scope</span>
+          </div>
+        </div>
+        <div class="cta-actions">
+          <a href="/contact" class="gh-btn-outline cta-secondary-btn">Book a call</a>
+          <a href="/contact" class="gh-btn-gold cta-primary-btn">Start hiring in days →</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
 </template>
 
 <style scoped>
-@import '@/styles/service-page.css';
-
-/* ============= COUNTRIES STRIP (EOR-specific) ============= */
-.countries-strip {
-  padding: 100px 0;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.countries-strip-head { max-width: 760px; margin-bottom: 48px; }
-.countries-strip-head .tag { margin-bottom: 16px; }
-.countries-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 14px;
-}
-.country-chip {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: var(--bg);
-  border-radius: 12px;
-  padding: 14px 18px;
-  border: 1px solid var(--border);
-  transition: border-color 0.2s, transform 0.2s;
-}
-.country-chip:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-.country-flag {
-  width: 32px;
-  height: 22px;
-  object-fit: cover;
-  border-radius: 3px;
-  flex-shrink: 0;
-}
-.country-chip span {
-  font-size: 14px;
-  font-weight: 500;
-}
-.countries-note {
-  margin-top: 24px;
-  font-size: 13px;
-  color: var(--ink-muted);
-  font-style: italic;
+@import '@/styles/eor-modern.css';
+@import '@/styles/eor-sections.css';
+/* ============================================================
+   PREMIUM HERO
+   ============================================================ */
+.eor-premium-hero {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 88px 0 96px;
+  display: block;
+  background-color: #f4f1ec;
+  background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 100%) 30%, rgba(253, 251, 247, 0.6) 55%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/eor-hero2.png);
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+  color: #061639; /* ink */
+  min-height: 700px;
+  overflow: hidden;
+  margin-bottom: 40px;
 }
 
-/* ============= WHO NEEDS ============= */
-.whoneeds-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+.eor-premium-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.4), transparent 50%);
+  pointer-events: none;
 }
-.whoneeds-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
+
+.eor-premium-hero > * {
+  position: relative;
+  z-index: 1;
 }
-.whoneeds-icon {
-  display: inline-flex;
-  width: 36px;
-  height: 36px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 16px;
-  margin-bottom: 16px;
+
+.eor-premium-hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
 }
-.whoneeds-card h4 {
-  font-family: var(--serif);
-  font-size: 19px;
+
+.eor-premium-hero .service-hero-copy {
+  max-width: 720px;
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.eor-premium-hero .tag {
+  color: #b09559; /* accent */
+  background: rgba(176, 149, 89, 0.1);
+  border: 1px solid rgba(176, 149, 89, 0.2);
+  margin-bottom: 24px;
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.eor-premium-hero h1 {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: clamp(48px, 5.8vw, 86px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
   font-weight: 400;
-  margin-bottom: 16px;
-  color: var(--ink);
-}
-.whoneeds-pain,
-.whoneeds-solution {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 0;
-}
-.whoneeds-pain { border-top: 1px solid var(--border); }
-.whoneeds-pain p,
-.whoneeds-solution p {
-  font-size: 13px;
-  color: var(--ink-soft);
-  line-height: 1.55;
+  margin-top: 0;
+  margin-bottom: 24px;
 }
 
-/* ============= COMPLIANCE (EOR-specific) ============= */
-.compliance-block {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 80px;
-  align-items: start;
+.eor-premium-hero h1 em {
+  font-style: italic;
+  color: #b09559;
 }
-.compliance-block .tag { margin-bottom: 16px; }
-.compliance-para {
-  margin-bottom: 16px;
+
+.eor-premium-hero .service-hero-lede {
+  color: rgba(6, 22, 57, 0.7); /* ink-soft */
+  font-size: 19px;
+  margin-top: 24px;
+  max-width: 520px;
+  line-height: 1.6;
 }
-.compliance-bullets {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.compliance-bullet {
+
+.eor-premium-hero .cta-row {
   display: flex;
   gap: 16px;
-  padding: 20px 24px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-.compliance-mark {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  flex-shrink: 0;
-}
-.compliance-bullet p {
-  font-size: 14px;
-  color: var(--ink-soft);
-  line-height: 1.55;
+  margin-top: 40px;
+  flex-wrap: wrap;
 }
 
-@media (max-width: 1024px) {
-  .compliance-block {
-    grid-template-columns: 1fr;
-    gap: 32px;
+.eor-premium-hero .btn-primary {
+  padding: 14px 28px;
+  font-size: 15px;
+  border-radius: 999px;
+  background: #b09559;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 8px 24px rgba(176, 149, 89, 0.3);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.eor-premium-hero .btn-primary:hover {
+  background: #9a824e;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(176, 149, 89, 0.4);
+}
+
+.eor-premium-hero .btn-secondary {
+  padding: 14px 28px;
+  font-size: 15px;
+  border-radius: 999px;
+  background: transparent;
+  color: #061639;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eor-premium-hero .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 960px) {
+  .eor-premium-hero {
+    padding: 72px 24px 72px;
+    background-size: cover;
+    background-position: center;
+    background-image: linear-gradient(rgba(244, 241, 236, 0.8), rgba(244, 241, 236, 0.95)), url(/services/service-page/eor-hero2.png);
   }
 }
+
 @media (max-width: 640px) {
-  .countries-strip {
-    padding: 60px 0;
+  .eor-premium-hero {
+    padding: 56px 20px 64px;
+  }
+  .eor-premium-hero h1 {
+    font-size: clamp(36px, 8vw, 48px);
+  }
+  .eor-premium-hero .cta-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .eor-premium-hero .btn-primary,
+  .eor-premium-hero .btn-secondary {
+    width: 100%;
+    justify-content: center;
   }
 }
+
 </style>

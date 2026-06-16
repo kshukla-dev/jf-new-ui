@@ -10,9 +10,9 @@
   --ink-soft: #4a4a4a;
   --ink-muted: #8a8680;
 
-  /* JF navy as the primary accent (replaces Halden Miller's #1e2a78) */
-  --accent: #143369;
-  --accent-soft: #e6e8f0;
+  /* JF gold as the primary accent */
+  --accent: #b09559;
+  --accent-soft: #f5edd9;
   --accent-warm: #d4b896;
 
   --dark: #161616;
