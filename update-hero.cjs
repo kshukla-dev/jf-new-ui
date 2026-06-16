@@ -75,7 +75,7 @@ if (styleStart !== -1 && styleEnd !== -1) {
   margin-right: -50vw;
   width: 100vw;
   box-sizing: border-box;
-  padding: 88px 0 96px;
+  padding: 20px 0 96px;
   display: block;
   background-color: #f4f1ec;
   background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 0%) 30%, rgba(253, 251, 247, 0.4) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/about2.png);

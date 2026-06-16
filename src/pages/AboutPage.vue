@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import about from '@/data/about-us.json'
 
@@ -34,36 +34,56 @@ const team = [
   { name: 'Maarten Koekebakker', role: 'Partner', image: '/leadership/Maarten.webp', bio: 'With a wealth of experience in navigating the intricate landscapes of international expansion strategy and human resources, Maarten stands as a seasoned professional adept at driving organizational growth and success on a global scale.' },
   { name: 'Pawel Michalkiewicz', role: 'Managing partner', image: '/leadership/pawel2.webp', bio: 'Pawel brings over two decades of hands-on experience in international business development and human resource management, having held pivotal roles in multinational corporations across various industries.' },
 ]
+
+const activeMilestone = ref(0)
+let milestoneInterval
+
+function nextMilestone() {
+  activeMilestone.value = (activeMilestone.value + 1) % milestones.length
+}
+
+function prevMilestone() {
+  activeMilestone.value = (activeMilestone.value - 1 + milestones.length) % milestones.length
+}
+
+function setMilestone(index) {
+  activeMilestone.value = index
+}
+
+onMounted(() => {
+  milestoneInterval = setInterval(nextMilestone, 5000)
+})
+
+onUnmounted(() => {
+  if (milestoneInterval) clearInterval(milestoneInterval)
+})
+
 </script>
 
 <template>
   <!-- ============= HERO ============= -->
-  <header class="container service-hero">
-    <div class="service-hero-copy">
-      <span class="tag">About us</span>
-      <h1>Global hiring,<br />made <em>human</em></h1>
-      <p class="service-hero-lede">{{ about.definition.description }}</p>
-      <div class="service-hero-features">
-        <div v-for="(f, i) in about.definition.keyFeatures" :key="i" class="hero-feature">
-          <span class="hero-feature-dot" />
-          {{ f }}
+  <header class="service-hero about-premium-hero">
+    <div class="about-premium-hero-inner">
+      <div class="service-hero-copy">
+       <h1>Global hiring,<br />made <em>human</em></h1>
+        <p class="service-hero-lede">{{ about.definition.description }}</p>
+        
+        <div class="service-hero-features" style="display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap;">
+          <div v-for="(f, i) in about.definition.keyFeatures" :key="i" class="hero-feature" style="display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 15px; color: var(--ink);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--accent);"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/><path d="M2 12H22"/><path d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z"/></svg>
+            {{ f }}
+          </div>
         </div>
-      </div>
-      <div class="cta-row">
-        <RouterLink to="/contact" class="btn-primary">
-          {{ about.definition.primaryButtonText }} <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/contact?reason=consultation" class="btn-secondary">
-          {{ about.definition.secondaryButtonText }}
-        </RouterLink>
-      </div>
-    </div>
-    <div class="service-hero-visual">
-      <img :src="about.definition.image" :alt="about.definition.imageAlt" />
-      <div class="service-hero-shape">J</div>
-      <div class="service-hero-badge">
-        <strong>Since 2013</strong>
-        <span>Over a decade of global HR</span>
+        
+        <div class="cta-row" style="margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;">
+          <RouterLink to="/contact" class="btn-primary" style="padding: 14px 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent); color: white; text-decoration: none; border: none; box-shadow: 0 8px 24px rgba(176, 149, 89, 0.3); font-weight: 600;">
+            {{ about.definition.primaryButtonText }} <span class="arrow" style="margin-left: 6px;">→</span>
+          </RouterLink>
+          <RouterLink to="/contact?reason=consultation" class="btn-secondary" style="padding: 14px 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: transparent; color: var(--ink); border: 1px solid rgba(0,0,0,0.1); text-decoration: none; font-weight: 500;">
+            {{ about.definition.secondaryButtonText }}
+          </RouterLink>
+        </div>
+
       </div>
     </div>
   </header>
@@ -89,10 +109,40 @@ const team = [
         provider, from our founding in the Netherlands to our expansion worldwide.
       </p>
     </div>
-    <div class="timeline">
-      <div v-for="m in milestones" :key="m.year" class="timeline-item">
-        <span class="timeline-year">{{ m.year }}</span>
-        <p>{{ m.description }}</p>
+    <div class="milestone-carousel">
+      <div class="mc-bg" style="background-image: url('/world-map-dark.png');"></div>
+      
+      <div class="mc-progress">
+        <button 
+          v-for="(m, i) in milestones" 
+          :key="'dot-'+i" 
+          class="mc-dot"
+          :class="{ active: i === activeMilestone }"
+          @click="setMilestone(i)"
+          :aria-label="'Go to milestone ' + m.year"
+        ></button>
+      </div>
+      
+      <div class="mc-content-wrapper">
+        <button class="mc-nav-btn prev" @click="prevMilestone" aria-label="Previous milestone">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        
+        <div class="mc-content">
+          <transition name="fade-slide" mode="out-in">
+            <div :key="activeMilestone" class="mc-slide">
+              <div class="mc-badge">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="3"/></svg>
+                {{ milestones[activeMilestone].year }}
+              </div>
+              <p class="mc-desc">{{ milestones[activeMilestone].description }}</p>
+            </div>
+          </transition>
+        </div>
+        
+        <button class="mc-nav-btn next" @click="nextMilestone" aria-label="Next milestone">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       </div>
     </div>
   </section>
@@ -120,13 +170,24 @@ const team = [
   <!-- ============= VISION / MISSION ============= -->
   <section class="section container">
     <div class="vm-grid">
-      <div class="vm-card">
-        <span class="tag">Vision</span>
-        <p>A world in which international employability has no barriers.</p>
+      <div class="vm-card-premium">
+        <!-- Bright, open horizon image for Vision -->
+        <div class="vm-bg" style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80');"></div>
+        <div class="vm-overlay"></div>
+        <div class="vm-content">
+          <span class="vm-badge">Vision</span>
+          <p>A world in which international employability has no barriers.</p>
+        </div>
       </div>
-      <div class="vm-card vm-card-dark">
-        <span class="tag">Mission</span>
-        <p>Enabling international labour mobility for organizations and people.</p>
+      
+      <div class="vm-card-premium vm-mission">
+        <!-- Collaborative global team image for Mission -->
+        <div class="vm-bg" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80');"></div>
+        <div class="vm-overlay"></div>
+        <div class="vm-content">
+          <span class="vm-badge">Mission</span>
+          <p>Enabling international labour mobility for organizations and people.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -301,51 +362,6 @@ const team = [
 .vm-card-dark .tag { color: rgba(255, 255, 255, 0.7); }
 .vm-card-dark p { color: white; }
 
-/* Team */
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-}
-.team-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-}
-.team-photo {
-  background: var(--accent-soft);
-}
-.team-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.team-body {
-  padding: 32px;
-}
-.team-body h3 {
-  font-family: var(--serif);
-  font-size: 24px;
-  font-weight: 400;
-  margin-bottom: 4px;
-}
-.team-role {
-  display: block;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 16px;
-}
-.team-body p {
-  font-size: 14px;
-  color: var(--ink-soft);
-  line-height: 1.6;
-}
-
 @media (max-width: 1024px) {
   .timeline { grid-template-columns: repeat(2, 1fr); }
   .values-grid { grid-template-columns: repeat(2, 1fr); }
@@ -357,4 +373,452 @@ const team = [
   .team-card { grid-template-columns: 1fr; }
   .team-photo { aspect-ratio: 16 / 10; }
 }
+
+/* =======================================
+   About Us Premium Hero
+   ======================================= */
+.about-premium-hero {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 100px 0 120px;
+  display: block;
+  background-color: #f4f1ec;
+  background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 0%) 30%, rgba(253, 251, 247, 0.4) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/about2.png);
+  background-size: 55% auto;
+  background-position: right 0% center;
+  background-repeat: no-repeat;
+  color: var(--ink);
+  min-height: 700px;
+  overflow: hidden;
+}
+
+.about-premium-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.4), transparent 50%);
+  pointer-events: none;
+}
+
+.about-premium-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.about-premium-hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.about-premium-hero .service-hero-copy {
+  max-width: 640px;
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.about-premium-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(48px, 5.5vw, 86px);
+  line-height: 1.05;
+  margin-bottom: 24px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.about-premium-hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.about-premium-hero .service-hero-lede {
+  font-size: 19px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.about-premium-hero .tag {
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+}
+
+@media (max-width: 960px) {
+  .about-premium-hero {
+    background-size: 70% auto;
+    background-position: right -50px center;
+    padding: 72px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-premium-hero {
+    padding: 56px 0 64px;
+    background-position: top center;
+    background-image: linear-gradient(to bottom, rgba(244, 241, 236, 0.5) 0%, #f4f1ec 60%), url(/services/service-page/about2.png);
+  }
+  .about-premium-hero .cta-row {
+    flex-direction: column;
+  }
+  .about-premium-hero .cta-row > * {
+    width: 100%;
+  }
+}
+
+/* Milestone Carousel */
+.milestone-carousel {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #0B1120;
+  padding: 60px 40px;
+  color: white;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 40px;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+}
+
+.mc-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+.milestone-carousel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, #0B1120 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mc-progress {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+  width: 90%;
+  max-width: 600px;
+}
+
+.mc-dot {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.mc-dot:hover {
+  background: rgba(255,255,255,0.4);
+}
+
+.mc-dot.active {
+  background: white;
+  box-shadow: 0 0 8px rgba(255,255,255,0.5);
+}
+
+.mc-content-wrapper {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mc-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.mc-nav-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.mc-content {
+  flex: 1;
+  text-align: center;
+  padding: 0 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.mc-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.8);
+  background: #2563EB;
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+}
+
+.mc-desc {
+  font-size: clamp(20px, 3vw, 28px);
+  line-height: 1.4;
+  font-weight: 600;
+  color: white;
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.4s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+@media (max-width: 640px) {
+  .mc-content-wrapper {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .mc-nav-btn {
+    display: none;
+  }
+  .mc-content {
+    padding: 0;
+  }
+}
+
+/* =======================================
+   Premium Vision / Mission Cards
+   ======================================= */
+.vm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.vm-card-premium {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  cursor: pointer;
+  background: white;
+}
+
+.vm-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.vm-card-premium:hover .vm-bg {
+  transform: scale(1.05);
+}
+
+/* Vision uses a light overlay so text is dark */
+.vm-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0) 100%);
+  z-index: 2;
+  transition: opacity 0.4s ease;
+}
+
+.vm-content {
+  position: relative;
+  z-index: 3;
+  padding: 48px;
+  color: var(--ink);
+  transform: translateY(16px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vm-card-premium:hover .vm-content {
+  transform: translateY(0);
+}
+
+.vm-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(8px);
+  color: var(--ink);
+}
+
+.vm-content p {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.5vw, 42px);
+  line-height: 1.25;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Mission uses a rich golden overlay so text is white */
+.vm-card-premium.vm-mission .vm-overlay {
+  background: linear-gradient(to top, rgba(176,149,89,1) 0%, rgba(176,149,89,0.8) 40%, rgba(176,149,89,0) 100%);
+}
+
+.vm-card-premium.vm-mission .vm-content {
+  color: white;
+}
+
+.vm-card-premium.vm-mission .vm-badge {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+
+@media (max-width: 960px) {
+  .vm-grid {
+    grid-template-columns: 1fr;
+  }
+  .vm-card-premium {
+    min-height: 400px;
+  }
+}
+
+
+/* =======================================
+   Premium Leadership Team (Horizontal)
+   ======================================= */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+}
+.team-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.03);
+  align-items: stretch;
+}
+.team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 48px rgba(176, 149, 89, 0.15);
+}
+.team-photo {
+  width: 260px;
+  flex-shrink: 0;
+  position: relative;
+}
+.team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.team-body {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.team-body h3 {
+  font-family: var(--serif);
+  font-size: 28px;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.team-role {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.team-body p {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+@media (max-width: 1100px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin: 48px auto 0;
+  }
+}
+@media (max-width: 640px) {
+  .team-card {
+    flex-direction: column;
+  }
+  .team-photo {
+    width: 100%;
+    height: 300px;
+  }
+  .team-body {
+    padding: 32px 24px;
+  }
+}
+
+
 </style>

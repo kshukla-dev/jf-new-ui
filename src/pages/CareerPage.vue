@@ -7,35 +7,39 @@ const openFaq = ref(0)
 function toggleFaq(i: number) {
   openFaq.value = openFaq.value === i ? -1 : i
 }
+
+function getRoleTheme(dept: string) {
+  const d = dept.toLowerCase()
+  if (d.includes('human') || d.includes('hr') || d.includes('mobility')) {
+    return 'blue'
+  }
+  if (d.includes('sales') || d.includes('business') || d.includes('develop')) {
+    return 'green'
+  }
+  return 'purple'
+}
 </script>
 
 <template>
-  <header class="container service-hero">
-    <div class="service-hero-copy">
-      <span class="tag">Careers</span>
-      <h1>Build the future of <em>global HR</em></h1>
-      <p class="service-hero-lede">{{ career.definition.description }}</p>
-      <div class="service-hero-features">
-        <div v-for="(f, i) in career.definition.keyFeatures" :key="i" class="hero-feature">
-          <span class="hero-feature-dot" />
-          {{ f }}
+  <header class="service-hero careers-hero">
+    <div class="careers-hero-inner">
+      <div class="service-hero-copy">
+        <h1>Build the future of <em>global HR</em></h1>
+        <p class="service-hero-lede">{{ career.definition.description }}</p>
+        <ul class="service-hero-features">
+          <li v-for="(f, i) in career.definition.keyFeatures" :key="i" class="hero-feature">
+            <span class="hero-feature-check">✓</span>
+            {{ f }}
+          </li>
+        </ul>
+        <div class="cta-row">
+          <a href="#open-positions" class="btn-primary">
+            {{ career.definition.primaryButtonText }} <span class="arrow">→</span>
+          </a>
+          <RouterLink to="/about-us" class="btn-secondary">
+            {{ career.definition.secondaryButtonText }}
+          </RouterLink>
         </div>
-      </div>
-      <div class="cta-row">
-        <a href="#open-positions" class="btn-primary">
-          {{ career.definition.primaryButtonText }} <span class="arrow">→</span>
-        </a>
-        <RouterLink to="/about-us" class="btn-secondary">
-          {{ career.definition.secondaryButtonText }}
-        </RouterLink>
-      </div>
-    </div>
-    <div class="service-hero-visual">
-      <img :src="career.definition.image" :alt="career.definition.imageAlt" />
-      <div class="service-hero-shape">↗</div>
-      <div class="service-hero-badge">
-        <strong>Remote-first</strong>
-        <span>Work from anywhere in the world</span>
       </div>
     </div>
   </header>
@@ -74,29 +78,46 @@ function toggleFaq(i: number) {
         <p class="section-lead">Join a mission-driven team building the infrastructure for the future of work.</p>
       </div>
       <div class="positions-list">
-        <a
+        <div
           v-for="(p, i) in career.openPositions"
           :key="i"
-          :href="p.href"
-          target="_blank"
-          rel="noopener"
           class="position-card"
+          :class="getRoleTheme(p.department)"
         >
-          <div class="position-main">
-            <div class="position-meta">
-              <span>{{ p.department }}</span>
-              <span>·</span>
-              <span>{{ p.location }}</span>
-              <span>·</span>
-              <span>{{ p.type }}</span>
+          <!-- Card top accent header -->
+          <div class="position-card-header" :class="getRoleTheme(p.department)">
+            <div class="pos-dept-icon">
+              <svg v-if="getRoleTheme(p.department) === 'blue'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><circle cx="9" cy="7" r="4"/><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg>
+              <svg v-else-if="getRoleTheme(p.department) === 'green'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              <svg v-else width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             </div>
-            <h3>{{ p.title }}</h3>
-            <p>{{ p.description }}</p>
+            <span class="pos-dept-label">{{ p.department }}</span>
+            <span class="pos-type-pill">{{ p.type }}</span>
           </div>
-          <span class="position-apply">
-            Apply <span aria-hidden>→</span>
-          </span>
-        </a>
+
+          <!-- Card body -->
+          <div class="position-body">
+            <h3 class="position-title">{{ p.title }}</h3>
+
+            <div class="pos-meta-row">
+              <span class="pos-meta-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                {{ p.location }}
+              </span>
+              <span class="pos-meta-sep">·</span>
+              <span class="pos-meta-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                {{ p.type }}
+              </span>
+            </div>
+
+            <p class="position-desc">{{ p.description }}</p>
+
+            <a :href="p.href" target="_blank" rel="noopener" class="position-apply" :class="getRoleTheme(p.department)">
+              Apply Now <span aria-hidden>→</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -144,16 +165,175 @@ function toggleFaq(i: number) {
 <style scoped>
 @import '@/styles/service-page.css';
 
+.careers-hero {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 0px 0 96px;
+  display: block;
+  background-color: #f4f1ec;
+  background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 10%) 30%, rgba(253, 251, 247, 0.4) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/career.png);
+  background-size: 60% auto;
+  background-position: right 0% center;
+  background-repeat: no-repeat;
+  color: var(--ink);
+  min-height: 700px;
+  overflow: hidden;
+}
+
+.careers-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.4), transparent 50%);
+  pointer-events: none;
+}
+
+.careers-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.careers-hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 10px 32px;
+}
+
+.careers-hero .service-hero-copy {
+  max-width: 720px;
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.careers-hero h1 {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+.careers-hero .service-hero-copy h1 em {
+  color: var(--accent, #b09559);
+}
+
+.careers-hero .service-hero-lede {
+  color: var(--ink-soft);
+  text-shadow: none;
+  font-size: 19px;
+}
+
+.careers-hero .service-hero-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 32px;
+  list-style: none;
+  padding: 0;
+}
+
+.careers-hero .hero-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-shadow: none;
+}
+
+.careers-hero .hero-feature-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(176, 149, 89, 0.15);
+  border: 1px solid rgba(176, 149, 89, 0.4);
+  color: var(--accent, #b09559);
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(176, 149, 89, 0.2);
+}
+
+.careers-hero .cta-row {
+  margin-top: 40px;
+}
+
+.careers-hero .btn-primary {
+  background: var(--accent, #b09559);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 8px 24px rgba(176, 149, 89, 0.3);
+}
+
+.careers-hero .btn-primary:hover {
+  background: #9a824e;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(176, 149, 89, 0.4);
+}
+
+.careers-hero .btn-secondary {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--ink);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.careers-hero .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--ink);
+}
+
+@media (max-width: 960px) {
+  .careers-hero {
+    padding: 72px 24px 72px;
+  }
+}
+
+@media (max-width: 640px) {
+  .careers-hero {
+    padding: 56px 20px 64px;
+  }
+  .careers-hero .service-hero-copy h1 {
+    font-size: clamp(36px, 8vw, 48px);
+  }
+  .careers-hero .cta-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .careers-hero .btn-primary,
+  .careers-hero .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 .benefit-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: linear-gradient(180deg, #fffaf3 0%, #f8f1e7 100%);
+  border: 1px solid rgba(160, 125, 77, 0.18);
+  border-radius: var(--radius-lg);
   padding: 32px 28px;
+  box-shadow: 0 16px 32px rgba(115, 78, 42, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.benefit-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px rgba(115, 78, 42, 0.1);
 }
 .benefit-mark {
   display: inline-block;
@@ -165,9 +345,10 @@ function toggleFaq(i: number) {
 }
 .benefit-card h3 {
   font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 22px;
+  font-weight: 500;
   margin-bottom: 10px;
+  color: var(--ink);
 }
 .benefit-card p {
   font-size: 14px;
@@ -176,7 +357,6 @@ function toggleFaq(i: number) {
 }
 
 .positions-strip {
-  background: var(--bg-card);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 100px 0;
@@ -185,66 +365,192 @@ function toggleFaq(i: number) {
 .positions-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+}
+/* === POSITION CARDS (CARD STYLE) === */
+.positions-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
 }
 .position-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 32px 36px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: center;
-  transition: border-color 0.2s, transform 0.2s;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 .position-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.1);
 }
-.position-meta {
+
+/* Colored top header strip */
+.position-card-header {
+  padding: 28px 28px 24px;
   display: flex;
-  gap: 8px;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.position-card-header.blue {
+  background: linear-gradient(135deg, #1c1915 0%, #2c241a 100%);
+}
+.position-card-header.green {
+  background: linear-gradient(135deg, #b09559 0%, #7d6635 100%);
+}
+.position-card-header.purple {
+  background: linear-gradient(135deg, #3d2e1e 0%, #1e1812 100%);
+}
+.position-card-header::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+.pos-dept-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  flex-shrink: 0;
+  backdrop-filter: blur(4px);
+}
+.pos-dept-label {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--ink-muted);
-  margin-bottom: 10px;
+  flex: 1;
 }
-.position-main h3 {
+.pos-type-pill {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 4px 12px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+/* Card body */
+.position-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.position-title {
   font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 400;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.3;
 }
-.position-main p {
+.pos-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pos-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  font-family: var(--sans);
+}
+.pos-meta-sep {
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+.position-desc {
   font-size: 14px;
   color: var(--ink-soft);
-  line-height: 1.6;
-  max-width: 720px;
+  line-height: 1.65;
+  flex: 1;
+  margin-bottom: 24px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .position-apply {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   padding: 12px 22px;
   border-radius: 999px;
-  background: var(--ink);
-  color: var(--bg);
   font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: background 0.2s;
+  font-family: var(--sans);
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
 }
+.position-apply.blue { background: #1c1915; }
+.position-apply.green { background: #b09559; }
+.position-apply.purple { background: #3d2e1e; }
 .position-card:hover .position-apply {
-  background: var(--accent);
+  transform: translateX(4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* FAQ Font Standardizations */
+.faq-q {
+  font-family: var(--sans);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  transition: color 0.2s;
+}
+.faq-item.open .faq-q {
+  color: var(--accent);
+}
+.faq-toggle {
+  font-size: 24px;
+  color: var(--ink-muted);
+  line-height: 1;
+  transition: color 0.2s;
+}
+.faq-item.open .faq-toggle {
+  color: var(--accent);
+}
+.faq-a {
+  grid-column: 1 / -1;
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.65;
 }
 
 @media (max-width: 1024px) {
   .benefits-grid { grid-template-columns: 1fr 1fr; }
-  .position-card { grid-template-columns: 1fr; }
+  .positions-list { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
   .benefits-grid { grid-template-columns: 1fr; }
+  .positions-list { grid-template-columns: 1fr; }
 }
 </style>

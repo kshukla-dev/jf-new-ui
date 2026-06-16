@@ -559,11 +559,17 @@ nav {
   .nav-inner {
     grid-template-columns: 1fr auto;
   }
-  .btn-contact {
+  .btn-consultation {
     display: none;
   }
   .dropdown-wrap {
     display: none;
+  }
+}
+@media (max-width: 768px) {
+  .logo {
+    font-size: 24px;
+    white-space: nowrap;
   }
 }
 </style>

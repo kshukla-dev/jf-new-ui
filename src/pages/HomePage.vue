@@ -939,35 +939,7 @@ const globalDestinations = [
         </div>
       </div>
     </section> -->
- -->
-  <!-- ============= BEGIN (final CTAs) ============= -->
-  <section class="section container">
-    <div class="begin-head">
-      <h2 class="section-title">Here's how we <em>begin</em></h2>
-    </div>
-    <div class="begin-grid">
-      <div class="begin-card dark">
-        <div>
-          <div class="begin-icon">▢</div>
-          <h3>Let's talk about <em>where</em> you want to hire next</h3>
-        </div>
-        <div class="begin-foot">
-          <p>When local compliance and global growth finally speak the same language, results follow.</p>
-          <RouterLink to="/contact" class="btn-primary">Book a consultation →</RouterLink>
-        </div>
-      </div>
-      <div class="begin-card warm">
-        <div>
-          <div class="begin-icon">◐</div>
-          <h3>Explore how we <em>structure</em> global teams</h3>
-        </div>
-        <div class="begin-foot">
-          <p>From EOR to payroll to immigration — one partner, every country.</p>
-          <RouterLink to="/employer-of-record" class="btn-primary">See our services →</RouterLink>
-        </div>
-      </div>
-    </div>
-  </section>
+
 </template>
 
 <style scoped>
@@ -982,7 +954,7 @@ const globalDestinations = [
   margin-right: -50vw;
   width: 100vw;
   box-sizing: border-box;
-  padding: 88px 0 96px;
+  padding: 20px 0 96px;
   display: block;
   background-color: #f4f1ec;
   background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 0%) 30%, rgba(253, 251, 247, 0.4) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/about2.png);
@@ -1144,13 +1116,17 @@ const globalDestinations = [
 @media (max-width: 960px) {
   .home-hero {
     padding: 72px 24px 72px;
+    background-image: linear-gradient(180deg, #f4f1ec 40%, rgba(244, 241, 236, 0.95) 80%, rgba(244, 241, 236, 0.7) 100%), url(/services/service-page/about2.png);
     background-size: cover;
-    background-position: right -200px center;
+    background-position: center bottom;
   }
 }
 @media (max-width: 640px) {
   .home-hero {
     padding: 56px 20px 64px;
+    background-image: linear-gradient(180deg, #f4f1ec 35%, rgba(244, 241, 236, 0.96) 75%, rgba(244, 241, 236, 0.8) 100%), url(/services/service-page/about2.png);
+    background-position: center bottom;
+    background-size: cover;
   }
   .home-hero h1 {
     font-size: clamp(36px, 8vw, 48px);
@@ -2291,8 +2267,14 @@ const globalDestinations = [
     grid-template-columns: 1fr;
     gap: 40px;
   }
+  .intro-blurb {
+    padding: 40px 0 40px;
+    gap: 20px;
+  }
   .intro-blurb p {
     grid-column: 1;
+    font-size: clamp(18px, 4vw, 22px);
+    line-height: 1.45;
   }
   .foundations-grid,
   .testimonials-grid,
@@ -2587,7 +2569,108 @@ const globalDestinations = [
     display: none;
   }
 }
+
+/* =======================================
+   Featured Report Card Enhancements
+   ======================================= */
+.featured-report-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  height: 440px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+  cursor: pointer;
+  background: #0a1223;
+}
+
+.featured-report-card:hover {
+  transform: translateY(-8px);
+}
+
+.frc-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 1s ease;
+  opacity: 0.8;
+}
+
+.featured-report-card:hover .frc-bg {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.frc-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to top, rgba(10, 18, 35, 0.95) 0%, rgba(10, 18, 35, 0.6) 50%, rgba(10, 18, 35, 0) 100%);
+  z-index: 1;
+}
+
+.frc-content {
+  position: relative;
+  z-index: 2;
+  padding: 40px;
+  color: white;
+}
+
+.frc-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+}
+
+.frc-content h3 {
+  font-family: var(--serif);
+  font-size: 32px;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.frc-content h3 .highlight {
+  color: #F8D38D; /* Golden accent matching the theme */
+  background: transparent;
+  padding: 0;
+}
+
+.frc-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 90%;
+  margin-bottom: 24px;
+}
+
+.frc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.frc-link .arrow {
+  transition: transform 0.2s;
+}
+
+.featured-report-card:hover .frc-link .arrow {
+  transform: translateX(4px);
+}
 </style>
+
 
 
 <style scoped>
@@ -2652,7 +2735,7 @@ const globalDestinations = [
 .frc-bg {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  background: url('/services/service-page/ChinatoEurope.png') center/cover no-repeat;
   z-index: 1;
 }
 .frc-bg::after {
@@ -2690,7 +2773,6 @@ const globalDestinations = [
 }
 
 .frc-content h3 .highlight {
-  background-color: #1a365d;
   padding: 4px 8px;
   margin-left: -8px;
   border-radius: 4px;
@@ -3337,6 +3419,29 @@ const globalDestinations = [
 }
 
 @media (max-width: 768px) {
+  .faq-tabs-wrapper {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    scrollbar-width: none;
+  }
+  .faq-tabs-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  .faq-tabs {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    margin: 0 auto;
+  }
+  .faq-tab {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    font-size: 14px;
+  }
   .faq-support-card {
     flex-direction: column;
     text-align: center;
