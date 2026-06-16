@@ -231,47 +231,49 @@ const currentPreview = computed(() =>
     </Transition>
 
     <!-- Mobile drawer -->
-    <Transition name="mobile">
-      <div v-if="mobileOpen" class="mobile-drawer">
-        <button class="mobile-close" @click="mobileOpen = false" aria-label="Close menu">×</button>
-        <div class="mobile-section">
-          <span class="dropdown-eyebrow">Solutions</span>
-          <RouterLink
-            v-for="item in services"
-            :key="item.title"
-            :to="item.href"
-            @click="mobileOpen = false"
-          >
-            {{ item.title }}
+    <Teleport to="body">
+      <Transition name="mobile">
+        <div v-if="mobileOpen" class="mobile-drawer">
+          <button class="mobile-close" @click="mobileOpen = false" aria-label="Close menu">×</button>
+          <div class="mobile-section">
+            <span class="dropdown-eyebrow">Solutions</span>
+            <RouterLink
+              v-for="item in services"
+              :key="item.title"
+              :to="item.href"
+              @click="mobileOpen = false"
+            >
+              {{ item.title }}
+            </RouterLink>
+          </div>
+          <div class="mobile-section">
+            <span class="dropdown-eyebrow">Resources</span>
+            <RouterLink
+              v-for="item in insights"
+              :key="item.title"
+              :to="item.href"
+              @click="mobileOpen = false"
+            >
+              {{ item.title }}
+            </RouterLink>
+          </div>
+          <div class="mobile-section">
+            <span class="dropdown-eyebrow">About Us</span>
+            <RouterLink
+              v-for="item in about"
+              :key="item.title"
+              :to="item.href"
+              @click="mobileOpen = false"
+            >
+              {{ item.title }}
+            </RouterLink>
+          </div>
+          <RouterLink to="/contact" class="btn-consultation mobile-cta" @click="mobileOpen = false">
+            Book a consultation
           </RouterLink>
         </div>
-        <div class="mobile-section">
-          <span class="dropdown-eyebrow">Resources</span>
-          <RouterLink
-            v-for="item in insights"
-            :key="item.title"
-            :to="item.href"
-            @click="mobileOpen = false"
-          >
-            {{ item.title }}
-          </RouterLink>
-        </div>
-        <div class="mobile-section">
-          <span class="dropdown-eyebrow">About Us</span>
-          <RouterLink
-            v-for="item in about"
-            :key="item.title"
-            :to="item.href"
-            @click="mobileOpen = false"
-          >
-            {{ item.title }}
-          </RouterLink>
-        </div>
-        <RouterLink to="/contact" class="btn-consultation mobile-cta" @click="mobileOpen = false">
-          Book a consultation
-        </RouterLink>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
   </nav>
 </template>
 
@@ -509,11 +511,15 @@ nav {
   overflow-y: auto;
 }
 .mobile-close {
-  position: absolute;
+  position: fixed;
   top: 18px;
   right: 24px;
   font-size: 32px;
   color: var(--ink);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 210;
 }
 .mobile-section {
   display: flex;

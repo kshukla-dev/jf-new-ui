@@ -407,7 +407,15 @@ background-color: #f4f1ec;
 
 @media (max-width: 640px) {
   .compliance-hero {
-    padding: 56px 20px 64px;
+    min-height: auto;
+    padding: 260px 20px 60px;
+    background-size: 100% auto;
+    background-position: top center;
+    background-image: linear-gradient(to bottom, rgba(244, 241, 236, 0.1) 0%, #f4f1ec 220px), url(/compliance-hero-bg.png);
+  }
+  .compliance-hero-inner {
+    padding-left: 0;
+    padding-right: 0;
   }
   .compliance-hero .service-hero-copy h1 {
     font-size: clamp(36px, 8vw, 48px);

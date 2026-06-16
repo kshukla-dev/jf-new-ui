@@ -354,7 +354,30 @@ const trustAvatars = [
 
 @media (max-width: 640px) {
   .contractor-hero {
-    padding: 56px 20px 64px;
+    min-height: auto;
+    padding: 260px 20px 60px;
+    background-image: none;
+    background-color: #f4f1ec;
+  }
+  .contractor-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 280px;
+    background-image: url(/services/service-page/contractor-hero.jpg);
+    background-size: 100% auto;
+    background-position: top center;
+    background-repeat: no-repeat;
+
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    pointer-events: none;
+  }
+  .contractor-hero-inner {
+    padding-left: 0;
+    padding-right: 0;
   }
   .contractor-hero .service-hero-copy h1 {
     font-size: clamp(36px, 8vw, 48px);

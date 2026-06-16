@@ -391,7 +391,8 @@ const trustAvatars = [
 
 @media (max-width: 640px) {
   .payroll-hero {
-    padding: 56px 20px 64px;
+    min-height: auto;
+    padding: 100px 20px 60px;
   }
 
   .payroll-hero .service-hero-copy h1 {

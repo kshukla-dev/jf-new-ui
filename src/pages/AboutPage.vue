@@ -461,16 +461,22 @@ onUnmounted(() => {
     background-position: right -50px center;
     padding: 72px 0;
   }
+  .about-premium-hero-inner {
+    padding: 0 20px;
+  }
 }
 
 @media (max-width: 640px) {
   .about-premium-hero {
-    padding: 56px 0 64px;
+    min-height: auto;
+    padding: 260px 0 60px;
+    background-size: 100% auto;
     background-position: top center;
-    background-image: linear-gradient(to bottom, rgba(244, 241, 236, 0.5) 0%, #f4f1ec 60%), url(/services/service-page/about2.png);
+    background-image: linear-gradient(to bottom, rgba(244, 241, 236, 0) 0%, rgba(244, 241, 236, 0.15) 60%, #f4f1ec 250px), url(/services/service-page/about2.png);
   }
   .about-premium-hero .cta-row {
     flex-direction: column;
+    gap: 12px;
   }
   .about-premium-hero .cta-row > * {
     width: 100%;
@@ -622,15 +628,27 @@ onUnmounted(() => {
 }
 
 @media (max-width: 640px) {
+  .milestone-carousel {
+    padding: 50px 16px 36px;
+    min-height: auto;
+  }
   .mc-content-wrapper {
-    flex-direction: column;
-    gap: 32px;
+    gap: 20px;
   }
   .mc-nav-btn {
-    display: none;
+    width: 38px;
+    height: 38px;
   }
   .mc-content {
-    padding: 0;
+    padding: 0 8px;
+  }
+  .mc-badge {
+    font-size: 18px;
+    padding: 8px 20px;
+    margin-bottom: 20px;
+  }
+  .mc-desc {
+    font-size: 18px;
   }
 }
 

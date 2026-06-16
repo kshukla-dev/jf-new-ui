@@ -1002,14 +1002,33 @@ async function submitNewsletter(e: Event) {
   }
 }
 @media (max-width: 640px) {
+  .toolbar-slider-wrap {
+    padding: 6px 8px;
+    border-radius: 24px;
+    margin-bottom: 32px;
+  }
+  .slider-btn {
+    width: 28px;
+    height: 28px;
+  }
+  .slider-btn.left { margin-right: 8px; }
+  .slider-btn.right { margin-left: 8px; }
   .blog-toolbar {
-    padding: 8px;
-    border-radius: 20px;
     gap: 8px;
   }
   .filter-pill {
-    padding: 8px 16px;
+    padding: 8px 14px;
     font-size: 12px;
+  }
+  .count-badge {
+    padding: 2px 6px;
+    min-width: 20px;
+  }
+  .sidebar-newsletter-form {
+    flex-direction: column;
+  }
+  .sidebar-newsletter-form .btn-primary {
+    width: 100%;
   }
 }
 </style>

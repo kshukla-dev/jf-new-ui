@@ -203,9 +203,9 @@ p {
   transform: translateY(-1px);
 }
 
-/* === Generic section wrapper === */
 .section {
-  padding: 100px 0;
+  padding-top: 100px;
+  padding-bottom: 100px;
 }
 
 /* === Fade-in animation === */
@@ -223,7 +223,8 @@ p {
 /* === Responsive === */
 @media (max-width: 900px) {
   .section {
-    padding: 60px 0;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
 
   .container {

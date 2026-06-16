@@ -376,41 +376,43 @@ const topCountries = [
         <h2>EOR vs. Setting Up a Local Entity</h2>
         <p class="eor-compare-sub">Establishing your own entity takes months and hundreds of thousands in setup costs. EOR gets you there in days.</p>
       </div>
-      <div class="eor-compare-table">
-        <div class="ect-header">
-          <div class="ect-label"></div>
-          <div class="ect-col eor-col">Jackson &amp; Frank EOR</div>
-          <div class="ect-col entity-col">Local Entity Setup</div>
-        </div>
-        <div class="ect-row">
-          <div class="ect-label">Time to hire</div>
-          <div class="ect-col eor-col"><span class="ect-good">✓ 48–72 hours</span></div>
-          <div class="ect-col entity-col"><span class="ect-bad">✗ 3–6 months</span></div>
-        </div>
-        <div class="ect-row">
-          <div class="ect-label">Upfront cost</div>
-          <div class="ect-col eor-col"><span class="ect-good">✓ No setup fees</span></div>
-          <div class="ect-col entity-col"><span class="ect-bad">✗ $20,000–$50,000+</span></div>
-        </div>
-        <div class="ect-row">
-          <div class="ect-label">Local entity required</div>
-          <div class="ect-col eor-col"><span class="ect-good">✓ Not needed</span></div>
-          <div class="ect-col entity-col"><span class="ect-bad">✗ Mandatory</span></div>
-        </div>
-        <div class="ect-row">
-          <div class="ect-label">Compliance risk</div>
-          <div class="ect-col eor-col"><span class="ect-good">✓ Fully managed by JF</span></div>
-          <div class="ect-col entity-col"><span class="ect-bad">✗ Company bears all risk</span></div>
-        </div>
-        <div class="ect-row">
-          <div class="ect-label">Scalability</div>
-          <div class="ect-col eor-col"><span class="ect-good">✓ Scale instantly</span></div>
-          <div class="ect-col entity-col"><span class="ect-bad">✗ Slow &amp; complex</span></div>
-        </div>
-        <div class="ect-row">
-          <div class="ect-label">Exit flexibility</div>
-          <div class="ect-col eor-col"><span class="ect-good">✓ Flexible offboarding</span></div>
-          <div class="ect-col entity-col"><span class="ect-bad">✗ Complex wind-down</span></div>
+      <div class="eor-compare-table-wrapper">
+        <div class="eor-compare-table">
+          <div class="ect-header">
+            <div class="ect-label"></div>
+            <div class="ect-col eor-col">Jackson &amp; Frank EOR</div>
+            <div class="ect-col entity-col">Local Entity Setup</div>
+          </div>
+          <div class="ect-row">
+            <div class="ect-label">Time to hire</div>
+            <div class="ect-col eor-col"><span class="ect-good">✓ 48–72 hours</span></div>
+            <div class="ect-col entity-col"><span class="ect-bad">✗ 3–6 months</span></div>
+          </div>
+          <div class="ect-row">
+            <div class="ect-label">Upfront cost</div>
+            <div class="ect-col eor-col"><span class="ect-good">✓ No setup fees</span></div>
+            <div class="ect-col entity-col"><span class="ect-bad">✗ $20,000–$50,000+</span></div>
+          </div>
+          <div class="ect-row">
+            <div class="ect-label">Local entity required</div>
+            <div class="ect-col eor-col"><span class="ect-good">✓ Not needed</span></div>
+            <div class="ect-col entity-col"><span class="ect-bad">✗ Mandatory</span></div>
+          </div>
+          <div class="ect-row">
+            <div class="ect-label">Compliance risk</div>
+            <div class="ect-col eor-col"><span class="ect-good">✓ Fully managed by JF</span></div>
+            <div class="ect-col entity-col"><span class="ect-bad">✗ Company bears all risk</span></div>
+          </div>
+          <div class="ect-row">
+            <div class="ect-label">Scalability</div>
+            <div class="ect-col eor-col"><span class="ect-good">✓ Scale instantly</span></div>
+            <div class="ect-col entity-col"><span class="ect-bad">✗ Slow &amp; complex</span></div>
+          </div>
+          <div class="ect-row">
+            <div class="ect-label">Exit flexibility</div>
+            <div class="ect-col eor-col"><span class="ect-good">✓ Flexible offboarding</span></div>
+            <div class="ect-col entity-col"><span class="ect-bad">✗ Complex wind-down</span></div>
+          </div>
         </div>
       </div>
     </section>

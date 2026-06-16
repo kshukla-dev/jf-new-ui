@@ -347,7 +347,15 @@ const filteredFaqs = computed(() => {
 
 @media (max-width: 640px) {
   .advantages-hero {
-    padding: 56px 20px 64px;
+    min-height: auto;
+    padding: 260px 20px 60px;
+    background-size: 100% auto;
+    background-position: top center;
+    background-image: linear-gradient(to bottom, rgba(244, 241, 236, 0) 0%, rgba(244, 241, 236, 0.15) 60%, #f4f1ec 250px), url(/services/service-page/advantages.png);
+  }
+  .advantages-hero-inner {
+    padding-left: 0;
+    padding-right: 0;
   }
   .advantages-hero .service-hero-copy h1 {
     font-size: clamp(36px, 8vw, 48px);

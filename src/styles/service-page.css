@@ -224,8 +224,11 @@
     padding-top: 64px;
   }
 
-  .service-hero-visual {
-    min-height: 520px;
+  .service-hero-visual,
+  .service-hero-visual.hero-visual-bg {
+    min-height: 320px;
+    background-size: contain;
+    background-position: center;
   }
 
   .hero-image-frame {
@@ -708,7 +711,18 @@
 
 @media (max-width: 640px) {
   .service-hero {
-    padding-top: 100px;
+    padding-top: 80px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 40px;
+    gap: 32px;
+  }
+
+  .service-hero-visual,
+  .service-hero-visual.hero-visual-bg {
+    min-height: 240px;
+    background-size: contain;
+    background-position: center;
   }
 
   .stats-strip-inner {

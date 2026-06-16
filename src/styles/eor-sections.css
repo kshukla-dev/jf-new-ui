@@ -638,22 +638,12 @@
 /* Responsive for new sections */
 @media (max-width: 1024px) {
   .eor-process-steps {
-    flex-direction: column;
-    gap: 16px;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .eor-process-connector {
-    width: 2px;
-    height: 32px;
-    margin-top: 0;
-    margin-left: 52px;
-  }
-
-  .eor-process-connector::after {
-    right: -4px;
-    top: auto;
-    bottom: -5px;
-    transform: rotate(135deg);
+    display: none;
   }
 
   .eor-audience-grid {
@@ -672,13 +662,18 @@
 
 @media (max-width: 768px) {
   .eor-stats-inner {
-    flex-direction: column;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 12px 16px;
   }
 
   .eor-stat-divider {
-    width: 80px;
-    height: 1px;
+    display: none;
+  }
+
+  .eor-process-panel {
+    padding: 30px 16px;
   }
 
   .ect-header,
@@ -703,6 +698,22 @@
   .eor-compare-header h2,
   .eor-audience-header h2,
   .eor-countries-header h2 {
-    font-size: 34px;
+    font-size: 32px;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 480px) {
+  .eor-countries-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .cta-banner {
+    padding: 40px 16px 30px;
+    margin: 60px 0 32px;
+  }
+  .cta-banner h2 {
+    font-size: 28px;
+    line-height: 1.2;
   }
 }
