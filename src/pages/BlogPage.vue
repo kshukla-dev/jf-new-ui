@@ -129,7 +129,6 @@ async function submitNewsletter(e: Event) {
     <header class="blog-hero">
       <div class="container blog-hero-inner">
         <div class="blog-hero-content">
-          <span class="tag">BLOG</span>
           <h1 class="blog-hero-title">Insights, Trends &<br>Global Hiring Intelligence</h1>
           <p class="blog-hero-subtitle">
             Expert insights on EOR, global hiring, compliance, payroll, visas, and workforce management.
@@ -282,24 +281,26 @@ async function submitNewsletter(e: Event) {
 
         <!-- RIGHT COLUMN: Sidebar -->
         <aside class="blog-sidebar">
-          <div class="sidebar-widget trending-widget">
+          <div class="trending-wrapper">
             <div class="section-heading">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="#b09559" stroke="none"><path d="M12 2c0 0-4 4-4 9a4 4 0 0 0 8 0c0-5-4-9-4-9zm0 0c0 0 4 4 4 9a4 4 0 0 1-8 0c0-5 4-9 4-9z"/></svg>
               <h2>Trending Articles</h2>
             </div>
-            <div class="trending-list">
-              <RouterLink v-for="(post, idx) in sortedBlogs.slice(0, 3)" :key="post.id" :to="`/blog/${post.slug}`" class="trending-item">
-                <div class="trending-img-wrap">
-                   <img v-if="post.image_url" :src="post.image_url" class="trending-img"/>
-                </div>
-                <div class="trending-num">{{ String(idx + 1).padStart(2, '0') }}</div>
-                <div class="trending-info">
-                  <h4>{{ post.title }}</h4>
-                  <span>5 min read</span>
-                </div>
-              </RouterLink>
+            <div class="sidebar-widget trending-widget">
+              <div class="trending-list">
+                <RouterLink v-for="(post, idx) in sortedBlogs.slice(0, 3)" :key="post.id" :to="`/blog/${post.slug}`" class="trending-item">
+                  <div class="trending-img-wrap">
+                     <img v-if="post.image_url" :src="post.image_url" class="trending-img"/>
+                  </div>
+                  <div class="trending-num">{{ String(idx + 1).padStart(2, '0') }}</div>
+                  <div class="trending-info">
+                    <h4>{{ post.title }}</h4>
+                    <span>5 min read</span>
+                  </div>
+                </RouterLink>
+              </div>
+              <button class="btn-link-small">View all trending &rarr;</button>
             </div>
-            <button class="btn-link-small">View all trending &rarr;</button>
           </div>
 
           <div class="sidebar-widget newsletter-widget">
@@ -565,13 +566,14 @@ async function submitNewsletter(e: Event) {
   color: var(--ink-soft);
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 .filter-pill:hover {
   background: rgba(0, 0, 0, 0.03);
   color: var(--ink);
 }
 .filter-pill.active {
-  background: var(--ink); /* using standard ink for dark active state */
+  background: var(--accent); /* using theme accent color for active state */
   color: #ffffff;
 }
 
@@ -626,6 +628,7 @@ async function submitNewsletter(e: Event) {
   overflow: hidden;
   text-decoration: none;
   transition: transform 0.3s, box-shadow 0.3s;
+  height: 420px;
 }
 .featured-card:hover {
   transform: translateY(-4px);
@@ -827,10 +830,16 @@ async function submitNewsletter(e: Event) {
 }
 
 /* Trending List */
+.trending-widget {
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+}
 .trending-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  justify-content: space-between;
+  flex: 1;
 }
 .trending-item {
   display: grid;
@@ -988,10 +997,40 @@ async function submitNewsletter(e: Event) {
     text-align: center;
     padding: 32px;
   }
+  .featured-card,
+  .trending-widget {
+    height: auto;
+  }
 }
 @media (max-width: 768px) {
+  .blog-hero {
+    min-height: auto;
+    padding: 260px 20px 60px;
+    background-image: none;
+    background-color: var(--bg);
+  }
+  .blog-hero::before {
+    background: url('/services/service-page/map.png');
+    background-size: 150% auto;
+    background-position: top center;
+    background-repeat: no-repeat;
+    bottom: auto;
+    height: 280px;
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  }
+  .blog-hero-inner {
+    padding-left: 0;
+    padding-right: 0;
+  }
   .featured-card {
     grid-template-columns: 1fr;
+  }
+  .featured-card-body {
+    padding: 24px;
+  }
+  .featured-title {
+    font-size: 24px;
   }
   .featured-card-img-wrap {
     aspect-ratio: 16 / 9;

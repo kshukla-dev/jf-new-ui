@@ -1,109 +1,402 @@
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import ev from '@/data/china-europe-event.json'
+
+const carouselRef = ref<HTMLElement | null>(null)
+const speakersLength = ev.speakers.length
+const activeIndex = ref(speakersLength) // Start at the middle copy (index 4)
+
+const displayedSpeakers = computed(() => {
+  // Triple the speakers array for seamless infinite looping
+  const tripled = [...ev.speakers, ...ev.speakers, ...ev.speakers]
+  return tripled.map((sp, idx) => {
+    return {
+      ...sp,
+      featured: idx === activeIndex.value
+    }
+  })
+})
+
+const selectSpeaker = (index: number) => {
+  const totalLength = speakersLength * 3
+  if (index >= 0 && index < totalLength) {
+    activeIndex.value = index
+    
+    // 1. Smooth scroll to the targeted item
+    setTimeout(() => {
+      const track = carouselRef.value
+      if (track) {
+        const cards = track.querySelectorAll('.sp-card-new')
+        const activeCard = cards[index] as HTMLElement
+        if (activeCard) {
+          const offsetLeft = activeCard.offsetLeft
+          const trackWidth = track.clientWidth
+          const cardWidth = activeCard.clientWidth
+          
+          track.scrollTo({
+            left: offsetLeft - (trackWidth / 2) + (cardWidth / 2),
+            behavior: 'smooth'
+          })
+        }
+      }
+    }, 60)
+
+    // 2. Seamlessly jump to the middle copy once smooth scroll completes (approx 450ms)
+    setTimeout(() => {
+      const track = carouselRef.value
+      if (track) {
+        const cards = track.querySelectorAll('.sp-card-new')
+        
+        // If we scrolled into the first copy, jump instantly to the middle copy
+        if (activeIndex.value < speakersLength) {
+          activeIndex.value = activeIndex.value + speakersLength
+          const activeCard = cards[activeIndex.value] as HTMLElement
+          if (activeCard) {
+            const offsetLeft = activeCard.offsetLeft
+            const trackWidth = track.clientWidth
+            const cardWidth = activeCard.clientWidth
+            track.scrollTo({
+              left: offsetLeft - (trackWidth / 2) + (cardWidth / 2),
+              behavior: 'auto'
+            })
+          }
+        }
+        // If we scrolled into the third copy, jump instantly to the middle copy
+        else if (activeIndex.value >= speakersLength * 2) {
+          activeIndex.value = activeIndex.value - speakersLength
+          const activeCard = cards[activeIndex.value] as HTMLElement
+          if (activeCard) {
+            const offsetLeft = activeCard.offsetLeft
+            const trackWidth = track.clientWidth
+            const cardWidth = activeCard.clientWidth
+            track.scrollTo({
+              left: offsetLeft - (trackWidth / 2) + (cardWidth / 2),
+              behavior: 'auto'
+            })
+          }
+        }
+      }
+    }, 550)
+  }
+}
+
+const scrollLeft = () => {
+  selectSpeaker(activeIndex.value - 1)
+}
+
+const scrollRight = () => {
+  selectSpeaker(activeIndex.value + 1)
+}
+
+onMounted(() => {
+  setTimeout(() => {
+    selectSpeaker(speakersLength) // Center Pawel (index 4) on mount
+  }, 300)
+})
 </script>
 
 <template>
   <!-- HERO -->
   <header class="pr-hero">
-    <div class="container">
-      <span class="tag">Event · {{ ev.hero.date }}</span>
-      <h1>{{ ev.hero.eventTitle }}</h1>
-      <p class="pr-tagline">{{ ev.hero.tagline }}</p>
-      <p class="pr-subline">{{ ev.hero.eventSubline }}</p>
-      <div class="pr-meta">
-        <span>📅 {{ ev.hero.date }}</span>
-        <span>🕒 {{ ev.hero.time }}</span>
-        <span>📍 {{ ev.hero.venue }}</span>
-      </div>
-      <div class="cta-row">
-        <a :href="ev.footerCta.registerHref" class="btn-primary">
-          {{ ev.hero.ctaText }} <span class="arrow">→</span>
-        </a>
-        <a href="#speakers" class="btn-secondary btn-on-dark">Meet the speakers</a>
-      </div>
-    </div>
-  </header>
+    <div class="pr-hero-inner container">
+      <!-- Left side -->
+      <div class="pr-hero-copy">
+        <span class="pr-hero-tag">CHINA-EUROPE-2026</span>
+        <h1 class="pr-hero-title">China to Europe 2026:<br><span class="gold-text">Scaling Beyond Borders</span></h1>
+        <p class="pr-hero-desc">
+          A one-day exclusive event bringing together business leaders, investors, and experts to explore opportunities, navigate complexities, and scale your business from China to Europe.
+        </p>
+        
+        <div class="pr-details-grid">
+          <div class="pr-detail-item">
+            <div class="pr-detail-icon">
+              <!-- Calendar icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <div class="pr-detail-info">
+              <strong>May 15, 2026</strong>
+              <span>9:00 AM - 5:30 PM</span>
+            </div>
+          </div>
+          
+          <div class="pr-detail-item">
+            <div class="pr-detail-icon">
+              <!-- Pin icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <div class="pr-detail-info">
+              <strong>The Ritz-Carlton</strong>
+              <span>Shanghai, China</span>
+            </div>
+          </div>
 
-  <!-- BACKGROUND -->
-  <section class="section container">
-    <div class="definition-block">
-      <div>
-        <span class="tag">Background</span>
-        <h2 class="section-title">{{ ev.eventBackground.title }}</h2>
-      </div>
-      <div class="definition-text">
-        <p v-for="(p, i) in ev.eventBackground.paragraphs" :key="i">{{ p }}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FRAMEWORK -->
-  <section class="section container">
-    <div class="section-head">
-      <span class="tag">{{ ev.eventBackground.frameworkTitle }}</span>
-      <h2 class="section-title">{{ ev.eventBackground.frameworkSteps.join(' → ') }}</h2>
-    </div>
-    <div class="pr-framework">
-      <div v-for="(card, i) in ev.eventBackground.cards" :key="i" class="pr-fw-card">
-        <span class="pr-fw-num">0{{ i + 1 }}</span>
-        <h3>{{ card.title }}</h3>
-        <p>{{ card.content }}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- AGENDA -->
-  <section class="agenda-strip">
-    <div class="container">
-      <div class="section-head">
-        <span class="tag">Agenda</span>
-        <h2 class="section-title">The <em>day</em></h2>
-      </div>
-      <div class="agenda-list">
-        <div v-for="(item, i) in ev.agenda" :key="i" class="agenda-row">
-          <span class="agenda-time">{{ item.time }}</span>
-          <div class="agenda-detail">
-            <strong>{{ item.title }}</strong>
-            <span v-if="item.description">{{ item.description }}</span>
+          <div class="pr-detail-item">
+            <div class="pr-detail-icon">
+              <!-- Group icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div class="pr-detail-info">
+              <strong>200+</strong>
+              <span>Business Leaders</span>
+            </div>
           </div>
         </div>
+
+        <div class="cta-row">
+          <a :href="ev.footerCta.registerHref" class="btn-primary-gold">
+            {{ ev.hero.ctaText || 'Register Your Interest' }} <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Right side -->
+      <div class="pr-hero-visual">
+        <img src="/case-study/china-europe.png" alt="China to Europe 2026 event" />
+      </div>
+    </div>
+  </header>  <!-- EVENT BACKGROUND -->
+  <section class="section container">
+    <div class="pr-background-grid">
+      <!-- Left side: Text & Stats -->
+      <div class="pr-bg-copy">
+        <span class="tag">{{ ev.eventBackground.tag }}</span>
+        <h2 class="pr-bg-title">{{ ev.eventBackground.title }}</h2>
+        <div class="pr-bg-text">
+          <p v-for="(p, i) in ev.eventBackground.paragraphs" :key="i">{{ p }}</p>
+        </div>
+        <!-- Stats row underneath -->
+        <div class="pr-bg-stats">
+          <div v-for="s in ev.eventBackground.stats" :key="s.label" class="pr-bg-stat-item">
+            <div class="pr-stat-icon-circle">
+              <!-- Render icon based on s.icon -->
+              <svg v-if="s.icon === 'globe'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <svg v-else-if="s.icon === 'group'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <svg v-else-if="s.icon === 'chart'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              <svg v-else-if="s.icon === 'shield'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+            </div>
+            <div class="pr-stat-text-wrap">
+              <strong>{{ s.value }}</strong>
+              <span>{{ s.label }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right side: Earth Graphic -->
+      <div class="pr-bg-image-wrapper">
+        <img src="/case-study/WhyChinaEurope.png" alt="Global expansion network" class="pr-bg-earth-image" />
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNEY SECTION -->
+  <section class="journey-section">
+    <div class="container text-center">
+      <span class="journey-tag">{{ ev.journey.tag }}</span>
+      <h2 class="journey-title">{{ ev.journey.title }}</h2>
+      <p class="journey-subtitle">{{ ev.journey.subtitle }}</p>
+      
+      <div class="journey-grid">
+        <div v-for="card in ev.journey.cards" :key="card.step" class="journey-card">
+          <div class="journey-card-header">
+            <div class="journey-icon-wrap">
+              <svg v-if="card.icon === 'target'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+              <svg v-else-if="card.icon === 'gear'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <svg v-else-if="card.icon === 'chart'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </div>
+            <span class="journey-number">{{ card.step }}</span>
+          </div>
+          <span class="journey-card-cat">{{ card.category }}</span>
+          <h3 class="journey-card-title">{{ card.title }}</h3>
+          <p class="journey-card-desc">{{ card.description }}</p>
+          <RouterLink to="/contact" class="journey-card-link">Learn more <span aria-hidden>→</span></RouterLink>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPECTATIONS -->
+  <section class="expect-section container">
+    <div class="text-center">
+      <span class="expect-tag">{{ ev.expectations.tag }}</span>
+      <h2 class="expect-title">{{ ev.expectations.title }}</h2>
+    </div>
+    
+    <div class="expect-grid">
+      <div v-for="item in ev.expectations.items" :key="item.title" class="expect-item">
+        <div class="expect-icon-circle">
+          <!-- Render icons -->
+          <svg v-if="item.icon === 'person'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <svg v-else-if="item.icon === 'chat'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <svg v-else-if="item.icon === 'network'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          <svg v-else-if="item.icon === 'document'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <svg v-else-if="item.icon === 'people'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <svg v-else-if="item.icon === 'gift'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+        </div>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
       </div>
     </div>
   </section>
 
   <!-- SPEAKERS -->
-  <section id="speakers" class="section container">
-    <div class="section-head">
-      <span class="tag">Speakers</span>
-      <h2 class="section-title">Learn from <em>local experts</em></h2>
-    </div>
-    <div class="speakers-grid">
-      <div v-for="sp in ev.speakers" :key="sp.name" class="speaker-card">
-        <div class="speaker-photo">
-          <img :src="sp.image" :alt="sp.name" loading="lazy" />
+  <section id="speakers" class="section container pr-speakers-section">
+    <div class="speakers-section-grid">
+      <!-- Top: heading -->
+      <div class="speakers-left-info">
+        <div class="speakers-head-text">
+          <span class="tag">LEARN FROM LOCAL EXPERTS</span>
+          <h2 class="speakers-main-title">Speakers &amp; <span class="gold-text">Experts</span></h2>
+          <p class="speakers-desc-text">
+            Industry leaders and local experts sharing real insights and actionable strategies for your expansion journey.
+          </p>
         </div>
-        <div class="speaker-body">
-          <h3>{{ sp.name }}</h3>
-          <span class="speaker-role">{{ sp.role }} · {{ sp.company }}</span>
-          <p>{{ sp.bio }}</p>
+        <RouterLink to="/contact" class="btn-primary-gold">View All Speakers <span aria-hidden>→</span></RouterLink>
+      </div>
+      <!-- Right side: carousel wrapper -->
+      <div class="speakers-carousel-wrapper">
+        <button class="carousel-arrow prev" @click="scrollLeft" aria-label="Previous Slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        
+        <div class="speakers-carousel-track" ref="carouselRef">
+          <div v-for="(sp, idx) in displayedSpeakers" :key="sp.name" :class="['sp-card-new', { 'featured-card': sp.featured }]" @click="selectSpeaker(idx)">
+            <!-- Featured Card Layout -->
+            <div v-if="sp.featured" class="featured-card-inner">
+              <div class="featured-card-left">
+                <img :src="sp.image" :alt="sp.name" class="featured-sp-photo" />
+              </div>
+              <div class="featured-card-right">
+                <div class="featured-tag-wrap">
+                  <span class="featured-tag">⭐ FEATURED SPEAKER</span>
+                </div>
+                <h3 class="sp-name">{{ sp.name }}</h3>
+                <p class="sp-role-comp">{{ sp.role }}</p>
+                <p class="sp-company-name">{{ sp.company }}</p>
+                
+                <div class="sp-meta-row">
+                  <span class="sp-meta-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="meta-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    {{ sp.location }}
+                  </span>
+                  <span class="sp-meta-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="meta-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    {{ sp.experience }}
+                  </span>
+                </div>
+
+                <div class="sp-badges">
+                  <span v-for="badge in sp.badges" :key="badge" class="sp-badge">{{ badge }}</span>
+                </div>
+
+                <div v-if="sp.speakingTitle" class="speaking-details-box">
+                  <div class="speaking-details-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div class="speaking-details-text">
+                    <p class="speaking-label">Speaking on</p>
+                    <p class="speaking-title">{{ sp.speakingTitle }}</p>
+                    <p class="speaking-time">{{ sp.speakingTime }}</p>
+                  </div>
+                </div>
+
+                <a :href="sp.linkedin" class="linkedin-link">
+                  <span class="linkedin-icon">in</span> View LinkedIn Profile <span class="arrow-diagonal">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Standard Card Layout -->
+            <div v-else class="standard-card-inner">
+              <div class="standard-card-top">
+                <img :src="sp.image" :alt="sp.name" class="standard-sp-photo" />
+              </div>
+              <div class="standard-card-body">
+                <h3 class="sp-name">{{ sp.name }}</h3>
+                <p class="sp-role-comp">{{ sp.role }}</p>
+                <p class="sp-company-name">{{ sp.company }}</p>
+                
+                <div class="sp-meta-row">
+                  <span class="sp-meta-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="meta-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    {{ sp.location }}
+                  </span>
+                  <span class="sp-meta-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="meta-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    {{ sp.experience }}
+                  </span>
+                </div>
+
+                <div class="sp-badges">
+                  <span v-for="badge in sp.badges" :key="badge" class="sp-badge">{{ badge }}</span>
+                </div>
+
+                <a :href="sp.linkedin" class="linkedin-link-standard">
+                  <span class="linkedin-icon">in</span> View Profile <span class="arrow-diagonal">↗</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="carousel-arrow next" @click="scrollRight" aria-label="Next Slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Banner Underneath -->
+    <div class="speakers-stats-strip">
+      <div class="stats-watermark-map"></div>
+      <div class="s-stat-item">
+        <div class="s-stat-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div class="s-stat-info">
+          <h3>50+</h3>
+          <p>Years of combined<br>experience</p>
+        </div>
+      </div>
+      <div class="s-stat-item">
+        <div class="s-stat-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </div>
+        <div class="s-stat-info">
+          <h3>40+</h3>
+          <p>Countries supported<br>by our experts</p>
+        </div>
+      </div>
+      <div class="s-stat-item">
+        <div class="s-stat-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="16"></line><line x1="15" y1="22" x2="15" y2="16"></line><line x1="9" y1="16" x2="15" y2="16"></line><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M12 6h.01M12 10h.01"></path></svg>
+        </div>
+        <div class="s-stat-info">
+          <h3>500+</h3>
+          <p>Global companies<br>advised</p>
+        </div>
+      </div>
+      <div class="s-stat-item">
+        <div class="s-stat-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </div>
+        <div class="s-stat-info">
+          <h3>98%</h3>
+          <p>Client satisfaction<br>rate</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- REGISTER CTA -->
-  <section id="register" class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">{{ ev.footerCta.subheading }}</span>
-      <h2>{{ ev.footerCta.heading }}</h2>
-      <p>Secure your spot for {{ ev.hero.date }} at {{ ev.hero.venue }}.</p>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact?reason=general_inquiry" class="btn-primary">
-          {{ ev.footerCta.registerButtonText }} <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/events" class="btn-secondary">All events</RouterLink>
-      </div>
+  <section id="register" class="register-cta-strip">
+    <div class="register-cta-dotted-bg"></div>
+    <div class="container register-cta-content text-center">
+      <span class="reg-tag">{{ ev.footerCta.tag }}</span>
+      <h2>Let's build your global success story<br>together.</h2>
+      <p>{{ ev.footerCta.description }}</p>
+      <RouterLink to="/contact" class="btn-primary-gold-cta">
+        {{ ev.footerCta.ctaText }} <span class="arrow">→</span>
+      </RouterLink>
     </div>
   </section>
 </template>
@@ -111,142 +404,967 @@ import ev from '@/data/china-europe-event.json'
 <style scoped>
 @import '@/styles/service-page.css';
 
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
 .pr-hero {
-  background: var(--dark);
-  color: var(--bg);
-  padding: 140px 0 80px;
+  background: #fdfbf7;
+  padding: 60px 0 0;
+  position: relative;
+  overflow: hidden;
 }
-.pr-hero .tag { color: rgba(255,255,255,0.55); margin-bottom: 18px; }
-.pr-hero h1 {
-  font-family: var(--serif);
-  font-size: clamp(40px, 5.5vw, 76px);
-  font-weight: 400;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  margin-bottom: 18px;
-  max-width: 900px;
-}
-.pr-tagline {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(20px, 2.4vw, 30px);
-  color: var(--accent-warm);
-  margin-bottom: 14px;
-}
-.pr-subline {
-  font-size: 16px;
-  color: rgba(255,255,255,0.75);
-  max-width: 620px;
-  line-height: 1.6;
-  margin-bottom: 28px;
-}
-.pr-meta {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: rgba(255,255,255,0.85);
-  margin-bottom: 32px;
-}
-.pr-hero .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
-.btn-on-dark { border-color: rgba(255,255,255,0.5); color: var(--bg); }
-.btn-on-dark:hover { background: rgba(255,255,255,0.9); color: var(--ink); }
-
-.pr-framework {
+.pr-hero-inner {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 32px;
+  align-items: center;
+  min-height: 600px;
 }
-.pr-fw-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 36px 32px;
+.pr-hero-copy {
+  padding-top: 60px;
+  padding-bottom: 80px;
+  max-width: 580px;
+  position: relative;
+  z-index: 2;
 }
-.pr-fw-num {
-  display: inline-block;
+.pr-hero-tag {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #b09559;
+  margin-bottom: 24px;
+}
+.pr-hero-title {
   font-family: var(--serif);
-  font-style: italic;
-  font-size: 36px;
-  color: var(--accent);
-  margin-bottom: 14px;
-}
-.pr-fw-card h3 {
-  font-family: var(--serif);
-  font-size: 26px;
+  font-size: clamp(38px, 4.5vw, 54px);
+  line-height: 1.15;
   font-weight: 400;
-  margin-bottom: 12px;
+  color: #111;
+  margin-bottom: 24px;
 }
-.pr-fw-card p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+.pr-hero-title .gold-text {
+  color: #b09559;
+  font-weight: 500;
+  font-family: var(--serif);
+}
+.pr-hero-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 40px;
+}
+.pr-details-grid {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.pr-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pr-detail-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #fdfaf5;
+  border: 1.5px solid #ebdcb7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b09559;
+  flex-shrink: 0;
+}
+.pr-detail-info {
+  display: flex;
+  flex-direction: column;
+}
+.pr-detail-info strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+}
+.pr-detail-info span {
+  font-size: 12px;
+  color: #777;
+  margin-top: 2px;
+}
+.btn-primary-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #b09559;
+  color: #fff;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-primary-gold:hover {
+  background: #947a44;
+  transform: translateY(-2px);
+}
+.pr-hero-visual {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 1;
+}
+.pr-hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%);
+  mask-image: linear-gradient(to right, transparent 0%, black 15%);
+}
 
-.agenda-strip {
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+/* ============================================================
+   EVENT BACKGROUND
+   ============================================================ */
+.pr-background-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+.pr-bg-copy {
+  max-width: 600px;
+}
+.pr-bg-copy .tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #b09559;
+  margin-bottom: 16px;
+}
+.pr-bg-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 42px);
+  color: #111;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.pr-bg-text p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 16px;
+}
+.pr-bg-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 40px;
+  border-top: 1px solid #ebdcb7;
+  padding-top: 32px;
+}
+.pr-bg-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.pr-stat-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fdfaf5;
+  border: 1px solid #ebdcb7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b09559;
+}
+.pr-stat-text-wrap {
+  display: flex;
+  flex-direction: column;
+}
+.pr-stat-text-wrap strong {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.2;
+}
+.pr-stat-text-wrap span {
+  font-size: 11px;
+  color: #777;
+  margin-top: 4px;
+}
+.pr-bg-image-wrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 380px;
+}
+.pr-bg-earth-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================
+   JOURNEY SECTION
+   ============================================================ */
+.journey-section {
+  background: #fdfbf7;
   padding: 100px 0;
 }
-.agenda-list { display: flex; flex-direction: column; }
-.agenda-row {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 32px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border);
-}
-.agenda-row:last-child { border-bottom: none; }
-.agenda-time {
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  font-weight: 500;
-}
-.agenda-detail strong {
+.journey-tag {
   display: block;
-  font-family: var(--serif);
-  font-size: 19px;
-  font-weight: 400;
-  margin-bottom: 2px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #b09559;
+  margin-bottom: 16px;
+  text-transform: uppercase;
 }
-.agenda-detail span { font-size: 13px; color: var(--ink-muted); }
-
-.speakers-grid {
+.journey-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 42px);
+  color: #111;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.journey-subtitle {
+  font-size: 15px;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto 64px;
+  line-height: 1.6;
+}
+.journey-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.journey-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.04);
+  border-radius: 16px;
+  padding: 40px 32px;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  transition: all 0.3s ease;
+  position: relative;
+}
+.journey-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+.journey-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.journey-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fdfaf5;
+  border: 1px solid #ebdcb7;
+  color: #b09559;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.journey-number {
+  font-size: 22px;
+  font-family: var(--serif);
+  color: #ebdcb7;
+  font-weight: 700;
+}
+.journey-card-cat {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #b09559;
+  margin-bottom: 8px;
+}
+.journey-card-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: #111;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.journey-card-desc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.journey-card-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: #b09559;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.journey-card-link:hover {
+  color: #947a44;
+}
+
+/* Connector line decoration for desktop */
+@media (min-width: 1025px) {
+  .journey-card:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #ebdcb7;
+    pointer-events: none;
+  }
+}
+
+/* ============================================================
+   EXPECTATIONS SECTION
+   ============================================================ */
+.expect-section {
+  padding: 100px 0;
+}
+.expect-tag {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #b09559;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.expect-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 42px);
+  color: #111;
+  font-weight: 400;
+  margin-bottom: 64px;
+}
+.expect-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   gap: 24px;
 }
-.speaker-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 160px 1fr;
+.expect-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.speaker-photo { background: var(--accent-soft); }
-.speaker-photo img { width: 100%; height: 100%; object-fit: cover; }
-.speaker-body { padding: 28px; }
-.speaker-body h3 {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 400;
-  margin-bottom: 4px;
+.expect-icon-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fdfaf5;
+  border: 1px solid #ebdcb7;
+  color: #b09559;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
 }
-.speaker-role {
-  display: block;
+.expect-item h3 {
+  font-size: 15px;
+  color: #111;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.expect-item p {
   font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 14px;
+  color: #666;
+  line-height: 1.5;
 }
-.speaker-body p { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
 
-@media (max-width: 1024px) {
-  .pr-framework, .speakers-grid { grid-template-columns: 1fr; }
+/* ============================================================
+   SPEAKERS SECTION
+   ============================================================ */
+.pr-speakers-section {
+  padding: 100px 0;
+  overflow: hidden;
 }
+.speakers-section-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: stretch;
+}
+.speakers-left-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  max-width: 100%;
+  width: 100%;
+}
+.speakers-head-text {
+  max-width: 700px;
+}
+.speakers-left-info .tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #b09559;
+  margin-bottom: 16px;
+}
+.speakers-main-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 42px);
+  color: #111;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.speakers-main-title .gold-text {
+  color: #b09559;
+  font-family: var(--serif);
+}
+.speakers-desc-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 0;
+}
+.speakers-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 0 48px;
+}
+.speakers-carousel-track {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding: 12px 4px 24px;
+  scrollbar-width: none; /* Firefox */
+}
+.speakers-carousel-track::-webkit-scrollbar {
+  display: none; /* Safari & Chrome */
+}
+.sp-card-new {
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+/* Featured Speaker layout */
+.featured-card {
+  width: 480px;
+}
+.featured-card-inner {
+  display: flex;
+  height: 100%;
+  gap: 20px;
+}
+.featured-card-left {
+  width: 200px;
+  height: 100%;
+  flex-shrink: 0;
+}
+.featured-sp-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.featured-card-right {
+  flex: 1;
+  padding: 24px 24px 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.featured-tag-wrap {
+  margin-bottom: 12px;
+}
+.featured-tag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #b09559;
+  background: #fdfaf5;
+  border: 1px solid #ebdcb7;
+  padding: 4px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+}
+
+/* Standard Speaker layout */
+.sp-card-new:not(.featured-card) {
+  width: 240px;
+}
+.standard-card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.standard-card-top {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #fdfaf5;
+}
+.standard-sp-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.standard-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Common Card Typography */
+.featured-card .sp-name {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 500;
+  color: #111;
+  margin-bottom: 6px;
+}
+.sp-name {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
+  color: #111;
+  margin-bottom: 6px;
+}
+.sp-role-comp {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 2px;
+}
+.sp-company-name {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 12px;
+}
+.sp-meta-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  border-top: 1px solid #ebdcb7;
+  padding-top: 12px;
+  margin-top: auto;
+}
+.sp-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #555;
+}
+.meta-icon {
+  color: #b09559;
+  flex-shrink: 0;
+}
+.sp-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.sp-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8a733e;
+  background: #faf6ed;
+  border: 1px solid #ebdcb7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Speaking on Box */
+.speaking-details-box {
+  display: flex;
+  gap: 12px;
+  background: #fffaf2;
+  border: 1px dashed #ebdcb7;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.speaking-details-icon {
+  color: #b09559;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.speaking-details-text {
+  display: flex;
+  flex-direction: column;
+}
+.speaking-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #888;
+}
+.speaking-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8a733e;
+  margin-top: 2px;
+}
+.speaking-time {
+  font-size: 11px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* LinkedIn Link */
+.linkedin-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: #b09559;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px solid #ebdcb7;
+  padding: 10px 16px;
+  border-radius: 8px;
+  width: 100%;
+  transition: all 0.2s ease;
+  margin-top: 16px;
+  background: #fffdf9;
+}
+.linkedin-link:hover {
+  background: #faf6ed;
+  color: #947a44;
+}
+.linkedin-link-standard {
+  font-size: 12px;
+  font-weight: 700;
+  color: #b09559;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border-top: 1px solid #ebdcb7;
+  padding-top: 16px;
+  margin-top: auto;
+  transition: color 0.2s ease;
+}
+.linkedin-link-standard:hover {
+  color: #947a44;
+}
+.linkedin-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: #b09559;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 2px;
+  line-height: 1;
+}
+
+/* Navigation Arrow Button Styling */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #b09559;
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.carousel-arrow:hover {
+  background: #947a44;
+  transform: translateY(-50%) scale(1.08);
+}
+.carousel-arrow.prev {
+  left: 8px;
+}
+.carousel-arrow.next {
+  right: 8px;
+}
+
+/* Bottom stats banner */
+.speakers-stats-strip {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ebdcb7;
+  border-radius: 16px;
+  padding: 40px 48px;
+  margin-top: 80px;
+  gap: 24px;
+}
+.stats-watermark-map {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40%;
+  height: 100%;
+  background-image: url('/world-map-dark.png');
+  background-size: cover;
+  background-position: left center;
+  opacity: 0.05;
+  filter: invert(0.85) sepia(1) saturate(1.8) hue-rotate(15deg);
+  pointer-events: none;
+  z-index: 1;
+}
+.s-stat-item {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+.s-stat-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fdfaf5;
+  border: 1px solid #ebdcb7;
+  color: #b09559;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.s-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+.s-stat-info h3 {
+  font-family: var(--serif);
+  font-size: 32px;
+  color: #111;
+  font-weight: 500;
+  line-height: 1.1;
+}
+.s-stat-info p {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   REGISTER CTA
+   ============================================================ */
+.register-cta-strip {
+  background: #0f1319;
+  color: #fff;
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+.register-cta-dotted-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  opacity: 0.8;
+  z-index: 1;
+}
+.register-cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.reg-tag {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #b09559;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+.register-cta-content h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4.5vw, 48px);
+  line-height: 1.2;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.register-cta-content p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.btn-primary-gold-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #b09559;
+  color: #fff;
+  border: none;
+  padding: 18px 36px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-primary-gold-cta:hover {
+  background: #ebdcb7;
+  color: #111;
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN / MEDIA QUERIES
+   ============================================================ */
+@media (max-width: 1024px) {
+  .pr-hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 0;
+  }
+  .pr-hero-copy {
+    max-width: 100%;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .pr-details-grid {
+    justify-content: center;
+  }
+  .pr-hero-visual {
+    position: relative;
+    width: 100%;
+    height: auto;
+    order: -1;
+    margin-bottom: 40px;
+    justify-content: center;
+  }
+  .pr-hero-visual img {
+    max-width: 100%;
+    height: auto;
+    transform: translateX(0);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .pr-background-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .journey-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .expect-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .speakers-section-grid {
+    gap: 32px;
+  }
+  .speakers-left-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+  }
+  .speakers-stats-strip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 32px;
+    margin-top: 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pr-bg-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 640px) {
-  .agenda-row { grid-template-columns: 1fr; gap: 4px; }
-  .speaker-card { grid-template-columns: 1fr; }
-  .speaker-photo { aspect-ratio: 16 / 10; }
+  .journey-grid {
+    grid-template-columns: 1fr;
+  }
+  .expect-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .featured-card {
+    width: 290px;
+  }
+  .featured-card-inner {
+    flex-direction: column;
+  }
+  .featured-card-left {
+    width: 100%;
+    height: 200px;
+  }
+  .featured-card-right {
+    padding: 20px;
+  }
+  .speakers-stats-strip {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 20px;
+  }
+  .pr-hero {
+    min-height: auto;
+    padding: 220px 20px 60px;
+    background-size: 100% auto;
+    background-position: top center;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, #ffffff 190px), url(/case-study/china-europe.png);
+    background-repeat: no-repeat;
+  }
+  .pr-hero-inner {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .pr-hero-visual {
+    display: none;
+  }
 }
 </style>
