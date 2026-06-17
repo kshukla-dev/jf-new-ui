@@ -268,6 +268,11 @@ const currentPreview = computed(() =>
               {{ item.title }}
             </RouterLink>
           </div>
+          <div class="mobile-section">
+            <RouterLink to="/contact" @click="mobileOpen = false" style="font-weight: 700; border-bottom: none;">
+              Contact Us
+            </RouterLink>
+          </div>
           <RouterLink to="/contact" class="btn-consultation mobile-cta" @click="mobileOpen = false">
             Book a consultation
           </RouterLink>
