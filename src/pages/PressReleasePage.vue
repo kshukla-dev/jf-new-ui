@@ -345,60 +345,10 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Stats Banner Underneath -->
-    <div class="speakers-stats-strip">
-      <div class="stats-watermark-map"></div>
-      <div class="s-stat-item">
-        <div class="s-stat-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-        </div>
-        <div class="s-stat-info">
-          <h3>50+</h3>
-          <p>Years of combined<br>experience</p>
-        </div>
-      </div>
-      <div class="s-stat-item">
-        <div class="s-stat-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        </div>
-        <div class="s-stat-info">
-          <h3>40+</h3>
-          <p>Countries supported<br>by our experts</p>
-        </div>
-      </div>
-      <div class="s-stat-item">
-        <div class="s-stat-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="16"></line><line x1="15" y1="22" x2="15" y2="16"></line><line x1="9" y1="16" x2="15" y2="16"></line><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M12 6h.01M12 10h.01"></path></svg>
-        </div>
-        <div class="s-stat-info">
-          <h3>500+</h3>
-          <p>Global companies<br>advised</p>
-        </div>
-      </div>
-      <div class="s-stat-item">
-        <div class="s-stat-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        </div>
-        <div class="s-stat-info">
-          <h3>98%</h3>
-          <p>Client satisfaction<br>rate</p>
-        </div>
-      </div>
-    </div>
+
   </section>
 
-  <!-- REGISTER CTA -->
-  <section id="register" class="register-cta-strip">
-    <div class="register-cta-dotted-bg"></div>
-    <div class="container register-cta-content text-center">
-      <span class="reg-tag">{{ ev.footerCta.tag }}</span>
-      <h2>Let's build your global success story<br>together.</h2>
-      <p>{{ ev.footerCta.description }}</p>
-      <RouterLink to="/contact" class="btn-primary-gold-cta">
-        {{ ev.footerCta.ctaText }} <span class="arrow">→</span>
-      </RouterLink>
-    </div>
-  </section>
+
 </template>
 
 <style scoped>
@@ -1353,7 +1303,7 @@ onMounted(() => {
   }
   .pr-hero {
     min-height: auto;
-    padding: 220px 20px 60px;
+    padding: 20px 20px 60px;
     background-size: 100% auto;
     background-position: top center;
     background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, #ffffff 190px), url(/case-study/china-europe.png);
