@@ -144,9 +144,9 @@ onMounted(() => {
         </div>
 
         <div class="cta-row">
-          <a :href="ev.footerCta.registerHref" class="btn-primary-gold">
+          <RouterLink to="/contact" class="btn-primary-gold">
             {{ ev.hero.ctaText || 'Register Your Interest' }} <span class="arrow">→</span>
-          </a>
+          </RouterLink>
         </div>
       </div>
       
