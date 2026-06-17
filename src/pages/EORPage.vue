@@ -522,30 +522,67 @@ const topCountries = [
     <section class="eor-container eor-cta-section">
       <div class="cta-banner eor-container2 cta-hiring-panel">
         <div class="cta-top-copy">
+          <div class="cta-eyebrow-wrapper">
+            <span class="cta-eyebrow-line"></span>
+            <span class="cta-eyebrow-text">READY TO EXPAND GLOBALLY?</span>
+            <span class="cta-eyebrow-line"></span>
+          </div>
           <h2>Ready to expand your team globally?</h2>
-          <p>1,000+ companies use us for international payroll and employment compliance. Most first hires go live in 48–72 hours.</p>
+          <p>1,000+ companies use us for international payroll and employment compliance. <br />Most first hires go live in <span class="gold-text">48–72 hours.</span></p>
         </div>
-        <div class="cta-feature-grid">
-          <div class="cta-feature-card">
-            <div class="cta-feature-icon">$</div>
-            <span>No setup fees</span>
+        <div class="cta-feature-grid-redesigned">
+          <!-- Card 1 -->
+          <div class="cta-card-new">
+            <div class="cta-icon-circle">
+              <!-- Lightning bolt icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <h3>48–72h</h3>
+            <span class="cta-card-subtitle">Go Live</span>
+            <span class="cta-card-divider"></span>
+            <p>Average time to onboard and go live.</p>
           </div>
-          <div class="cta-feature-card">
-            <div class="cta-feature-icon">⚡</div>
-            <span>48–72 hour typical go-live</span>
+          <!-- Card 2 -->
+          <div class="cta-card-new">
+            <div class="cta-icon-circle">
+              <!-- Globe icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3>160+</h3>
+            <span class="cta-card-subtitle">Countries</span>
+            <span class="cta-card-divider"></span>
+            <p>Hire anywhere in the world without setting up entities.</p>
           </div>
-          <div class="cta-feature-card">
-            <div class="cta-feature-icon">🌍</div>
-            <span>Hire without entity</span>
+          <!-- Card 3 -->
+          <div class="cta-card-new">
+            <div class="cta-icon-circle">
+              <!-- Shield Check icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h3>98%</h3>
+            <span class="cta-card-subtitle">Compliance</span>
+            <span class="cta-card-divider"></span>
+            <p>Stay compliant with local laws and regulations.</p>
           </div>
-          <div class="cta-feature-card">
-            <div class="cta-feature-icon">🛡️</div>
-            <span>Employment compliance in scope</span>
+          <!-- Card 4 -->
+          <div class="cta-card-new">
+            <div class="cta-icon-circle">
+              <!-- People Group icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3>50,000+</h3>
+            <span class="cta-card-subtitle">Employees Managed</span>
+            <span class="cta-card-divider"></span>
+            <p>Trusted by growing businesses worldwide.</p>
           </div>
         </div>
-        <div class="cta-actions">
-          <a href="/contact" class="gh-btn-outline cta-secondary-btn">Book a call</a>
-          <a href="/contact" class="gh-btn-gold cta-primary-btn">Start hiring in days →</a>
+        <div class="cta-actions-redesigned">
+          <RouterLink to="/contact" class="btn-cta-gold">Book a Call <span class="arrow">→</span></RouterLink>
+          <RouterLink to="/contact" class="btn-cta-outline">Start Hiring in Days <span class="arrow">→</span></RouterLink>
+        </div>
+        <div class="cta-lock-footer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lock-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Your information is secure and confidential.</span>
         </div>
       </div>
     </section>
