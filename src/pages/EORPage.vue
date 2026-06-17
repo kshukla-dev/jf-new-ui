@@ -703,7 +703,25 @@ const topCountries = [
 
 @media (max-width: 640px) {
   .eor-premium-hero {
-    padding: 56px 20px 64px;
+    min-height: auto;
+    padding: 260px 20px 64px;
+    background-image: none;
+    background-color: #f4f1ec;
+  }
+  .eor-premium-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 280px;
+    background-image: url(/services/service-page/eor-hero2.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    pointer-events: none;
   }
   .eor-premium-hero h1 {
     font-size: clamp(36px, 8vw, 48px);

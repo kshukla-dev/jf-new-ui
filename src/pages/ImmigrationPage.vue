@@ -17,52 +17,38 @@ const trustAvatars = [
 
 <template>
   <!-- ============= HERO ============= -->
-  <header class="container service-hero immigration-hero hero-premium">
-    <div class="service-hero-copy">
-      <h1>
-        Hire, Relocate & Expand Globally <br /><em>Without Boundaries</em>
-      </h1>
-      <p class="service-hero-lede">
-        From Employer of Record and Global Payroll to Immigration and Visa Support, Jackson & Frank helps businesses and talent move across borders with confidence.
-      </p>
-          <!--  <div class="hero-stat-grid">
-              <div class="hero-stat-card">
-                <strong>10,000+</strong>
-                <span>Successful applications</span>
-              </div>
-              <div class="hero-stat-card">
-                <strong>25+</strong>
-                <span>Countries covered</span>
-              </div>
-              <div class="hero-stat-card">
-                <strong>98%</strong>
-                <span>Client satisfaction</span>
-              </div>
-            </div>
-            -->
-      <div class="cta-row">
-        <RouterLink to="/contact?reason=immigration_services" class="btn-primary">
-          Get Free Consultation <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/services" class="btn-secondary">
-          Explore Services
-        </RouterLink>
-      </div>
-      <div class="trust-row">
-        <div class="avatars">
-          <div
-            v-for="(src, i) in trustAvatars"
-            :key="i"
-            class="avatar"
-            :style="{ backgroundImage: `url('${src}')` }"
-          />
+  <header class="service-hero immigration-premium-hero">
+    <div class="immigration-premium-hero-inner">
+      <div class="service-hero-copy">
+        <h1>
+          Hire, Relocate & Expand Globally <br /><em>Without Boundaries</em>
+        </h1>
+        <p class="service-hero-lede">
+          From Employer of Record and Global Payroll to Immigration and Visa Support, Jackson & Frank helps businesses and talent move across borders with confidence.
+        </p>
+        <div class="cta-row">
+          <RouterLink to="/contact?reason=immigration_services" class="btn-primary">
+            Get Free Consultation <span class="arrow">→</span>
+          </RouterLink>
+          <RouterLink to="/services" class="btn-secondary">
+            Explore Services
+          </RouterLink>
         </div>
-        <span class="trust-text">
-          <strong>99.5%</strong> visa approval rate across 160+ countries
-        </span>
+        <div class="trust-row">
+          <div class="avatars">
+            <div
+              v-for="(src, i) in trustAvatars"
+              :key="i"
+              class="avatar"
+              :style="{ backgroundImage: `url('${src}')` }"
+            />
+          </div>
+          <span class="trust-text">
+            <strong>99.5%</strong> visa approval rate across 160+ countries
+          </span>
+        </div>
       </div>
     </div>
-    <div class="service-hero-visual hero-visual-bg"></div>
   </header>
 
   <!-- ============= MAIN DESCRIPTION ============= -->
@@ -442,6 +428,88 @@ const trustAvatars = [
   color: var(--ink);
 }
 
+.immigration-premium-hero {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 88px 0 96px;
+  display: block;
+  background-color: #f4f1ec;
+  background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 0%) 30%, rgba(253, 251, 247, 0.6) 55%, rgba(253, 251, 247, 0) 100%), url(/case-study/immigration.png);
+  background-size: 55% auto;
+  background-position: right 32px center;
+  background-repeat: no-repeat;
+  color: #061639; /* ink */
+  min-height: 700px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.immigration-premium-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.4), transparent 50%);
+  pointer-events: none;
+}
+
+.immigration-premium-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.immigration-premium-hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.immigration-premium-hero .service-hero-copy {
+  max-width: 720px;
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.immigration-premium-hero h1 {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: clamp(48px, 5.8vw, 86px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.immigration-premium-hero h1 em {
+  font-style: italic;
+  color: #b09559;
+}
+
+.immigration-premium-hero .service-hero-lede {
+  color: rgba(6, 22, 57, 0.7); /* ink-soft */
+  font-size: 19px;
+  margin-top: 24px;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+@media (max-width: 960px) {
+  .immigration-premium-hero {
+    padding: 72px 24px 72px;
+    background-size: cover;
+    background-position: center;
+    background-image: linear-gradient(rgba(244, 241, 236, 0.8), rgba(244, 241, 236, 0.95)), url(/case-study/immigration.png);
+  }
+}
+
 @media (max-width: 1024px) {
   .services-grid,
   .how-grid-4,
@@ -450,4 +518,39 @@ const trustAvatars = [
   }
 }
 
+@media (max-width: 640px) {
+  .immigration-premium-hero {
+    min-height: auto;
+    padding: 200px 20px 64px;
+    background-image: none;
+    background-color: #f4f1ec;
+  }
+  .immigration-premium-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 220px;
+    background-image: url(/case-study/immigration.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    pointer-events: none;
+  }
+  .immigration-premium-hero h1 {
+    font-size: clamp(36px, 8vw, 48px);
+  }
+  .immigration-premium-hero .cta-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .immigration-premium-hero .btn-primary,
+  .immigration-premium-hero .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
 </style>

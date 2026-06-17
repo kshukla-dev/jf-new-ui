@@ -392,7 +392,24 @@ const trustAvatars = [
 @media (max-width: 640px) {
   .payroll-hero {
     min-height: auto;
-    padding: 100px 20px 60px;
+    padding: 260px 20px 60px;
+    background-image: none;
+    background-color: #0b0f1a;
+  }
+  .payroll-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 280px;
+    background-image: url('https://cdn.craft.cloud/019cb01a-1d95-731f-9bc4-3a2fec394116/assets/images/Z_DELETE/Temp/608c78a14f189da3e50e174bca035c7fbd051996.jpg?fit=cover&format=webp&width=1280&s=cK_YnjDwH_igbP_kzd4CFxjdweGJjgJGK6Vq_7weuxE');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    pointer-events: none;
   }
 
   .payroll-hero .service-hero-copy h1 {

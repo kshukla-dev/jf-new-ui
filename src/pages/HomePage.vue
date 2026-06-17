@@ -1123,10 +1123,25 @@ const globalDestinations = [
 }
 @media (max-width: 640px) {
   .home-hero {
-    padding: 56px 20px 64px;
-    background-image: linear-gradient(180deg, #f4f1ec 35%, rgba(244, 241, 236, 0.96) 75%, rgba(244, 241, 236, 0.8) 100%), url(/services/service-page/about2.png);
-    background-position: center bottom;
+    min-height: auto;
+    padding: 260px 20px 64px;
+    background-image: none;
+    background-color: #f4f1ec;
+  }
+  .home-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 280px;
+    background-image: url(/services/service-page/about2.png);
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    pointer-events: none;
   }
   .home-hero h1 {
     font-size: clamp(36px, 8vw, 48px);

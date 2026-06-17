@@ -303,9 +303,23 @@ function getRoleTheme(dept: string) {
   .careers-hero {
     min-height: auto;
     padding: 260px 20px 60px;
-    background-size: 100% auto;
-    background-position: top center;
-    background-image: linear-gradient(to bottom, rgba(244, 241, 236, 0) 0%, rgba(244, 241, 236, 0.15) 60%, #f4f1ec 250px), url(/services/service-page/career.png);
+    background-image: none;
+    background-color: #f4f1ec;
+  }
+  .careers-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 280px;
+    background-image: url(/services/service-page/career.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    pointer-events: none;
   }
   .careers-hero-inner {
     padding-left: 0;
