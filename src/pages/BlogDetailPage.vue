@@ -56,12 +56,9 @@ const renderedContent = computed(() => {
   html = applyStatCorrections(html)
   html = demoteBodyH1s(html)
 
-  // Insert the table of contents at the marker (or strip the marker if no TOC).
+  // Strip TOC marker from body content since we render TOC horizontally at the top
   if (html.includes(TOC_MARKER)) {
-    const toc = blog.value.toc_html
-      ? `<nav class="blog-toc"><p class="blog-toc-title">On this page</p>${blog.value.toc_html}</nav>`
-      : ''
-    html = html.replace(TOC_MARKER, toc)
+    html = html.replace(TOC_MARKER, '')
   }
 
   // Wrap every table so it scrolls horizontally on small screens instead of
@@ -70,6 +67,70 @@ const renderedContent = computed(() => {
 
   return html
 })
+
+// Extract top-level headings from TOC HTML for horizontal "In this article" component
+const parsedToc = computed(() => {
+  if (!blog.value || !blog.value.toc_html) return []
+  const html = blog.value.toc_html
+  const matches = [...html.matchAll(/href="([^"]+)"[^>]*>([^<]+)<\/a>/gi)]
+  return matches.map(m => ({
+    href: m[1],
+    text: m[2].replace(/&amp;/g, '&')
+  })).slice(0, 5) // Limit to top 5 circles for aesthetics
+})
+
+// Authors metadata lookup
+const AUTHORS_INFO: Record<string, { title: string; bio: string }> = {
+  'vibhu agarwal': {
+    title: 'Co-Founder & Director',
+    bio: 'Vibhu is a co-founder and director at Jackson & Frank, specializing in global workforce operations, expansion strategies, and compliance frameworks across Europe and Asia.'
+  },
+  'pawel michalkiewicz': {
+    title: 'Founder & CSO',
+    bio: 'Pawel has 20+ years of experience helping international companies expand globally. He is a trusted advisor for market entry, HR, and compliance across Europe.'
+  },
+  'gaurav yelve': {
+    title: 'Immigration & Global Mobility Specialist',
+    bio: 'Gaurav has extensive experience in immigration services, visa sponsorships, and navigating complex mobility regulations for international hires.'
+  }
+}
+
+const authorInfo = computed(() => {
+  const name = (blog.value?.author?.name ?? '').trim().toLowerCase()
+  return AUTHORS_INFO[name] || {
+    title: 'Global Mobility Expert',
+    bio: 'The team of global expansion specialists at Jackson & Frank helps companies hire, pay, and manage talent across international borders.'
+  }
+})
+
+// Social sharing links
+const shareLinks = computed(() => {
+  const url = encodeURIComponent(window.location.href)
+  const title = encodeURIComponent(blog.value?.title ?? '')
+  return {
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+    twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    email: `mailto:?subject=${title}&body=Check out this article: ${url}`
+  }
+})
+
+// Sidebar related articles
+const sidebarRelated = computed(() => {
+  return related.value.slice(0, 4)
+})
+
+// Newsletter signup
+const subscribeEmail = ref('')
+const subscribeSuccess = ref(false)
+function handleSubscribe() {
+  if (!subscribeEmail.value) return
+  subscribeEmail.value = ''
+  subscribeSuccess.value = true
+  setTimeout(() => {
+    subscribeSuccess.value = false
+  }, 4000)
+}
 
 async function loadBlog(currentSlug: string) {
   loading.value = true
@@ -86,31 +147,25 @@ async function loadBlog(currentSlug: string) {
 
   blog.value = post
 
-  // Update document title for SEO (basic — no full meta yet)
+  // Update document title for SEO
   document.title = `${post.meta_title || post.title} — Jackson & Frank`
 
-  // Pull related articles. If the API returned them, use those; otherwise fetch
-  // all blogs and pick 2 from the same category as fallback.
-  if (post.related_articles && post.related_articles.length > 0) {
-    // RelatedArticle and BlogPost have compatible-enough shapes for display
-    related.value = post.related_articles.slice(0, 2) as unknown as BlogPost[]
-  } else {
-    try {
-      const all = await fetchAllBlogs()
-      const sameCat = (post.category_ids ?? '').split(',').map((s) => s.trim()).filter(Boolean)
-      const candidates = all.filter(
-        (b) =>
-          b.slug !== post.slug &&
-          sameCat.some((cid) =>
-            (b.category_ids ?? '').split(',').map((s) => s.trim()).includes(cid)
-          )
-      )
-      related.value = (candidates.length > 0 ? candidates : all.filter((b) => b.slug !== post.slug))
-        .sort((a, b) => +new Date(b.publish_date) - +new Date(a.publish_date))
-        .slice(0, 2)
-    } catch {
-      related.value = []
-    }
+  // Fetch related articles (up to 4)
+  try {
+    const all = await fetchAllBlogs()
+    const sameCat = (post.category_ids ?? '').split(',').map((s) => s.trim()).filter(Boolean)
+    const candidates = all.filter(
+      (b) =>
+        b.slug !== post.slug &&
+        sameCat.some((cid) =>
+          (b.category_ids ?? '').split(',').map((s) => s.trim()).includes(cid)
+        )
+    )
+    related.value = (candidates.length > 0 ? candidates : all.filter((b) => b.slug !== post.slug))
+      .sort((a, b) => +new Date(b.publish_date) - +new Date(a.publish_date))
+      .slice(0, 4)
+  } catch {
+    related.value = []
   }
 
   loading.value = false
@@ -149,26 +204,45 @@ watch(slug, (s) => {
     <!-- Breadcrumb -->
     <nav class="container blog-breadcrumb" aria-label="Breadcrumb">
       <RouterLink to="/">Home</RouterLink>
-      <span class="sep">/</span>
+      <span class="sep">></span>
+      <RouterLink to="/blog">Resources</RouterLink>
+      <span class="sep">></span>
       <RouterLink to="/blog">Blog</RouterLink>
-      <span class="sep">/</span>
+      <span class="sep">></span>
       <span class="current">{{ blog.title }}</span>
     </nav>
 
     <!-- Header -->
     <header class="container blog-detail-header">
-      <span class="tag">
-        Insights · {{ formatBlogDate(blog.publish_date) }}
-      </span>
-      <h1>{{ blog.title }}</h1>
-      <div class="blog-detail-meta">
-        <span v-if="blog.author?.name" class="meta-author">
-          <AuthorAvatar :name="blog.author.name" size="sm" />
-          <span>{{ blog.author.name }}</span>
-        </span>
-        <span v-if="blog.estimated_reading_time" class="meta-time">
-          · {{ blog.estimated_reading_time }} min read
-        </span>
+      <div class="header-container-inner">
+        <span class="tag-eyebrow">BLOG</span>
+        <h1>{{ blog.title }}</h1>
+        <p class="excerpt-subtitle" v-if="blog.excerpt">{{ blog.excerpt }}</p>
+        
+        <div class="blog-detail-meta">
+          <div class="meta-author" v-if="blog.author?.name">
+            <AuthorAvatar :name="blog.author.name" size="sm" />
+            <div class="author-info-block">
+              <span class="name">{{ blog.author.name }}</span>
+              <span class="role">{{ authorInfo.title }} · Jackson &amp; Frank</span>
+            </div>
+          </div>
+          
+          <div class="meta-stats">
+            <span class="meta-item">
+              <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              {{ formatBlogDate(blog.publish_date) }}
+            </span>
+            <span class="meta-item" v-if="blog.estimated_reading_time">
+              <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              {{ blog.estimated_reading_time }} min read
+            </span>
+            <button class="meta-item btn-save" aria-label="Save Article">
+              <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+              Save
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -177,100 +251,147 @@ watch(slug, (s) => {
       <img :src="blog.image_url" :alt="blog.title" />
     </figure>
 
-    <!-- Body -->
-    <div class="container blog-detail-body-wrap" :class="{ 'has-sidebar': blog.in_this_guide && blog.in_this_guide.length > 0 }">
-      <div class="blog-main-column">
-        <div class="blog-detail-body blog-content">
-          <PortableText v-if="blog.body" :value="blog.body" :components="ptComponents" />
-          <div v-else v-html="renderedContent" />
-        </div>
-
-        <!-- Inline lead-capture CTA -->
-        <div class="blog-lead-cta">
-          <div>
-            <span class="tag">Need a hand?</span>
-            <h3>Talk to an expert about this</h3>
-            <p>Get tailored guidance for your situation — most questions answered within 24 hours.</p>
-          </div>
-          <button class="btn-primary" @click="openModal">
-            Get expert help <span class="arrow">→</span>
-          </button>
-        </div>
-
-        <!-- Author footer card -->
-        <div v-if="blog.author?.name" class="author-footer">
-          <span class="tag">About the author</span>
-          <div class="author-footer-card">
-            <AuthorAvatar :name="blog.author.name" size="lg" />
-            <div>
-              <strong>{{ blog.author.name }}</strong>
-              <span>Author at Jackson &amp; Frank</span>
-              <p v-if="blog.author.email">
-                <a :href="`mailto:${blog.author.email}`">{{ blog.author.email }}</a>
-              </p>
+    <!-- Body & Sidebar Grid -->
+    <div class="container blog-detail-body-wrap">
+      <div class="blog-grid-layout">
+        
+        <!-- Main Column -->
+        <main class="blog-main-column">
+          <!-- Horizontal Table of Contents "In this article" circles -->
+          <div v-if="parsedToc.length > 0" class="in-this-article">
+            <h3 class="toc-title">In this article</h3>
+            <div class="toc-circles-container">
+              <a v-for="(item, index) in parsedToc" :key="index" :href="item.href" class="toc-circle-card">
+                <div class="circle-num">{{ index + 1 }}</div>
+                <div class="circle-label">{{ item.text }}</div>
+              </a>
             </div>
           </div>
-        </div>
-      </div>
 
-      <aside v-if="blog.in_this_guide && blog.in_this_guide.length > 0" class="blog-sidebar">
-        <div class="in-this-guide">
-          <div class="guide-header">IN THIS GUIDE</div>
-          <ul class="guide-list">
-            <li v-for="(item, i) in blog.in_this_guide" :key="i">
-              <a :href="item.url">{{ item.title }}</a>
-            </li>
-          </ul>
-        </div>
-      </aside>
+          <!-- Article Content -->
+          <div class="blog-detail-body blog-content">
+            <PortableText v-if="blog.body" :value="blog.body" :components="ptComponents" />
+            <div v-else v-html="renderedContent" />
+          </div>
+
+          <!-- Bottom consultation Banner -->
+          <div class="consultation-banner">
+            <div class="consultation-content">
+              <div class="consultation-icon-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              </div>
+              <div class="consultation-text">
+                <h3>Ready to expand your business to Europe?</h3>
+                <p>Our experts can help you navigate every step of your expansion journey.</p>
+              </div>
+            </div>
+            <button class="btn-primary consultation-btn" @click="openModal">
+              Book a Consultation <span class="arrow">→</span>
+            </button>
+          </div>
+        </main>
+
+        <!-- Sticky Sidebar -->
+        <aside class="blog-sidebar">
+          
+          <!-- About the Author -->
+          <div class="sidebar-widget author-widget" v-if="blog.author?.name">
+            <h4 class="widget-title">About the Author</h4>
+            <div class="author-widget-body">
+              <div class="author-header-row">
+                <AuthorAvatar :name="blog.author.name" size="md" />
+                <div class="author-meta-text">
+                  <h5>{{ blog.author.name }}</h5>
+                  <span class="author-tagline">{{ authorInfo.title }}</span>
+                  <span class="author-corp">Jackson &amp; Frank</span>
+                </div>
+              </div>
+              <p class="author-bio">{{ authorInfo.bio }}</p>
+              <RouterLink to="/blog" class="widget-action-link">
+                View all posts <span class="arrow">→</span>
+              </RouterLink>
+            </div>
+          </div>
+
+          <!-- Share this article -->
+          <div class="sidebar-widget share-widget">
+            <h4 class="widget-title">Share this article</h4>
+            <div class="share-buttons">
+              <a :href="shareLinks.linkedin" target="_blank" rel="noopener noreferrer" class="share-btn-round" aria-label="Share on LinkedIn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+              <a :href="shareLinks.twitter" target="_blank" rel="noopener noreferrer" class="share-btn-round" aria-label="Share on Twitter/X">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+              </a>
+              <a :href="shareLinks.facebook" target="_blank" rel="noopener noreferrer" class="share-btn-round" aria-label="Share on Facebook">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              </a>
+              <a :href="shareLinks.email" class="share-btn-round" aria-label="Share via Email">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Related Articles -->
+          <div class="sidebar-widget related-widget" v-if="sidebarRelated.length > 0">
+            <h4 class="widget-title">Related Articles</h4>
+            <div class="related-vertical-list">
+              <RouterLink
+                v-for="post in sidebarRelated"
+                :key="post.id"
+                :to="`/blog/${post.slug}`"
+                class="related-item-row"
+              >
+                <div class="related-thumb-box">
+                  <img
+                    v-if="post.image_url"
+                    :src="post.image_url"
+                    :alt="post.title"
+                    loading="lazy"
+                  />
+                  <div v-else class="thumb-placeholder">JF</div>
+                </div>
+                <div class="related-item-text">
+                  <h5>{{ post.title }}</h5>
+                  <div class="related-item-meta-row">
+                    <span>{{ formatBlogDate(post.publish_date) }}</span>
+                    <span class="dot">•</span>
+                    <span>{{ post.estimated_reading_time || 5 }} min read</span>
+                  </div>
+                </div>
+              </RouterLink>
+            </div>
+          </div>
+
+          <!-- Stay Updated -->
+          <div class="sidebar-widget newsletter-widget">
+            <h4 class="widget-title">Stay Updated</h4>
+            <div class="newsletter-widget-card">
+              <p>Subscribe to our newsletter for the latest insights.</p>
+              <form @submit.prevent="handleSubscribe" class="newsletter-inline-form">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  required
+                  v-model="subscribeEmail"
+                  aria-label="Email Address"
+                />
+                <button type="submit" class="submit-arrow-btn" aria-label="Subscribe">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+              </form>
+              <transition name="fade">
+                <div v-if="subscribeSuccess" class="subscribe-success-banner">
+                  Thank you for subscribing!
+                </div>
+              </transition>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
     </div>
-
-    <!-- Related articles -->
-    <section v-if="related.length > 0" class="section container">
-      <h2 class="section-title">Recent <em>articles</em></h2>
-      <div class="related-grid">
-        <RouterLink
-          v-for="post in related"
-          :key="post.id"
-          :to="`/blog/${post.slug}`"
-          class="related-card"
-        >
-          <div class="related-card-img-wrap">
-            <img
-              v-if="post.image_url"
-              :src="post.image_url"
-              :alt="post.title"
-              loading="lazy"
-            />
-          </div>
-          <div class="related-card-body">
-            <div class="related-card-meta">
-              <span class="related-card-eyebrow">ARTICLE</span>
-              <span class="related-card-date">{{ formatBlogDate(post.publish_date) }}</span>
-            </div>
-            <h3 class="related-card-title">{{ post.title }}</h3>
-            <p class="related-card-excerpt">{{ post.excerpt }}</p>
-          </div>
-        </RouterLink>
-      </div>
-    </section>
-
-    <!-- Warm CTA -->
-    <section class="cta-warm-wrap">
-      <div class="cta-warm">
-        <span class="cta-tag">Talk to us</span>
-        <h2>We're ready to respond <em>to your doubts</em></h2>
-        <p>
-          Understanding your hurdles and helping you through them is the priority.
-        </p>
-        <div class="cta-warm-buttons">
-          <button class="btn-primary" @click="openModal">
-            Get in touch <span class="arrow">→</span>
-          </button>
-          <RouterLink to="/blog" class="btn-secondary">More articles</RouterLink>
-        </div>
-      </div>
-    </section>
 
     <!-- Lead-capture modal -->
     <LeadModal
@@ -286,7 +407,8 @@ watch(slug, (s) => {
 <style scoped>
 .blog-detail {
   padding-top: 120px;
-  padding-bottom: 80px;
+  padding-bottom: 120px;
+  background-color: #fdfcfb;
 }
 
 /* ====== BREADCRUMB ====== */
@@ -296,10 +418,12 @@ watch(slug, (s) => {
   gap: 8px;
   font-size: 13px;
   color: var(--ink-muted);
-  margin-bottom: 32px;
+  margin-bottom: 40px;
+  font-family: var(--sans);
 }
 .blog-breadcrumb a {
   color: var(--ink-soft);
+  text-decoration: none;
   transition: color 0.2s;
 }
 .blog-breadcrumb a:hover {
@@ -310,7 +434,8 @@ watch(slug, (s) => {
 }
 .blog-breadcrumb .current {
   color: var(--ink);
-  max-width: 360px;
+  font-weight: 500;
+  max-width: 380px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -318,247 +443,327 @@ watch(slug, (s) => {
 
 /* ====== HEADER ====== */
 .blog-detail-header {
-  max-width: 820px;
-  margin: 0 auto;
-  text-align: center;
   margin-bottom: 48px;
+  text-align: left;
 }
-.blog-detail-header .tag {
-  margin-bottom: 24px;
+.header-container-inner {
+  max-width: 900px;
+}
+.tag-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-family: var(--sans);
 }
 .blog-detail-header h1 {
   font-family: var(--serif);
-  font-size: clamp(34px, 4.5vw, 60px);
-  line-height: 1.08;
+  font-size: clamp(34px, 4.2vw, 56px);
+  line-height: 1.15;
   font-weight: 400;
   letter-spacing: -0.015em;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   color: var(--ink);
 }
-.blog-detail-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
+.excerpt-subtitle {
+  font-size: clamp(16px, 1.8vw, 20px);
+  line-height: 1.55;
   color: var(--ink-soft);
+  margin-bottom: 32px;
+  font-family: var(--sans);
+}
+
+.blog-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
 }
 .meta-author {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
-.meta-author span {
-  font-weight: 500;
+.author-info-block {
+  display: flex;
+  flex-direction: column;
 }
-.meta-time {
+.author-info-block .name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.author-info-block .role {
+  font-size: 12px;
   color: var(--ink-muted);
+  margin-top: 2px;
+}
+.meta-stats {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-family: var(--sans);
+}
+.meta-icon {
+  width: 15px;
+  height: 15px;
+  color: var(--ink-muted);
+}
+.btn-save {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.btn-save:hover {
+  color: var(--accent);
+}
+.btn-save:hover .meta-icon {
+  color: var(--accent);
 }
 
 /* ====== HERO IMAGE ====== */
-/* Blog banners often have text baked in, so we show the WHOLE image at its
-   natural aspect ratio (no crop) rather than forcing 16:9 + cover. */
 .blog-detail-hero {
-  max-width: 1080px;
   margin: 0 auto 64px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--accent-soft);
+  box-shadow: 0 12px 48px -15px rgba(0,0,0,0.06);
 }
 .blog-detail-hero img {
   width: 100%;
   height: auto;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
   display: block;
 }
 
-/* ====== BODY ====== */
-.blog-detail-body-wrap {
-  max-width: 720px;
-  margin: 0 auto;
-}
-.blog-detail-body-wrap.has-sidebar {
-  max-width: 1080px;
+/* ====== GRID LAYOUT ====== */
+.blog-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
 }
 @media (min-width: 1024px) {
-  .blog-detail-body-wrap.has-sidebar {
-    display: grid;
+  .blog-grid-layout {
     grid-template-columns: 1fr 340px;
-    gap: 40px;
+    gap: 64px;
     align-items: start;
   }
 }
 .blog-main-column {
-  max-width: 720px;
-  width: 100%;
-  margin: 0 auto;
+  min-width: 0; /* Prevents flex items/grid cells from breaking page layout */
 }
 
-.blog-sidebar {
-  position: sticky;
-  top: 100px;
-  margin-top: 56px;
-}
-@media (max-width: 1023px) {
-  .blog-sidebar {
-    margin-top: 0;
-    margin-bottom: 40px;
-    order: -1;
-  }
-  .blog-detail-body-wrap.has-sidebar {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.in-this-guide {
-  background: #ffffff;
+/* ====== IN THIS ARTICLE ====== */
+.in-this-article {
+  background-color: #ffffff;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 48px;
+  box-shadow: 0 4px 24px rgba(20, 51, 105, 0.02);
 }
-.guide-header {
-  background: var(--ink);
-  color: #fff;
-  font-size: 13px;
+.toc-title {
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  padding: 16px 20px;
   text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
 }
-.guide-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.toc-circles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 }
-.guide-list li {
-  border-bottom: 1px solid var(--border);
-}
-.guide-list li:last-child {
-  border-bottom: none;
-}
-.guide-list a {
-  display: block;
-  padding: 14px 20px;
-  color: var(--ink-soft);
-  font-weight: 600;
-  font-size: 14px;
+.toc-circle-card {
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   text-decoration: none;
-  line-height: 1.4;
-  transition: background 0.2s, color 0.2s;
+  transition: transform 0.2s;
 }
-.guide-list a:hover {
-  background: var(--bg-hover, #f9fafb);
+.toc-circle-card:hover {
+  transform: translateY(-2px);
+}
+.circle-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--serif);
+  font-style: italic;
+  transition: background-color 0.2s, color 0.2s;
+}
+.toc-circle-card:hover .circle-num {
+  background-color: var(--accent);
+  color: white;
+}
+.circle-label {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+  font-family: var(--sans);
+}
+.toc-circle-card:hover .circle-label {
   color: var(--accent);
 }
 
+/* ====== CONTENT BODY ====== */
 .blog-detail-body {
   font-family: var(--sans);
   font-size: 17px;
   line-height: 1.75;
-  color: var(--ink);
+  color: var(--ink-soft);
 }
-/* :deep() because content is rendered via v-html */
 .blog-detail-body :deep(h2),
 .blog-detail-body :deep(h3) {
   font-family: var(--serif);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   margin-top: 56px;
   margin-bottom: 20px;
-  line-height: 1.2;
+  line-height: 1.25;
   color: var(--ink);
 }
-.blog-detail-body :deep(h2) { font-size: 30px; }
-.blog-detail-body :deep(h3) { font-size: 22px; }
-.blog-detail-body :deep(h4) {
-  font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 32px;
-  margin-bottom: 12px;
-  letter-spacing: 0.02em;
-}
+.blog-detail-body :deep(h2) { font-size: 32px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+.blog-detail-body :deep(h3) { font-size: 24px; margin-top: 40px; }
 .blog-detail-body :deep(p) {
-  margin: 18px 0;
-  color: var(--ink-soft);
+  margin: 20px 0;
 }
 .blog-detail-body :deep(strong) {
   color: var(--ink);
   font-weight: 600;
 }
-.blog-detail-body :deep(em) {
-  font-style: italic;
-}
 .blog-detail-body :deep(a) {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
+  transition: color 0.2s;
 }
 .blog-detail-body :deep(a:hover) {
-  text-decoration-thickness: 2px;
+  color: var(--ink);
 }
-.blog-detail-body :deep(ul),
-.blog-detail-body :deep(ol) {
-  margin: 20px 0;
-  padding-left: 28px;
-  color: var(--ink-soft);
+
+/* Checklist custom styling */
+.blog-detail-body :deep(ul) {
+  list-style: none;
+  padding-left: 0;
+  margin: 24px 0;
 }
 .blog-detail-body :deep(li) {
-  margin: 8px 0;
-  line-height: 1.7;
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 12px;
+  line-height: 1.65;
 }
-.blog-detail-body :deep(blockquote) {
-  margin: 32px 0;
-  padding: 24px 32px;
-  border-left: 3px solid var(--accent);
-  background: var(--bg-card);
-  font-family: var(--serif);
-  font-size: 22px;
-  font-style: italic;
-  line-height: 1.4;
-  color: var(--ink);
-  border-radius: 0 12px 12px 0;
+.blog-detail-body :deep(li::before) {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b09559' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
-.blog-detail-body :deep(img) {
-  width: 100%;
+
+/* Exclude list icons under Sources */
+.blog-detail-body :deep(h2:has(a[href*="Sources"]) + ul li::before),
+.blog-detail-body :deep(h2:has(span:contains("Sources")) + ul li::before),
+.blog-detail-body :deep(ul:last-of-type li::before) {
+  background-image: none;
+  content: "•";
+  color: var(--accent);
+  font-size: 20px;
+  left: 6px;
+  top: -2px;
+  width: auto;
   height: auto;
-  border-radius: 12px;
-  margin: 28px 0;
 }
-.blog-detail-body :deep(figure) {
+
+/* Info & warning cards styling */
+.blog-detail-body :deep(.info),
+.blog-detail-body :deep(.warning),
+.blog-detail-body :deep(.highlight) {
+  padding: 24px 28px;
+  border-radius: 8px;
   margin: 32px 0;
+  font-size: 15px;
+  line-height: 1.65;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.01);
 }
-.blog-detail-body :deep(figcaption) {
-  font-size: 13px;
-  color: var(--ink-muted);
-  text-align: center;
-  margin-top: 10px;
+.blog-detail-body :deep(.info) {
+  background-color: #faf7f2;
+  border-left: 3px solid var(--accent);
+  color: var(--ink-soft);
 }
-/* Tables: scroll horizontally on overflow, zebra rows, clean borders */
+.blog-detail-body :deep(.warning) {
+  background-color: #fcf9f4;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-warm, #d08855);
+}
+.blog-detail-body :deep(.highlight) {
+  background-color: #f7f4ef;
+  border: 1px solid var(--border);
+}
+.blog-detail-body :deep(.info p),
+.blog-detail-body :deep(.warning p),
+.blog-detail-body :deep(.highlight p) {
+  margin: 0 0 8px 0;
+}
+.blog-detail-body :deep(.info p:last-child),
+.blog-detail-body :deep(.warning p:last-child),
+.blog-detail-body :deep(.highlight p:last-child) {
+  margin-bottom: 0;
+}
+
+/* Table container details */
 .blog-detail-body :deep(.blog-table-wrap) {
   overflow-x: auto;
-  margin: 28px 0;
+  margin: 36px 0;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.01);
 }
 .blog-detail-body :deep(table) {
   width: 100%;
   border-collapse: collapse;
-  margin: 0;
-  font-size: 13.5px;
-  /* Wide enough that 6–7 column tables get readable column widths;
-     the wrapper scrolls horizontally instead of squashing text. */
-  min-width: 880px;
+  font-size: 14px;
+  min-width: 800px;
 }
 .blog-detail-body :deep(th),
 .blog-detail-body :deep(td) {
-  padding: 11px 14px;
+  padding: 14px 18px;
   text-align: left;
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  vertical-align: top;
   line-height: 1.5;
 }
 .blog-detail-body :deep(th:last-child),
@@ -569,396 +774,315 @@ watch(slug, (s) => {
   border-bottom: none;
 }
 .blog-detail-body :deep(thead th) {
-  background: var(--ink);
-  color: var(--bg);
+  background-color: var(--ink);
+  color: #ffffff;
   font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  white-space: nowrap;
+  font-size: 11px;
 }
 .blog-detail-body :deep(tbody tr:nth-child(even)) {
-  background: var(--bg-card);
+  background-color: #faf9f7;
 }
 
-/* ====== TABLE OF CONTENTS ====== */
-.blog-detail-body :deep(.blog-toc) {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px 28px;
-  margin: 8px 0 40px;
-}
-.blog-detail-body :deep(.blog-toc-title) {
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  margin: 0 0 14px;
-}
-.blog-detail-body :deep(.blog-toc ol) {
-  margin: 0;
-  padding-left: 20px;
-  counter-reset: toc;
-}
-.blog-detail-body :deep(.blog-toc > ol) {
-  list-style: none;
-  padding-left: 0;
-}
-.blog-detail-body :deep(.blog-toc > ol > li) {
-  counter-increment: toc;
-  margin: 6px 0;
-  padding-left: 30px;
-  position: relative;
-}
-.blog-detail-body :deep(.blog-toc > ol > li)::before {
-  content: counter(toc, decimal-leading-zero);
-  position: absolute;
-  left: 0;
-  font-family: var(--serif);
-  font-style: italic;
-  color: var(--accent);
-  font-size: 14px;
-}
-.blog-detail-body :deep(.blog-toc a) {
-  color: var(--ink);
-  text-decoration: none;
-  font-size: 15px;
-  line-height: 1.5;
-}
-.blog-detail-body :deep(.blog-toc a:hover) {
-  color: var(--accent);
-  text-decoration: underline;
-}
-.blog-detail-body :deep(.blog-toc ol ol) {
-  padding-left: 16px;
-  margin: 6px 0;
-}
-.blog-detail-body :deep(.blog-toc ol ol a) {
-  font-size: 14px;
-  color: var(--ink-soft);
-}
-
-/* ====== DETAILS / SUMMARY ACCORDIONS (country toggles) ====== */
+/* Accordion updates */
 .blog-detail-body :deep(details.country-accordion) {
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 8px;
   margin: 16px 0;
-  background: var(--bg-card);
+  background-color: #ffffff;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 .blog-detail-body :deep(details.country-accordion[open]) {
   border-color: var(--accent);
-  box-shadow: 0 12px 36px -20px rgba(20, 51, 105, 0.4);
 }
 .blog-detail-body :deep(details.country-accordion > summary) {
-  display: block; /* removes the native disclosure triangle reliably */
-  list-style: none;
   cursor: pointer;
-  padding: 20px 56px 20px 24px;
-  position: relative;
+  padding: 18px 24px;
   user-select: none;
 }
-.blog-detail-body :deep(details.country-accordion > summary::-webkit-details-marker) {
-  display: none;
-}
-.blog-detail-body :deep(details.country-accordion > summary::marker) {
-  content: '';
-}
-/* the content authors put an <h3> inside <summary>; render it inline */
 .blog-detail-body :deep(details.country-accordion > summary h3) {
-  display: inline;
   margin: 0;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ====== CONSULTATION BANNER ====== */
+.consultation-banner {
+  background-color: #f7f4ef;
+  border-radius: 12px;
+  padding: 32px;
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+@media (min-width: 640px) {
+  .consultation-banner {
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
+}
+.consultation-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.consultation-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.consultation-icon-circle svg {
+  width: 24px;
+  height: 24px;
+}
+.consultation-text h3 {
   font-family: var(--serif);
   font-size: 20px;
   font-weight: 400;
   color: var(--ink);
-  letter-spacing: 0;
+  margin-bottom: 4px;
+  line-height: 1.3;
 }
-.blog-detail-body :deep(details.country-accordion > summary strong) {
-  font-weight: 400;
-}
-/* +/- toggle indicator */
-.blog-detail-body :deep(details.country-accordion > summary)::after {
-  content: '+';
-  position: absolute;
-  right: 22px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 24px;
-  line-height: 1;
-  color: var(--accent);
-  transition: transform 0.2s;
-}
-.blog-detail-body :deep(details.country-accordion[open] > summary)::after {
-  content: '−';
-}
-.blog-detail-body :deep(details.country-accordion > summary:hover h3) {
-  color: var(--accent);
-}
-/* body of the accordion */
-.blog-detail-body :deep(details.country-accordion > *:not(summary)) {
-  padding: 0 24px;
-}
-.blog-detail-body :deep(details.country-accordion > *:not(summary):last-child) {
-  padding-bottom: 22px;
-}
-.blog-detail-body :deep(details.country-accordion[open] > summary) {
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 18px;
-}
-/* tone variants */
-.blog-detail-body :deep(details.country-accordion.info[open]) {
-  border-color: var(--accent);
-}
-.blog-detail-body :deep(details.country-accordion.warning) {
-  background: #fdf8f0;
-}
-.blog-detail-body :deep(details.country-accordion.warning[open]) {
-  border-color: var(--accent-warm);
-}
-.blog-detail-body :deep(code) {
-  background: var(--bg-card);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
-  font-family: 'SF Mono', Menlo, monospace;
-}
-.blog-detail-body :deep(pre) {
-  background: var(--dark);
-  color: var(--bg);
-  padding: 20px;
-  border-radius: 12px;
-  overflow-x: auto;
-  margin: 24px 0;
-}
-.blog-detail-body :deep(pre code) {
-  background: transparent;
-  padding: 0;
-  color: inherit;
-}
-.blog-detail-body :deep(hr) {
-  border: 0;
-  border-top: 1px solid var(--border);
-  margin: 48px 0;
-}
-
-/* ====== INLINE LEAD CTA ====== */
-.blog-lead-cta {
-  margin-top: 64px;
-  padding: 32px 36px;
-  background: var(--accent-soft);
-  border-radius: var(--radius-lg);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: center;
-}
-.blog-lead-cta .tag {
-  margin-bottom: 8px;
-  color: var(--accent);
-}
-.blog-lead-cta h3 {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 400;
-  line-height: 1.15;
-  margin-bottom: 6px;
-  color: var(--ink);
-}
-.blog-lead-cta p {
+.consultation-text p {
   font-size: 14px;
   color: var(--ink-soft);
-  line-height: 1.55;
+  line-height: 1.5;
+  margin: 0;
 }
-.blog-lead-cta .btn-primary { white-space: nowrap; }
+.consultation-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
-/* ====== AUTHOR FOOTER ====== */
-.author-footer {
-  margin-top: 80px;
-  padding-top: 40px;
-  border-top: 1px solid var(--border);
+/* ====== STICKY SIDEBAR ====== */
+.blog-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  position: sticky;
+  top: 100px;
+  margin-top: 12px;
 }
-.author-footer .tag {
-  margin-bottom: 16px;
+
+.sidebar-widget {
+  background-color: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
 }
-.author-footer-card {
+.widget-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Author widget details */
+.author-header-row {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 24px;
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
+  gap: 16px;
+  margin-bottom: 16px;
 }
-.author-footer-card strong {
-  display: block;
-  font-size: 17px;
-  font-weight: 600;
+.author-meta-text h5 {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--ink);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+  line-height: 1.2;
 }
-.author-footer-card span {
-  font-size: 13px;
+.author-tagline {
+  display: block;
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.author-corp {
+  display: block;
+  font-size: 10px;
   color: var(--ink-muted);
 }
-.author-footer-card p {
-  margin-top: 6px;
+.author-bio {
   font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
 }
-.author-footer-card a {
+.widget-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.widget-action-link:hover {
+  color: var(--ink);
 }
 
-/* ====== RELATED ====== */
-.related-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-  margin-top: 48px;
+/* Share widget details */
+.share-buttons {
+  display: flex;
+  gap: 12px;
 }
-.related-card {
-  background: var(--bg-card);
+.share-btn-round {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.share-btn-round svg {
+  width: 16px;
+  height: 16px;
+}
+.share-btn-round:hover {
+  background-color: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Related Widget Details */
+.related-vertical-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.related-item-row {
+  display: flex;
+  gap: 12px;
   text-decoration: none;
-  color: var(--ink);
-  transition: transform 0.3s, box-shadow 0.3s;
+  color: inherit;
+  transition: transform 0.2s;
 }
-.related-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.2);
+.related-item-row:hover {
+  transform: translateX(4px);
 }
-.related-card-img-wrap {
-  aspect-ratio: 16 / 9;
-  background: var(--accent-soft);
+.related-thumb-box {
+  width: 72px;
+  height: 54px;
+  border-radius: 6px;
   overflow: hidden;
+  background-color: var(--accent-soft);
+  flex-shrink: 0;
 }
-.related-card-img-wrap img {
+.related-thumb-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s;
 }
-.related-card:hover .related-card-img-wrap img {
-  transform: scale(1.04);
-}
-.related-card-body {
-  padding: 22px 24px 26px;
-}
-.related-card-meta {
+.thumb-placeholder {
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 14px;
-}
-.related-card-title {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 400;
-  line-height: 1.25;
-  margin-bottom: 10px;
-}
-.related-card-excerpt {
+  align-items: center;
+  justify-content: center;
   font-size: 14px;
-  color: var(--ink-soft);
-  line-height: 1.55;
+  font-weight: 700;
+  color: var(--accent);
+}
+.related-item-text h5 {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+  margin-bottom: 4px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* ====== WARM CTA ====== */
-.cta-warm-wrap {
-  margin-top: 80px;
+.related-item-row:hover h5 {
+  color: var(--accent);
 }
-.cta-warm {
-  background: linear-gradient(135deg, #f4a467 0%, #e87a4d 30%, #d35d4d 65%, #c25c8b 100%);
-  color: white;
-  padding: 80px 32px;
-  text-align: center;
-  border-radius: 0;
-}
-.cta-warm .cta-tag {
-  display: inline-block;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  color: rgba(255, 255, 255, 0.8);
-}
-.cta-warm h2 {
-  font-family: var(--serif);
-  font-size: clamp(36px, 5vw, 64px);
-  line-height: 1.05;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.cta-warm h2 em {
-  font-style: italic;
-}
-.cta-warm p {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 32px;
-  max-width: 560px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.cta-warm-buttons {
+.related-item-meta-row {
   display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.cta-warm .btn-primary {
-  background: white;
-  color: var(--ink);
-}
-.cta-warm .btn-primary:hover {
-  background: var(--ink);
-  color: white;
-}
-.cta-warm .btn-secondary {
-  border-color: rgba(255, 255, 255, 0.7);
-  color: white;
-}
-.cta-warm .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--ink);
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-muted);
 }
 
-/* ====== 404 ====== */
-.blog-detail-404 {
-  padding: 200px 0 120px;
-  text-align: center;
+/* Newsletter widget details */
+.newsletter-widget {
+  background-color: #f7f4ef;
+  border-color: #eae6df;
 }
-.blog-detail-404 .tag {
-  margin-bottom: 12px;
-}
-.blog-detail-404 h1 {
+.newsletter-widget-card p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
   margin-bottom: 16px;
 }
-.blog-detail-404 p {
-  color: var(--ink-soft);
-  margin-bottom: 32px;
+.newsletter-inline-form {
+  display: flex;
+  background-color: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 4px 4px 16px;
+  align-items: center;
+}
+.newsletter-inline-form input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--ink);
+}
+.submit-arrow-btn {
+  width: 36px;
+  height: 36px;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.submit-arrow-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.submit-arrow-btn:hover {
+  background-color: var(--ink);
+}
+.subscribe-success-banner {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #3b7a57;
+  font-weight: 600;
 }
 
-/* ====== LOADING ====== */
+/* ====== SKELETONS ====== */
 .blog-detail-loading {
   padding-top: 160px;
   padding-bottom: 100px;
@@ -992,17 +1116,13 @@ watch(slug, (s) => {
 .skeleton-hero { height: 420px; margin-bottom: 32px; }
 .skeleton-line { height: 16px; }
 
-/* ====== RESPONSIVE ====== */
-@media (max-width: 900px) {
-  .blog-detail-body {
-    font-size: 16px;
-  }
-  .blog-detail-body :deep(h2) { font-size: 26px; margin-top: 40px; }
-  .related-grid {
-    grid-template-columns: 1fr;
-  }
-  .cta-warm {
-    padding: 60px 24px;
-  }
+/* Transition animations */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

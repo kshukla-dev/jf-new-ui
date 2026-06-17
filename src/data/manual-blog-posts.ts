@@ -18,6 +18,7 @@ export const UK_BANK_HOLIDAYS_2026_SLUG = "uk-bank-holidays-2026";
 export const BELGIUM_PUBLIC_HOLIDAYS_2026_SLUG = "belgium-public-holidays-2026";
 export const ITALY_BANK_HOLIDAYS_2026_SLUG = "italy-bank-holidays-2026";
 export const WORK_VISA_EUROPE_GUIDE_SLUG = "work-visa-europe-guide"
+export const WHAT_CHANGED_EUROPEAN_WORK_VISAS_2026_SLUG = "what-changed-for-european-work-visas-in-2026"
 
 const nlPublicHolidays2026Content = `
 <div class="highlight">
@@ -1081,6 +1082,64 @@ export const MANUAL_BLOG_POSTS: BlogPost[] = [
     created_by: 0,
     updated_by: 0,
     created_at: "2025-03-10",
+    updated_at: "2026-05-13",
+    author: {
+      id: 0,
+      name: "Vibhu Agarwal",
+      email: "",
+    },
+    related_articles: [],
+    featuredServiceData: [],
+    otherServiceData: [],
+    recommendedBlogsData: [],
+  },
+  {
+    id: 20250311,
+    title: "What Changed for European Work Visas in 2026?",
+    slug: WHAT_CHANGED_EUROPEAN_WORK_VISAS_2026_SLUG,
+    excerpt:
+      "What changed for European work visas in 2026? Key updates on IND salary thresholds, German EU Blue Card revisions, Irish permit changes, and Spanish reforms.",
+    page_content: workVisaEuropeGuide2026BlogHtml,
+    toc_html: `<ol>
+<li><a href="#what-changed-for-european-work-visas-in-2026">What changed for European work visas in 2026?</a></li>
+<li><a href="#work-visa-salary-thresholds-by-country-2026">What are the 2026 work visa salary thresholds by country?</a></li>
+<li><a href="#which-european-work-visa-route-fits-my-situation">Which European work visa route fits my situation?</a></li>
+<li class="toc-has-children">
+<a href="#which-european-countries-have-the-best-work-visa-routes-in-2026">Which European countries have the best work visa routes in 2026?</a>
+<ol>
+<li><a href="#germany-work-visa-2026">Germany work visa routes in 2026</a></li>
+<li><a href="#netherlands-highly-skilled-migrant-2026">Netherlands Highly Skilled Migrant visa 2026</a></li>
+<li><a href="#france-talent-passport-eu-blue-card-2026">France Talent Passport &amp; EU Blue Card 2026</a></li>
+<li><a href="#portugal-d7-vs-digital-nomad-visa">Portugal D7 vs Digital Nomad visa 2026</a></li>
+<li><a href="#spain-work-visa-2026">Spain work visa routes in 2026</a></li>
+<li><a href="#poland-work-permit-2026">Poland work permit routes in 2026</a></li>
+<li><a href="#czech-republic-work-visa-2026">Czech Republic work visa routes in 2026</a></li>
+<li><a href="#ireland-critical-skills-permit-2026">Ireland Critical Skills Employment Permit 2026</a></li>
+<li><a href="#belgium-work-permit-2026">Belgium work permit routes in 2026</a></li>
+<li><a href="#uk-skilled-worker-visa-2026">UK Skilled Worker visa requirements 2026</a></li>
+<li><a href="#italy-decreto-flussi-2026">Italy Decreto Flussi work visa 2026</a></li>
+</ol>
+</li>
+</ol>`,
+    author_id: 0,
+    image_url: "/blog-images/work-visa-in-europe.webp",
+    page_type: "BLOG",
+    featured_page: 0,
+    estimated_reading_time: 25,
+    related_article_ids: "",
+    tag_ids: "",
+    category_ids: "",
+    meta_title: "What Changed for European Work Visas in 2026?",
+    meta_description:
+      "Important updates on European work visas in 2026, including German Blue Cards, Netherlands HSM salary limits, and Irish permit rules.",
+    keywords:
+      "work visa europe 2026, what changed for european work visas in 2026, europe visa updates, EU Blue Card 2026",
+    canonical_url: `https://jacksonandfrank.com/blog/${WHAT_CHANGED_EUROPEAN_WORK_VISAS_2026_SLUG}`,
+    status: "PUBLISHED",
+    publish_date: "2026-05-13",
+    created_by: 0,
+    updated_by: 0,
+    created_at: "2026-05-13",
     updated_at: "2026-05-13",
     author: {
       id: 0,
