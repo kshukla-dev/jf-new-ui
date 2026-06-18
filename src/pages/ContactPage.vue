@@ -437,14 +437,14 @@ function slide(direction: 'next' | 'prev') {
           <div class="map-pin pin-pl" style="top: 26%; left: 53%"></div>
           <div class="map-pin pin-in" style="top: 52%; left: 68%"></div>
           <div class="map-pin pin-sg" style="top: 66%; left: 74%"></div>
+        </div>
         
-          <!-- Right side Stats overlay card inside the map container wrapper -->
-          <div class="stats-overlay-card">
-            <span class="operating-label">Operating in</span>
-            <div class="countries-count">40+</div>
-            <span class="countries-label">countries</span>
-            <p class="desc">Supporting companies worldwide with local expertise.</p>
-          </div>
+        <!-- Right side Stats overlay card (sibling to backdrop for clean stacking on mobile) -->
+        <div class="stats-overlay-card">
+          <span class="operating-label">Operating in</span>
+          <div class="countries-count">40+</div>
+          <span class="countries-label">countries</span>
+          <p class="desc">Supporting companies worldwide with local expertise.</p>
         </div>
       </div>
     </section>
@@ -462,26 +462,61 @@ function slide(direction: 'next' | 'prev') {
 /* ============= HERO & FORM ============= */
 .contact-hero-section {
   position: relative;
-  padding: 40px 0 20px;
+  min-height: auto;
+  padding: 160px 20px 60px;
   background-color: #FAF8F5;
   overflow: hidden;
 }
 
-.hero-bg-map {
+.contact-hero-section::before {
+  content: '';
   position: absolute;
-  top: 50%;
-  left: 45%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 1100px;
-  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 280px;
   background-image: url('/case-study/contact-bg.png');
   background-size: contain;
-  background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.85;
+  background-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
   pointer-events: none;
+  opacity: 0.85;
   z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .contact-hero-section {
+    padding: 160px 0 100px;
+  }
+  .contact-hero-section::before {
+    display: none;
+  }
+}
+
+.hero-bg-map {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .hero-bg-map {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1100px;
+    height: 100%;
+    background-image: url('/case-study/contact-bg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: 1;
+  }
 }
 
 .hero-grid {
@@ -609,8 +644,14 @@ function slide(direction: 'next' | 'prev') {
   background-color: #ffffff7a;
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 40px;
+  padding: 24px;
   box-shadow: 0 20px 50px rgba(20, 51, 105, 0.03);
+}
+
+@media (min-width: 768px) {
+  .floating-contact-form-card {
+    padding: 40px;
+  }
 }
 
 .floating-contact-form-card h2 {
@@ -624,8 +665,14 @@ function slide(direction: 'next' | 'prev') {
 
 .form-grid-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 16px;
+}
+
+@media (min-width: 580px) {
+  .form-grid-row {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .form-field {
@@ -851,8 +898,14 @@ function slide(direction: 'next' | 'prev') {
   background-color: #ffffff87;
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 60px 48px;
+  padding: 32px 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.01);
+}
+
+@media (min-width: 768px) {
+  .why-us-card-container {
+    padding: 60px 48px;
+  }
 }
 
 .why-us-grid {
@@ -1026,6 +1079,7 @@ function slide(direction: 'next' | 'prev') {
 }
 
 .carousel-arrow-btn {
+  display: none;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -1035,13 +1089,18 @@ function slide(direction: 'next' | 'prev') {
   border: 1px solid var(--border);
   background-color: #ffffff;
   color: var(--ink);
-  display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
   cursor: pointer;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 1024px) {
+  .carousel-arrow-btn {
+    display: flex;
+  }
 }
 
 .carousel-arrow-btn:hover {
@@ -1059,7 +1118,7 @@ function slide(direction: 'next' | 'prev') {
   right: -24px;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1280px) and (min-width: 1024px) {
   .prev-btn {
     left: 0;
   }
@@ -1260,9 +1319,15 @@ function slide(direction: 'next' | 'prev') {
 /* ============= MAP OVERLAY STRIP ============= */
 .map-overlay-section {
   background-color: #FAF8F5;
-  padding: 80px 0;
+  padding: 40px 0;
   position: relative;
   overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .map-overlay-section {
+    padding: 80px 0;
+  }
 }
 
 .map-strip-container {
@@ -1271,36 +1336,42 @@ function slide(direction: 'next' | 'prev') {
 }
 
 .dotted-map-backdrop {
-  height: 400px;
+  height: 220px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background-color: #FCFAF6;
   background-image: url('/case-study/contact-bg.png');
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: left 50px center;
+  background-position: center;
   position: relative;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 900px) {
   .dotted-map-backdrop {
-    height: auto;
-    min-height: 350px;
-    background-position: center;
+    height: 400px;
+    background-position: left 50px center;
   }
 }
 
 /* World pins overlay styling */
 .map-pin {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background-color: var(--accent);
-  border: 2px solid white;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(176, 149, 89, 0.8);
-  transform: translate(-50%, -50%);
-  animation: pulse 2s infinite;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .map-pin {
+    display: block;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: var(--accent);
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(176, 149, 89, 0.8);
+    transform: translate(-50%, -50%);
+    animation: pulse 2s infinite;
+  }
 }
 
 @keyframes pulse {
@@ -1313,23 +1384,22 @@ function slide(direction: 'next' | 'prev') {
   background-color: #ffffff;
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 40px;
+  padding: 32px 24px;
   box-shadow: 0 15px 40px rgba(20, 51, 105, 0.04);
   text-align: center;
-  width: 320px;
-  position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 100%;
+  max-width: 320px;
+  margin: 32px auto 0;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 900px) {
   .stats-overlay-card {
-    position: relative;
-    right: auto;
-    top: auto;
-    transform: none;
-    margin: 40px auto 20px;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    padding: 40px;
   }
 }
 

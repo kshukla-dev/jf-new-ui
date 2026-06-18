@@ -436,11 +436,11 @@ const trustAvatars = [
   margin-right: -50vw;
   width: 100vw;
   box-sizing: border-box;
-  padding: 88px 0 96px;
+  padding: 30px 0 96px;
   display: block;
   background-color: #f4f1ec;
   background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 0%) 30%, rgba(253, 251, 247, 0.6) 55%, rgba(253, 251, 247, 0) 100%), url(/case-study/immigration.png);
-  background-size: 55% auto;
+  background-size: 62% auto;
   background-position: right 32px center;
   background-repeat: no-repeat;
   color: #061639; /* ink */
