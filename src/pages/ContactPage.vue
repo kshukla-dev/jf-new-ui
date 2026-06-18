@@ -848,7 +848,7 @@ function slide(direction: 'next' | 'prev') {
 
 .why-us-card-container {
   position: relative;
-  background-color: #ffffff;
+  background-color: #ffffff87;
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 60px 48px;
