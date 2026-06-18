@@ -100,9 +100,6 @@ const getCountryImage = (name: string) => {
           Get the guide <span class="arrow">→</span>
         </button>
       </div>
-      <div class="ghg-hero-visual">
-        <img src="/case-study/global-hiring-guide.png" alt="Global Hiring Guide Globe" />
-      </div>
     </div>
     
     <div class="container trust-banner-wrap">
@@ -454,24 +451,47 @@ const getCountryImage = (name: string) => {
    NEW HERO STYLES
    ============================================================ */
 .ghg-hero {
-  background: #fdfbf7;
-  padding: 60px 0 0;
   position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 88px 0 96px;
+  display: block;
+  background-color: #fdfbf7;
+  background-image: linear-gradient(90deg, #fdfbf7 0%, rgba(253, 251, 247, 0%) 35%, rgba(253, 251, 247, 0.4) 65%, rgba(253, 251, 247, 0) 100%), url(/case-study/global-hiring-guide.png);
+  background-size: 50% auto;
+  background-position: right 5% center;
+  background-repeat: no-repeat;
+  color: var(--ink);
+  min-height: 620px;
   overflow: hidden;
 }
 
+.ghg-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.4), transparent 50%);
+  pointer-events: none;
+}
+
 .ghg-hero-inner {
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 0;
-  align-items: center;
-  min-height: 560px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
 }
 
 .ghg-hero-copy {
-  max-width: 500px;
-  padding-bottom: 140px;
-  padding-top: 40px;
+  max-width: 650px;
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .hero-tag {
@@ -527,26 +547,6 @@ const getCountryImage = (name: string) => {
 .btn-primary-gold:hover {
   background: #b08a4f;
   transform: translateY(-2px);
-}
-
-.ghg-hero-visual {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 55%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.ghg-hero-visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left center;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%);
-  mask-image: linear-gradient(to right, transparent 0%, black 15%);
 }
 
 /* ============================================================
@@ -1290,33 +1290,24 @@ const getCountryImage = (name: string) => {
     text-align: center;
   }
   
-  .ghg-hero-inner {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 0;
+  
+@media (min-width: 641px) and (max-width: 1024px) {
+  .ghg-hero {
+    padding: 80px 0 80px;
+    background-image: linear-gradient(90deg, #fdfbf7 30%, rgba(253, 251, 247, 0.75) 60%, rgba(253, 251, 247, 0.1) 100%), url(/case-study/global-hiring-guide.png);
+    background-size: cover;
+    background-position: 40% center;
+    min-height: 540px;
   }
   .ghg-hero-copy {
-    max-width: 100%;
-    padding-bottom: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    max-width: 480px;
+    padding-bottom: 20px;
+    padding-top: 10px;
   }
-  .ghg-hero-visual {
-    position: relative;
-    width: 100%;
-    height: auto;
-    order: -1;
-    margin-bottom: 40px;
-    justify-content: center;
+  .trust-banner-wrap {
+    margin-top: 30px;
   }
-  .ghg-hero-visual img {
-    max-width: 100%;
-    height: auto;
-    transform: translateX(0);
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
+}
   .trust-banner {
     flex-direction: column;
     gap: 24px;
@@ -1342,6 +1333,8 @@ const getCountryImage = (name: string) => {
   .map-stat-item {
     border-right: none;
   }
+}
+@media (max-width: 640px) {
   .process-flow {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -1349,8 +1342,6 @@ const getCountryImage = (name: string) => {
   .process-line {
     display: none;
   }
-}
-@media (max-width: 640px) {
   .how-grid-4 { grid-template-columns: 1fr; }
   .cs-grid { grid-template-columns: -1fr; }
   .cs-card {

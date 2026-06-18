@@ -402,6 +402,8 @@ background-color: #f4f1ec;
 @media (max-width: 960px) {
   .compliance-hero {
     padding: 72px 24px 72px;
+        background-size: 90% auto;
+    background-position: top 30% right;
   }
 }
 

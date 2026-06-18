@@ -1116,9 +1116,9 @@ const globalDestinations = [
 @media (max-width: 960px) {
   .home-hero {
     padding: 72px 24px 72px;
-    background-image: linear-gradient(180deg, #f4f1ec 40%, rgba(244, 241, 236, 0.95) 80%, rgba(244, 241, 236, 0.7) 100%), url(/services/service-page/about2.png);
+    background-image: linear-gradient(180deg, #f4f1ec 0%, #f4f1ec 20%, rgba(244, 241, 236, 0.4) 45%, rgba(244, 241, 236, 0) 65%), url(/services/service-page/about2.png);
     background-size: cover;
-    background-position: center bottom;
+    background-position: center 35%;
   }
 }
 @media (max-width: 640px) {
@@ -1533,9 +1533,24 @@ const globalDestinations = [
     width: 100%;
     margin-top: 24px;
     box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 24px 32px;
+    gap: 24px;
+  }
+  .sa-stat-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+  }
+}
+
+@media (max-width: 640px) {
+  .sa-stats-pill {
     flex-direction: column;
-    gap: 20px;
     align-items: stretch;
+    gap: 20px;
     padding: 24px;
   }
   .sa-stat-divider {

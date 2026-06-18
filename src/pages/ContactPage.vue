@@ -1435,4 +1435,34 @@ function slide(direction: 'next' | 'prev') {
   color: var(--ink-soft);
   margin: 0;
 }
+
+/* Tablet specific styles (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-left-content {
+    margin: 0 auto;
+    text-align: center;
+    max-width: 580px;
+  }
+  .contact-info-cards {
+    align-items: center;
+  }
+  .info-card {
+    width: 100%;
+    max-width: 480px;
+  }
+  .floating-contact-form-card {
+    max-width: 580px;
+    margin: 0 auto;
+  }
+  .why-us-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 40px;
+  }
+  .why-us-left-col {
+    grid-column: 1 / -1;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 16px;
+  }
+}
 </style>

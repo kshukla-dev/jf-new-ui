@@ -82,30 +82,7 @@ const topCountries = [
       </div>
     </header>
 
-    <!-- STATS BAR -->
-    <section class="eor-stats-bar">
-      <div class="eor-container eor-stats-inner">
-        <div class="eor-stat">
-          <strong>160+</strong>
-          <span>Countries covered</span>
-        </div>
-        <div class="eor-stat-divider"></div>
-        <div class="eor-stat">
-          <strong>48–72h</strong>
-          <span>Avg. onboarding time</span>
-        </div>
-        <div class="eor-stat-divider"></div>
-        <div class="eor-stat">
-          <strong>700+</strong>
-          <span>Businesses served</span>
-        </div>
-        <div class="eor-stat-divider"></div>
-        <div class="eor-stat">
-          <strong>98%</strong>
-          <span>Client retention rate</span>
-        </div>
-      </div>
-    </section>
+
 
     <!-- WHAT IS EOR -->
     <section class="eor-section eor-container">

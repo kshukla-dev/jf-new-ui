@@ -426,7 +426,10 @@ const trustAvatars = [
 
 @media (max-width: 960px) {
   .testimonials-hero {
-    padding: 72px 24px 72px;
+    padding: 52px 24px 72px;
+    background-size: 100% auto;
+    background-position: top 20% center;
+    background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 83%) 30%, rgb(253 251 247 / 13%) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/hiringGlobally.png);
   }
 }
 
@@ -436,6 +439,7 @@ const trustAvatars = [
     padding: 260px 20px 60px;
     background-image: none;
     background-color: #f4f1ec;
+    
   }
   .testimonials-hero::before {
     content: '';

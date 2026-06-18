@@ -295,7 +295,11 @@ function getRoleTheme(dept: string) {
 
 @media (max-width: 960px) {
   .careers-hero {
-    padding: 72px 24px 72px;
+    padding: 52px 24px 72px;
+    background-size: 100% auto;
+    background-position: top 20% center;
+     background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 80%) 30%, rgba(253, 251, 247, 0.4) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/career.png);
+  
   }
 }
 

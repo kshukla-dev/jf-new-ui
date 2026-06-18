@@ -342,6 +342,8 @@ const filteredFaqs = computed(() => {
 @media (max-width: 960px) {
   .advantages-hero {
     padding: 72px 24px 72px;
+            background-size: 100% auto;
+        background-position: top 20% center;
   }
 }
 

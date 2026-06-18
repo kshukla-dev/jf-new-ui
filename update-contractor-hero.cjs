@@ -205,6 +205,8 @@ const newCss = `@import '@/styles/service-page.css';
 @media (max-width: 960px) {
   .contractor-hero {
     padding: 72px 24px 72px;
+    background-size: 70% auto;
+        background-position: top 30% right;
   }
 }
 
