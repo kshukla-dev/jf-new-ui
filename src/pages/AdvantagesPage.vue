@@ -140,20 +140,7 @@ const filteredFaqs = computed(() => {
         <h2 class="section-title">{{ advantages.faqs.title }}</h2>
       </div>
       <div>
-        <!-- Tabs at the top of the list -->
-        <div class="faq-tabs-wrapper" style="justify-content: flex-start; margin-bottom: 32px;">
-          <div class="faq-tabs">
-            <button
-              v-for="tab in faqTabs"
-              :key="tab.id"
-              class="faq-tab"
-              :class="{ active: activeTab === tab.id }"
-              @click="activeTab = activeTab === tab.id ? '' : tab.id; openFaq = -1"
-            >
-              {{ tab.id }}
-            </button>
-          </div>
-        </div>
+       
 
         <div class="faq-list">
           <button
@@ -451,7 +438,6 @@ const filteredFaqs = computed(() => {
 /* Redesigned Certifications */
 .cert-strip {
   border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
   padding: 100px 0;
 }
 .cert-grid {

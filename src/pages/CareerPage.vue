@@ -176,7 +176,7 @@ function getRoleTheme(dept: string) {
   padding: 0px 0 96px;
   display: block;
   background-color: #f4f1ec;
-  background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 10%) 30%, rgba(253, 251, 247, 0.4) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/career.png);
+  background-image: linear-gradient(90deg, #f4f1ec 0%, rgb(244 241 236 / 10%) 30%, rgb(253 251 247 / 0%) 60%, rgba(253, 251, 247, 0) 100%), url(/services/service-page/career.png);
   background-size: 60% auto;
   background-position: right 0% center;
   background-repeat: no-repeat;
@@ -396,8 +396,8 @@ function getRoleTheme(dept: string) {
 /* === POSITION CARDS (CARD STYLE) === */
 .positions-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 32px;
 }
 .position-card {
   background: #ffffff;
@@ -408,6 +408,7 @@ function getRoleTheme(dept: string) {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  min-height: 460px;
 }
 .position-card:hover {
   transform: translateY(-6px);
@@ -512,13 +513,10 @@ function getRoleTheme(dept: string) {
 .position-desc {
   font-size: 14px;
   color: var(--ink-soft);
-  line-height: 1.65;
+  line-height: 1.75;
   flex: 1;
+  min-height: 130px;
   margin-bottom: 24px;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .position-apply {
   display: inline-flex;

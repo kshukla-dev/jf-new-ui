@@ -458,11 +458,11 @@ const getCountryImage = (name: string) => {
   margin-right: -50vw;
   width: 100vw;
   box-sizing: border-box;
-  padding: 88px 0 96px;
+  padding: 40px 0 96px;
   display: block;
   background-color: #fdfbf7;
   background-image: linear-gradient(90deg, #fdfbf7 0%, rgba(253, 251, 247, 0%) 35%, rgba(253, 251, 247, 0.4) 65%, rgba(253, 251, 247, 0) 100%), url(/case-study/global-hiring-guide.png);
-  background-size: 50% auto;
+  background-size: 70% auto;
   background-position: right 5% center;
   background-repeat: no-repeat;
   color: var(--ink);
@@ -553,10 +553,8 @@ const getCountryImage = (name: string) => {
    TRUST BANNER
    ============================================================ */
 .trust-banner-wrap {
-  position: relative;
-  z-index: 10;
-  margin-top: -120px;
-  margin-bottom: 60px;
+  
+  margin-top: 5rem;
 }
 
 .trust-banner {
