@@ -56,7 +56,6 @@ const year = new Date().getFullYear()
       <div class="footer-top">
         <div class="footer-brand-section">
           <div class="footer-logo">
-            <div class="logo-mark">JF</div>
             <div class="logo-text">
               <div class="logo-name">JACKSON &amp; FRANK</div>
               <div class="logo-sub">Global Employer of Record</div>
@@ -201,7 +200,7 @@ const year = new Date().getFullYear()
 .jf-footer {
   background-color: var(--dark);
   color: #fff;
-  padding: 80px 0 40px;
+  padding: 56px 0 24px;
   font-family: var(--sans, 'Inter', sans-serif);
   margin-top: 60px;
 }
@@ -209,14 +208,14 @@ const year = new Date().getFullYear()
 .footer-container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 24px;
 }
 
 /* --- DIVIDERS --- */
 .footer-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.08);
-  margin: 48px 0;
+  margin: 32px 0;
 }
 
 /* =============================
@@ -226,7 +225,7 @@ const year = new Date().getFullYear()
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 48px;
+  gap: 32px;
   flex-wrap: wrap;
 }
 
@@ -309,7 +308,7 @@ const year = new Date().getFullYear()
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px;
-  padding: 32px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
 }
@@ -450,6 +449,7 @@ const year = new Date().getFullYear()
   align-items: center;
   flex-wrap: wrap;
   gap: 40px;
+  margin-top: 1rem;
 }
 .trust-companies {
   flex: 1;
@@ -565,12 +565,12 @@ const year = new Date().getFullYear()
 @media (max-width: 1200px) {
   .footer-newsletter {
     flex: 1;
-    min-width: 300px;
+    min-width: 260px;
   }
 }
 @media (max-width: 992px) {
   .footer-links-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
   .contact-col {
     grid-column: 1 / -1;
@@ -580,31 +580,84 @@ const year = new Date().getFullYear()
     border-right: none;
     padding-right: 0;
     border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding-bottom: 32px;
+    padding-bottom: 28px;
   }
 }
 @media (max-width: 768px) {
   .footer-top {
     flex-direction: column;
+    gap: 28px;
   }
   .footer-newsletter {
     width: 100%;
+    padding: 20px;
+  }
+  .footer-links-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
   .footer-trust {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 24px;
+    padding: 24px;
   }
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
   }
   .fb-right {
     flex-wrap: wrap;
+    width: 100%;
+  }
+  .fb-social {
+    margin-left: 0;
   }
 }
 @media (max-width: 480px) {
   .footer-links-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .footer-container {
+    padding: 0 16px;
+  }
+  .footer-logo {
+    gap: 10px;
+  }
+  .logo-mark {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  .footer-desc {
+    margin-bottom: 24px;
+  }
+  .footer-newsletter {
+    padding: 18px;
+  }
+  .trust-logos {
+    gap: 14px;
+  }
+  .mock-logo {
+    font-size: 15px;
+  }
+  .footer-checks {
+    gap: 12px;
+  }
+  .footer-divider {
+    margin: 24px 0;
+  }
+
+  /* Tighter spacing for mobile link columns */
+  .fl-col h4 {
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .fl-col a {
+    margin-bottom: 8px;
+    font-size: 13px;
   }
 }
 </style>

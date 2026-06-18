@@ -398,7 +398,7 @@ const topCountries = [
     <section class="eor-section eor-container">
       <div class="eor-audience-header">
         <span class="eor-eyebrow">Built for every stage</span>
-        <h2>Who is EOR <em>designed for?</em></h2>
+        <h2>Who is EOR designed for?</h2>
       </div>
       <div class="eor-audience-grid">
         <div class="eor-audience-card">
