@@ -66,6 +66,21 @@ async function handleSubmit(e: Event) {
     errorMessage.value = result.error ?? 'Failed to send message. Please try again.'
   }
 }
+
+const carouselTrack = ref<HTMLElement | null>(null)
+
+function slide(direction: 'next' | 'prev') {
+  if (!carouselTrack.value) return
+  const card = carouselTrack.value.querySelector('.office-location-card') as HTMLElement
+  if (!card) return
+  const cardWidth = card.offsetWidth
+  const gap = 24 // matching CSS gap
+  const scrollAmount = direction === 'next' ? (cardWidth + gap) : -(cardWidth + gap)
+  carouselTrack.value.scrollBy({
+    left: scrollAmount,
+    behavior: 'smooth'
+  })
+}
 </script>
 
 <template>
@@ -73,14 +88,14 @@ async function handleSubmit(e: Event) {
     
     <!-- ============= HERO & FORM SECTION ============= -->
     <section class="contact-hero-section">
-      <!-- Background Map Image -->
-      <div class="hero-bg-map" style="background-image: url('/case-study/contact-bg.png');"></div>
+      <!-- Background Map Image positioned relatively/absolutely behind the grid -->
+      <div class="hero-bg-map"></div>
 
       <div class="container hero-grid">
         <!-- Left Content -->
         <div class="hero-left-content">
           <span class="tag-eyebrow">GET IN TOUCH</span>
-          <h1>Let's build your global success <span class="highlight-gold">together.</span></h1>
+          <h1>Let's build your<br>global success <span class="highlight-gold">together.</span></h1>
           <p class="hero-desc">Have questions about global employment, expansion, or our services? Our experts are here to help.</p>
 
           <!-- Info Cards -->
@@ -88,7 +103,7 @@ async function handleSubmit(e: Event) {
             <!-- Email -->
             <a href="mailto:hello@jacksonandfrank.com" class="info-card">
               <div class="icon-circle">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
               </div>
               <div class="info-card-text">
                 <span class="label">Email us</span>
@@ -99,7 +114,7 @@ async function handleSubmit(e: Event) {
             <!-- Call -->
             <a href="tel:+442045722467" class="info-card">
               <div class="icon-circle">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               </div>
               <div class="info-card-text">
                 <span class="label">Call us</span>
@@ -110,7 +125,7 @@ async function handleSubmit(e: Event) {
             <!-- Hours -->
             <div class="info-card no-hover">
               <div class="icon-circle">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
               </div>
               <div class="info-card-text">
                 <span class="label">Business hours</span>
@@ -122,146 +137,154 @@ async function handleSubmit(e: Event) {
 
         <!-- Right Floating Form -->
         <div class="hero-right-form">
-          <form class="floating-contact-form" @submit="handleSubmit">
-            <h2>Send us a message</h2>
+          <div class="floating-contact-form-card">
+            <form @submit="handleSubmit">
+              <h2>Send us a message</h2>
 
-            <!-- Success State -->
-            <div v-if="status === 'success'" class="form-success-card">
-              <div class="success-icon-circle">✓</div>
-              <strong>Message Sent!</strong>
-              <p>Thank you for contacting us. We'll get back to you within 24 hours.</p>
-            </div>
+              <!-- Success State -->
+              <div v-if="status === 'success'" class="form-success-card">
+                <div class="success-icon-circle">✓</div>
+                <strong>Message Sent!</strong>
+                <p>Thank you for contacting us. We'll get back to you within 24 hours.</p>
+              </div>
 
-            <!-- Form Fields -->
-            <template v-else>
-              <div class="form-grid-row">
+              <!-- Form Fields -->
+              <template v-else>
+                <div class="form-grid-row">
+                  <div class="form-field">
+                    <input v-model="form.firstName" type="text" placeholder="First name" required aria-label="First Name" />
+                  </div>
+                  <div class="form-field">
+                    <input v-model="form.lastName" type="text" placeholder="Last name" required aria-label="Last Name" />
+                  </div>
+                </div>
+
                 <div class="form-field">
-                  <input v-model="form.firstName" type="text" placeholder="First name" required aria-label="First Name" />
+                  <input v-model="form.email" type="email" placeholder="Work email" required aria-label="Work Email" />
                 </div>
+
                 <div class="form-field">
-                  <input v-model="form.lastName" type="text" placeholder="Last name" required aria-label="Last Name" />
+                  <input v-model="form.company" type="text" placeholder="Company name" aria-label="Company Name" />
                 </div>
-              </div>
 
-              <div class="form-field">
-                <input v-model="form.email" type="email" placeholder="Work email" required aria-label="Work Email" />
-              </div>
-
-              <div class="form-field">
-                <input v-model="form.company" type="text" placeholder="Company name" aria-label="Company Name" />
-              </div>
-
-              <div class="form-field select-field">
-                <select v-model="form.reason" required aria-label="What can we help you with?">
-                  <option value="" disabled selected>How can we help you?</option>
-                  <option v-for="r in contact.form.contactReasons" :key="r.value" :value="r.value">
-                    {{ r.label }}
-                  </option>
-                </select>
-                <div class="select-arrow">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <div class="form-field select-field">
+                  <select v-model="form.reason" required aria-label="What can we help you with?">
+                    <option value="" disabled selected>How can we help you?</option>
+                    <option v-for="r in contact.form.contactReasons" :key="r.value" :value="r.value">
+                      {{ r.label }}
+                    </option>
+                  </select>
+                  <div class="select-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-field">
-                <textarea v-model="form.message" placeholder="Your message" rows="4" required aria-label="Your Message"></textarea>
-              </div>
+                <div class="form-field">
+                  <textarea v-model="form.message" placeholder="Your message" rows="4" required aria-label="Your Message"></textarea>
+                </div>
 
-              <div class="form-consent-row">
-                <label class="custom-checkbox">
-                  <input v-model="form.consent" type="checkbox" required />
-                  <span class="checkmark"></span>
-                </label>
-                <span class="consent-text">
-                  I agree to the <RouterLink to="/privacy-policy">Privacy Policy</RouterLink> and Terms of Service.
-                </span>
-              </div>
+                <div class="form-consent-row">
+                  <label class="custom-checkbox">
+                    <input v-model="form.consent" type="checkbox" required />
+                    <span class="checkmark"></span>
+                  </label>
+                  <span class="consent-text">
+                    I agree to the <RouterLink to="/privacy-policy">Privacy Policy</RouterLink> and <RouterLink to="/terms-of-service">Terms of Service</RouterLink>.
+                  </span>
+                </div>
 
-              <p v-if="status === 'error'" class="error-msg-banner">{{ errorMessage }}</p>
+                <p v-if="status === 'error'" class="error-msg-banner">{{ errorMessage }}</p>
 
-              <button type="submit" class="btn-primary submit-btn" :disabled="status === 'sending'">
-                {{ status === 'sending' ? 'Sending...' : 'Send Message' }}
-                <span class="arrow">→</span>
-              </button>
+                <button type="submit" class="submit-btn" :disabled="status === 'sending'">
+                  <span>{{ status === 'sending' ? 'Sending...' : 'Send Message' }}</span>
+                  <span class="arrow">→</span>
+                </button>
 
-              <div class="form-footer-lock">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                <span>Your information is secure and confidential.</span>
-              </div>
-            </template>
-          </form>
+                <div class="form-footer-lock">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  <span>Your information is secure and confidential.</span>
+                </div>
+              </template>
+            </form>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ============= WHY GET IN TOUCH ============= -->
     <section class="why-us-section">
-      <div class="container why-us-grid">
-        <!-- Left info -->
-        <div class="why-us-left">
-          <span class="tag-eyebrow">WHY GET IN TOUCH WITH JACKSON &amp; FRANK</span>
-          <h2>Your trusted partner for <span class="highlight-gold">global expansion</span></h2>
-          <p>We combine local expertise with global experience to make your expansion simple, compliant, and successful.</p>
-          <RouterLink to="/about-us" class="btn-secondary learn-more-btn">
-            Learn more about us <span class="arrow">→</span>
-          </RouterLink>
-        </div>
-
-        <!-- Right 3x2 cards -->
-        <div class="why-us-cards-grid">
-          <!-- Card 1 -->
-          <div class="why-us-card">
-            <div class="card-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      <div class="container">
+        <div class="why-us-card-container">
+          <div class="why-us-grid">
+            <!-- Column 1: Left info (Spans 2 rows) -->
+            <div class="why-us-left-col">
+              <span class="tag-eyebrow">WHY GET IN TOUCH WITH JACKSON &amp; FRANK</span>
+              <h2>Your trusted partner<br>for <span class="highlight-gold">global expansion</span></h2>
+              <p>We combine local expertise with global experience to make your expansion simple, compliant, and successful.</p>
+              <RouterLink to="/about-us" class="learn-more-btn">
+                Learn more about us <span class="arrow">→</span>
+              </RouterLink>
             </div>
-            <h5>Local Expertise, Global Reach</h5>
-            <p>Our teams in 40+ countries understand local markets, laws, and business culture.</p>
+
+            <!-- Column 2, Row 1 -->
+            <div class="feature-item col-2 row-1">
+              <div class="feature-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              </div>
+              <h5>Local Expertise, Global Reach</h5>
+              <p>Our teams in 40+ countries understand local markets, laws, and business culture.</p>
+            </div>
+
+            <!-- Column 3, Row 1 -->
+            <div class="feature-item col-3 row-1">
+              <div class="feature-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 11 2 2 4-4"></path></svg>
+              </div>
+              <h5>Compliance You Can Trust</h5>
+              <p>Stay compliant with local laws, tax regulations, and labor requirements.</p>
+            </div>
+
+            <!-- Column 4, Row 1 -->
+            <div class="feature-item col-4 row-1">
+              <div class="feature-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+              <h5>Fast &amp; Efficient</h5>
+              <p>Most first hires go live within 48–72 hours.</p>
+            </div>
+
+            <!-- Column 2, Row 2 -->
+            <div class="feature-item col-2 row-2">
+              <div class="feature-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <h5>End-to-End Support</h5>
+              <p>From entity setup to payroll and HR, we handle it all.</p>
+            </div>
+
+            <!-- Column 3, Row 2 -->
+            <div class="feature-item col-3 row-2">
+              <div class="feature-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+              </div>
+              <h5>Cost Effective</h5>
+              <p>Save time and costs with our streamlined solutions.</p>
+            </div>
+
+            <!-- Column 4, Row 2 -->
+            <div class="feature-item col-4 row-2">
+              <div class="feature-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+              </div>
+              <h5>Human Support</h5>
+              <p>Real people, real support, whenever you need us.</p>
+            </div>
           </div>
 
-          <!-- Card 2 -->
-          <div class="why-us-card">
-            <div class="card-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            </div>
-            <h5>Compliance You Can Trust</h5>
-            <p>Stay compliant with local laws, tax regulations, and labor requirements.</p>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="why-us-card">
-            <div class="card-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            </div>
-            <h5>Fast &amp; Efficient</h5>
-            <p>Most first hires go live within 48–72 hours.</p>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="why-us-card">
-            <div class="card-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            </div>
-            <h5>End-to-End Support</h5>
-            <p>From entity setup to payroll and HR, we handle it all.</p>
-          </div>
-
-          <!-- Card 5 -->
-          <div class="why-us-card">
-            <div class="card-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
-            </div>
-            <h5>Cost Effective</h5>
-            <p>Save time and costs with our streamlined solutions.</p>
-          </div>
-
-          <!-- Card 6 -->
-          <div class="why-us-card">
-            <div class="card-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-            </div>
-            <h5>Human Support</h5>
-            <p>Real people, real support, whenever you need us.</p>
-          </div>
+          <!-- Connected divider lines overlay -->
+          <div class="grid-divider divider-1"></div>
+          <div class="grid-divider divider-2"></div>
+          <div class="grid-divider divider-3"></div>
         </div>
       </div>
     </section>
@@ -274,116 +297,139 @@ async function handleSubmit(e: Event) {
             <span class="tag-eyebrow">OUR OFFICES</span>
             <h2>A global presence, <span class="highlight-gold">wherever you grow.</span></h2>
           </div>
-          <RouterLink to="/sitemaps" class="btn-secondary view-locations-btn">
+          <RouterLink to="/sitemaps" class="view-locations-btn">
             View all locations <span class="arrow">→</span>
           </RouterLink>
         </div>
 
-        <div class="offices-card-grid">
-          <!-- London -->
-          <div class="office-location-card">
-            <img src="/countries/eor-uk.webp" alt="London skyline" class="office-img" />
-            <div class="card-inner-body">
-              <div class="country-row">
-                <span class="flag">🇬🇧</span>
-                <span class="country-name">London</span>
-                <span class="badge-hq">Head Office</span>
+        <div class="carousel-track-wrapper">
+          <!-- Left Arrow Button -->
+          <button @click="slide('prev')" class="carousel-arrow-btn prev-btn" aria-label="Previous Location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+
+          <div ref="carouselTrack" class="offices-carousel-track">
+            <!-- London -->
+            <div class="office-location-card">
+              <div class="office-img-wrap">
+                <img src="/countries/eor-uk.webp" alt="London skyline" class="office-img" />
               </div>
-              <p class="address">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                25 Wilton Road, London, SW1V 1LW, United Kingdom
-              </p>
-              <a href="tel:+442045722467" class="phone-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                +44 20 4572 2467
-              </a>
+              <div class="card-inner-body">
+                <div class="country-row">
+                  <span class="flag">🇬🇧</span>
+                  <span class="country-name">London</span>
+                  <span class="badge-hq">Head Office</span>
+                </div>
+                <p class="address">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  25 Wilton Road, London, SW1V 1LW, United Kingdom
+                </p>
+                <a href="tel:+442045722467" class="phone-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  +44 20 4572 2467
+                </a>
+              </div>
+            </div>
+
+            <!-- Warsaw -->
+            <div class="office-location-card">
+              <div class="office-img-wrap">
+                <img src="/countries/eor-poland.webp" alt="Warsaw skyline" class="office-img" />
+              </div>
+              <div class="card-inner-body">
+                <div class="country-row">
+                  <span class="flag">🇵🇱</span>
+                  <span class="country-name">Warsaw</span>
+                </div>
+                <p class="address">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  ul. Zlota 59, 00-120 Warsaw, Poland
+                </p>
+                <a href="tel:+48222082700" class="phone-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  +48 22 208 27 00
+                </a>
+              </div>
+            </div>
+
+            <!-- Amsterdam -->
+            <div class="office-location-card">
+              <div class="office-img-wrap">
+                <img src="/countries/eor-netherlands.webp" alt="Amsterdam canals" class="office-img" />
+              </div>
+              <div class="card-inner-body">
+                <div class="country-row">
+                  <span class="flag">🇳🇱</span>
+                  <span class="country-name">Amsterdam</span>
+                </div>
+                <p class="address">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  Herengracht 124, 1015 BT Amsterdam, Netherlands
+                </p>
+                <a href="tel:+31208082967" class="phone-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  +31 20 808 2967
+                </a>
+              </div>
+            </div>
+
+            <!-- Singapore -->
+            <div class="office-location-card">
+              <div class="office-img-wrap">
+                <img src="/countries/eor-hong-kong.webp" alt="Singapore Skyline" class="office-img" />
+              </div>
+              <div class="card-inner-body">
+                <div class="country-row">
+                  <span class="flag">🇸🇬</span>
+                  <span class="country-name">Singapore</span>
+                </div>
+                <p class="address">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  10 Anson Road, #10-11, Singapore 079903, Singapore
+                </p>
+                <a href="tel:+6569502185" class="phone-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  +65 6950 2185
+                </a>
+              </div>
+            </div>
+
+            <!-- New York -->
+            <div class="office-location-card">
+              <div class="office-img-wrap">
+                <img src="/countries/eor-spain.webp" alt="New York skyline" class="office-img" />
+              </div>
+              <div class="card-inner-body">
+                <div class="country-row">
+                  <span class="flag">🇺🇸</span>
+                  <span class="country-name">New York</span>
+                </div>
+                <p class="address">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  375 Park Avenue, 9th Floor, New York, NY 10152, USA
+                </p>
+                <a href="tel:+16469939004" class="phone-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  +1 646 993 9004
+                </a>
+              </div>
             </div>
           </div>
 
-          <!-- Warsaw -->
-          <div class="office-location-card">
-            <img src="/countries/eor-poland.webp" alt="Warsaw skyline" class="office-img" />
-            <div class="card-inner-body">
-              <div class="country-row">
-                <span class="flag">🇵🇱</span>
-                <span class="country-name">Warsaw</span>
-              </div>
-              <p class="address">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                ul. Zlota 59, 00-120 Warsaw, Poland
-              </p>
-              <a href="tel:+48222082700" class="phone-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                +48 22 208 27 00
-              </a>
-            </div>
-          </div>
-
-          <!-- Amsterdam -->
-          <div class="office-location-card">
-            <img src="/countries/eor-netherlands.webp" alt="Amsterdam canals" class="office-img" />
-            <div class="card-inner-body">
-              <div class="country-row">
-                <span class="flag">🇳🇱</span>
-                <span class="country-name">Amsterdam</span>
-              </div>
-              <p class="address">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                Herengracht 124, 1015 BT Amsterdam, Netherlands
-              </p>
-              <a href="tel:+31208082967" class="phone-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                +31 20 808 2967
-              </a>
-            </div>
-          </div>
-
-          <!-- Singapore -->
-          <div class="office-location-card">
-            <img src="/countries/eor-hong-kong.webp" alt="Singapore Skyline" class="office-img" />
-            <div class="card-inner-body">
-              <div class="country-row">
-                <span class="flag">🇸🇬</span>
-                <span class="country-name">Singapore</span>
-              </div>
-              <p class="address">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                10 Anson Road, #10-11, Singapore 079903, Singapore
-              </p>
-              <a href="tel:+6569502185" class="phone-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                +65 6950 2185
-              </a>
-            </div>
-          </div>
-
-          <!-- New York -->
-          <div class="office-location-card">
-            <img src="/countries/eor-spain.webp" alt="New York skyline" class="office-img" />
-            <div class="card-inner-body">
-              <div class="country-row">
-                <span class="flag">🇺🇸</span>
-                <span class="country-name">New York</span>
-              </div>
-              <p class="address">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                375 Park Avenue, 9th Floor, New York, NY 10152, USA
-              </p>
-              <a href="tel:+16469939004" class="phone-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loc-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                +1 646 993 9004
-              </a>
-            </div>
-          </div>
+          <!-- Right Arrow Button -->
+          <button @click="slide('next')" class="carousel-arrow-btn next-btn" aria-label="Next Location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
         </div>
       </div>
     </section>
+
 
     <!-- ============= MAP OVERLAY STRIP ============= -->
     <section class="map-overlay-section">
       <div class="container map-strip-container">
         <!-- World map with connection lines behind/under the card -->
-        <div class="dotted-map-backdrop" style="background-image: url('/case-study/contact-bg.png');">
+        <div class="dotted-map-backdrop">
           <!-- Pin overlays positioned on the map -->
           <div class="map-pin pin-us" style="top: 35%; left: 22%"></div>
           <div class="map-pin pin-uk" style="top: 25%; left: 46%"></div>
@@ -391,14 +437,14 @@ async function handleSubmit(e: Event) {
           <div class="map-pin pin-pl" style="top: 26%; left: 53%"></div>
           <div class="map-pin pin-in" style="top: 52%; left: 68%"></div>
           <div class="map-pin pin-sg" style="top: 66%; left: 74%"></div>
-        </div>
         
-        <!-- Right side Stats overlay card -->
-        <div class="stats-overlay-card">
-          <span class="operating-label">Operating in</span>
-          <div class="countries-count">40+</div>
-          <span class="countries-label">countries</span>
-          <p class="desc">Supporting companies worldwide with local expertise.</p>
+          <!-- Right side Stats overlay card inside the map container wrapper -->
+          <div class="stats-overlay-card">
+            <span class="operating-label">Operating in</span>
+            <div class="countries-count">40+</div>
+            <span class="countries-label">countries</span>
+            <p class="desc">Supporting companies worldwide with local expertise.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -408,31 +454,36 @@ async function handleSubmit(e: Event) {
 
 <style scoped>
 .contact-page-container {
-  background-color: #faf9f6;
+  background-color: #FAF8F5;
   font-family: var(--sans);
   color: var(--ink);
-  overflow: hidden;
 }
 
 /* ============= HERO & FORM ============= */
 .contact-hero-section {
   position: relative;
-  padding: 160px 0 100px;
-  background-color: #fcfbf8;
-  border-bottom: 1px solid var(--border);
+  padding: 40px 0 20px;
+  background-color: #FAF8F5;
   overflow: hidden;
 }
+
 .hero-bg-map {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%);
   width: 100%;
+  max-width: 1100px;
   height: 100%;
-  background-size: cover;
+  background-image: url('/case-study/contact-bg.png');
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.15;
+  opacity: 0.85;
   pointer-events: none;
+  z-index: 1;
 }
+
 .hero-grid {
   position: relative;
   z-index: 2;
@@ -441,9 +492,10 @@ async function handleSubmit(e: Event) {
   gap: 48px;
   align-items: center;
 }
+
 @media (min-width: 1024px) {
   .hero-grid {
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1.15fr 0.85fr;
     gap: 80px;
   }
 }
@@ -451,6 +503,7 @@ async function handleSubmit(e: Event) {
 .hero-left-content {
   max-width: 580px;
 }
+
 .tag-eyebrow {
   display: inline-block;
   font-size: 11px;
@@ -460,18 +513,21 @@ async function handleSubmit(e: Event) {
   margin-bottom: 16px;
   text-transform: uppercase;
 }
+
 .hero-left-content h1 {
   font-family: var(--serif);
-  font-size: clamp(34px, 4.5vw, 54px);
-  line-height: 1.12;
+  font-size: clamp(38px, 4.8vw, 56px);
+  line-height: 1.1;
   font-weight: 400;
   letter-spacing: -0.015em;
   margin-bottom: 24px;
 }
+
 .highlight-gold {
   color: var(--accent);
   font-style: italic;
 }
+
 .hero-desc {
   font-size: 16px;
   line-height: 1.6;
@@ -482,54 +538,64 @@ async function handleSubmit(e: Event) {
 .contact-info-cards {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
+
 .info-card {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  background-color: #ffffff;
-  border: 1px solid var(--border);
+  gap: 20px;
+  padding: 18px 24px;
   border-radius: 12px;
   text-decoration: none;
   color: inherit;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.01);
 }
+
 .info-card:not(.no-hover):hover {
   transform: translateY(-2px);
   border-color: var(--accent);
   box-shadow: 0 10px 24px -10px rgba(176, 149, 89, 0.15);
 }
+
 .info-card .icon-circle {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background-color: var(--accent-soft);
+  border: 1px solid var(--border);
+  background-color: #FCFAF6;
   color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: border-color 0.2s;
 }
+
+.info-card:hover .icon-circle {
+  border-color: var(--accent);
+}
+
 .info-card .icon-circle svg {
   width: 18px;
   height: 18px;
 }
+
 .info-card-text {
   display: flex;
   flex-direction: column;
 }
+
 .info-card-text .label {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   color: var(--ink-muted);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
+
 .info-card-text .value {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--ink);
 }
@@ -538,19 +604,22 @@ async function handleSubmit(e: Event) {
 .hero-right-form {
   min-width: 0;
 }
-.floating-contact-form {
-  background-color: #ffffff;
+
+.floating-contact-form-card {
+  background-color: #ffffff7a;
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 36px;
-  box-shadow: 0 15px 45px -10px rgba(20, 51, 105, 0.04);
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(20, 51, 105, 0.03);
 }
-.floating-contact-form h2 {
+
+.floating-contact-form-card h2 {
   font-family: var(--serif);
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 400;
   color: var(--ink);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
 }
 
 .form-grid-row {
@@ -558,29 +627,33 @@ async function handleSubmit(e: Event) {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+
 .form-field {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
+
 .form-field input,
 .form-field select,
 .form-field textarea {
   width: 100%;
-  padding: 13px 16px;
+  padding: 14px 18px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background-color: #faf9f6;
+  background-color: #ffffff85;
   font-family: var(--sans);
   font-size: 14px;
   color: var(--ink);
   outline: none;
-  transition: all 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
+
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
-  background-color: #ffffff;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(176, 149, 89, 0.1);
 }
+
 .form-field textarea {
   resize: vertical;
 }
@@ -589,19 +662,24 @@ async function handleSubmit(e: Event) {
 .select-field {
   position: relative;
 }
+
 .select-field select {
   appearance: none;
   -webkit-appearance: none;
-  padding-right: 40px;
+  padding-right: 44px;
 }
+
 .select-arrow {
   position: absolute;
-  right: 16px;
+  right: 18px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: var(--ink-muted);
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
 }
+
 .select-arrow svg {
   width: 16px;
   height: 16px;
@@ -612,8 +690,9 @@ async function handleSubmit(e: Event) {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
+
 .custom-checkbox {
   position: relative;
   display: inline-block;
@@ -622,32 +701,36 @@ async function handleSubmit(e: Event) {
   flex-shrink: 0;
   margin-top: 2px;
 }
+
 .custom-checkbox input {
   opacity: 0;
   width: 0;
   height: 0;
 }
+
 .checkmark {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #faf9f6;
+  background-color: #ffffff;
   border: 1px solid var(--border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .custom-checkbox input:checked + .checkmark {
   background-color: var(--accent);
   border-color: var(--accent);
 }
+
 .checkmark:after {
   content: "";
   position: absolute;
   display: none;
-  left: 6px;
+  left: 5px;
   top: 2px;
   width: 4px;
   height: 8px;
@@ -655,14 +738,17 @@ async function handleSubmit(e: Event) {
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+
 .custom-checkbox input:checked + .checkmark:after {
   display: block;
 }
+
 .consent-text {
   font-size: 13px;
   color: var(--ink-soft);
-  line-height: 1.4;
+  line-height: 1.45;
 }
+
 .consent-text a {
   color: var(--accent);
   text-decoration: underline;
@@ -670,10 +756,32 @@ async function handleSubmit(e: Event) {
 
 .submit-btn {
   width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 14px 24px;
+  gap: 8px;
+  padding: 16px 24px;
+  background-color: #b09559;
+  color: #ffffff;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-weight: 600;
   font-size: 15px;
+  transition: background-color 0.2s, transform 0.2s;
 }
+
+.submit-btn:hover {
+  background-color: #9a8047;
+}
+
+.submit-btn .arrow {
+  transition: transform 0.2s;
+}
+
+.submit-btn:hover .arrow {
+  transform: translateX(4px);
+}
+
 .error-msg-banner {
   color: #b54234;
   font-size: 13px;
@@ -686,21 +794,24 @@ async function handleSubmit(e: Event) {
   align-items: center;
   gap: 8px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 24px;
   color: var(--ink-muted);
 }
+
 .form-footer-lock svg {
   width: 14px;
   height: 14px;
 }
+
 .form-footer-lock span {
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .form-success-card {
   text-align: center;
-  padding: 32px 16px;
+  padding: 40px 16px;
 }
+
 .success-icon-circle {
   width: 48px;
   height: 48px;
@@ -711,15 +822,17 @@ async function handleSubmit(e: Event) {
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  margin: 0 auto 16px;
+  margin: 0 auto 20px;
 }
+
 .form-success-card strong {
   display: block;
   font-family: var(--serif);
-  font-size: 22px;
+  font-size: 24px;
   color: var(--ink);
   margin-bottom: 8px;
 }
+
 .form-success-card p {
   font-size: 14px;
   color: var(--ink-soft);
@@ -728,86 +841,161 @@ async function handleSubmit(e: Event) {
 
 /* ============= WHY JACKSON & FRANK ============= */
 .why-us-section {
-  padding: 100px 0;
-  background-color: #faf9f6;
+  padding: 80px 0;
+  background-color: #faf8f533;
+  border-top: 1px solid var(--border);
 }
+
+.why-us-card-container {
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 60px 48px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.01);
+}
+
 .why-us-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 48px;
+  gap: 40px;
 }
+
+.grid-divider {
+  display: none;
+}
+
 @media (min-width: 1024px) {
   .why-us-grid {
-    grid-template-columns: 1fr 1.3fr;
-    gap: 80px;
+    grid-template-columns: 1.25fr 0.95fr 0.95fr 0.95fr;
+    row-gap: 48px;
+    column-gap: 0;
+  }
+
+  .why-us-left-col {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    padding-right: 48px;
+  }
+
+  .feature-item.col-2 {
+    grid-column: 2;
+    padding-left: 48px;
+    padding-right: 24px;
+  }
+
+  .feature-item.col-3 {
+    grid-column: 3;
+    padding-left: 48px;
+    padding-right: 24px;
+  }
+
+  .feature-item.col-4 {
+    grid-column: 4;
+    padding-left: 48px;
+  }
+
+  .grid-divider {
+    display: block;
+    position: absolute;
+    top: 60px;
+    bottom: 60px;
+    width: 1px;
+    background-color: var(--border);
+  }
+
+  .divider-1 {
+    left: calc(48px + (100% - 96px) * 0.3048);
+  }
+
+  .divider-2 {
+    left: calc(48px + (100% - 96px) * 0.5365);
+  }
+
+  .divider-3 {
+    left: calc(48px + (100% - 96px) * 0.7682);
   }
 }
-.why-us-left {
-  max-width: 480px;
-}
-.why-us-left h2 {
+
+.why-us-left-col h2 {
   font-family: var(--serif);
-  font-size: clamp(30px, 3.8vw, 46px);
+  font-size: clamp(28px, 3.2vw, 36px);
   line-height: 1.15;
   font-weight: 400;
   margin-bottom: 20px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  color: var(--ink);
 }
-.why-us-left p {
-  font-size: 15px;
-  line-height: 1.65;
+
+.why-us-left-col p {
+  font-size: 14px;
+  line-height: 1.6;
   color: var(--ink-soft);
   margin-bottom: 32px;
 }
+
 .learn-more-btn {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1px solid var(--border);
+  background-color: #ffffff;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--accent);
+  transition: all 0.2s;
 }
 
-.why-us-cards-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-}
-@media (min-width: 640px) {
-  .why-us-cards-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-.why-us-card {
-  background-color: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 28px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.01);
-  transition: transform 0.25s;
-}
-.why-us-card:hover {
-  transform: translateY(-2px);
-}
-.card-icon-wrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.learn-more-btn:hover {
   background-color: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.learn-more-btn .arrow {
+  transition: transform 0.2s;
+}
+
+.learn-more-btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.feature-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(176, 149, 89, 0.2);
+  background: radial-gradient(circle, #FCFAF6 0%, #FAF8F5 100%);
   color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(176, 149, 89, 0.05);
 }
-.card-icon-wrap svg {
-  width: 20px;
-  height: 20px;
+
+.feature-icon-wrap svg {
+  width: 22px;
+  height: 22px;
 }
-.why-us-card h5 {
-  font-size: 15px;
+
+.feature-item h5 {
+  font-size: 14px;
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 8px;
 }
-.why-us-card p {
-  font-size: 13px;
+
+.feature-item p {
+  font-size: 12.5px;
   line-height: 1.5;
   color: var(--ink-soft);
   margin: 0;
@@ -815,155 +1003,290 @@ async function handleSubmit(e: Event) {
 
 /* ============= OUR OFFICES ============= */
 .offices-section {
-  padding: 100px 0;
-  background-color: #ffffff;
+  padding: 120px 0;
+  background-color: #FCFAF6;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
+
 .offices-header-row {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-bottom: 48px;
+  margin-bottom: 56px;
   justify-content: space-between;
   align-items: flex-start;
 }
+
 @media (min-width: 768px) {
   .offices-header-row {
     flex-direction: row;
     align-items: flex-end;
   }
 }
-.offices-header-row h2 {
-  font-family: var(--serif);
-  font-size: clamp(28px, 3.5vw, 42px);
-  line-height: 1.2;
-  font-weight: 400;
-  margin-top: 6px;
-  letter-spacing: -0.01em;
+
+.carousel-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background-color: #ffffff;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.offices-card-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+.carousel-arrow-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  box-shadow: 0 6px 16px rgba(176, 149, 89, 0.15);
+}
+
+.prev-btn {
+  left: -24px;
+}
+
+.next-btn {
+  right: -24px;
+}
+
+@media (max-width: 1280px) {
+  .prev-btn {
+    left: 0;
+  }
+  .next-btn {
+    right: 0;
+  }
+}
+
+.carousel-arrow-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.view-locations-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 1px solid var(--border);
+  background-color: #ffffff;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  transition: all 0.2s;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.view-locations-btn:hover {
+  background-color: var(--ink);
+  color: #ffffff;
+  border-color: var(--ink);
+}
+
+.view-locations-btn .arrow {
+  transition: transform 0.2s;
+}
+
+.view-locations-btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+.carousel-track-wrapper {
+  width: 100%;
+  overflow: visible;
+  position: relative;
+}
+
+.offices-carousel-track {
+  display: flex;
   gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 4px 20px;
+  margin: -10px -4px -20px;
 }
-@media (min-width: 640px) {
-  .offices-card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.offices-carousel-track::-webkit-scrollbar {
+  display: none;
 }
-@media (min-width: 1024px) {
-  .offices-card-grid {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
-  }
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.offices-carousel-track {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
+
 .office-location-card {
-  background-color: #faf9f6;
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .office-location-card {
+    flex: 0 0 300px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .office-location-card {
+    flex: 0 0 310px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .office-location-card {
+    flex: 0 0 330px;
+  }
+}
+
+.office-location-card {
+  background-color: #ffffff;
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+  transition: transform 0.25s, box-shadow 0.25s;
 }
+
+.office-location-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(20, 51, 105, 0.05);
+}
+
+.office-img-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 140px;
+}
+
 .office-img {
   width: 100%;
-  height: 110px;
+  height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.5s ease;
 }
+
+.office-location-card:hover .office-img {
+  transform: scale(1.05);
+}
+
 .card-inner-body {
-  padding: 16px;
+  padding: 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
+
 .country-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
+
 .country-row .flag {
   font-size: 16px;
 }
+
 .country-row .country-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--ink);
 }
+
 .badge-hq {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.04em;
   background-color: var(--accent-soft);
   color: var(--accent);
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: 4px;
   text-transform: uppercase;
   margin-left: auto;
 }
+
 .office-location-card .address {
-  font-size: 12px;
-  line-height: 1.55;
+  font-size: 12.5px;
+  line-height: 1.6;
   color: var(--ink-soft);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
+
 .office-location-card .phone-link {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--accent);
   text-decoration: none;
   margin-top: auto;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
+
 .office-location-card .phone-link:hover {
   text-decoration: underline;
 }
+
 .loc-icon {
-  width: 12px;
-  height: 12px;
-  color: var(--ink-muted);
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
   flex-shrink: 0;
   margin-top: 2px;
 }
 
 /* ============= MAP OVERLAY STRIP ============= */
 .map-overlay-section {
-  background-color: #fcfbf8;
+  background-color: #FAF8F5;
   padding: 80px 0;
   position: relative;
   overflow: hidden;
 }
+
 .map-strip-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-  align-items: center;
   position: relative;
+  width: 100%;
 }
-@media (min-width: 900px) {
-  .map-strip-container {
-    grid-template-columns: 1.3fr 0.7fr;
-  }
-}
+
 .dotted-map-backdrop {
-  height: 300px;
+  height: 400px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background-color: #FCFAF6;
+  background-image: url('/case-study/contact-bg.png');
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: left 50px center;
   position: relative;
-  opacity: 0.75;
 }
-@media (min-width: 900px) {
+
+@media (max-width: 900px) {
   .dotted-map-backdrop {
-    height: 340px;
+    height: auto;
+    min-height: 350px;
+    background-position: center;
   }
 }
 
@@ -979,6 +1302,7 @@ async function handleSubmit(e: Event) {
   transform: translate(-50%, -50%);
   animation: pulse 2s infinite;
 }
+
 @keyframes pulse {
   0% { box-shadow: 0 0 0 0 rgba(176, 149, 89, 0.7); }
   70% { box-shadow: 0 0 0 8px rgba(176, 149, 89, 0); }
@@ -989,17 +1313,26 @@ async function handleSubmit(e: Event) {
   background-color: #ffffff;
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 36px 40px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(20, 51, 105, 0.04);
   text-align: center;
-  max-width: 320px;
-  margin: 0 auto;
+  width: 320px;
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
 }
-@media (min-width: 900px) {
+
+@media (max-width: 900px) {
   .stats-overlay-card {
-    margin: 0 0 0 auto;
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    margin: 40px auto 20px;
   }
 }
+
 .operating-label {
   font-size: 11px;
   font-weight: 700;
@@ -1007,14 +1340,16 @@ async function handleSubmit(e: Event) {
   text-transform: uppercase;
   color: var(--ink-muted);
 }
+
 .countries-count {
   font-family: var(--serif);
   font-size: 72px;
   line-height: 1;
   font-weight: 400;
   color: var(--accent);
-  margin: 8px 0;
+  margin: 12px 0;
 }
+
 .countries-label {
   font-size: 18px;
   font-weight: 700;
@@ -1024,9 +1359,10 @@ async function handleSubmit(e: Event) {
   display: block;
   margin-bottom: 16px;
 }
+
 .stats-overlay-card .desc {
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--ink-soft);
   margin: 0;
 }
