@@ -488,7 +488,7 @@ function slide(direction: 'next' | 'prev') {
 
 @media (min-width: 1024px) {
   .contact-hero-section {
-    padding: 160px 0 100px;
+    padding: 40px 0 100px;
   }
   .contact-hero-section::before {
     display: none;
@@ -1337,7 +1337,6 @@ function slide(direction: 'next' | 'prev') {
 
 .dotted-map-backdrop {
   height: 220px;
-  border: 1px solid var(--border);
   border-radius: 16px;
   background-color: #FCFAF6;
   background-image: url('/case-study/contact-bg.png');
