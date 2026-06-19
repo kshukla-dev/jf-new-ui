@@ -2,7 +2,6 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import contact from '@/data/contact.json'
-import { submitContactForm } from '@/services/contact'
 
 const route = useRoute()
 
@@ -45,26 +44,22 @@ async function handleSubmit(e: Event) {
     return
   }
 
-  status.value = 'sending'
-  const result = await submitContactForm({
-    first_name: form.firstName,
-    last_name: form.lastName,
-    work_email: form.email,
-    phone_number: form.phone,
-    company_name: form.company,
-    help_reason: form.reason,
-    message: form.message,
+  // Log form entry to the console instead of using API
+  console.log('Contact Form Submitted:', JSON.parse(JSON.stringify(form)))
+
+  // Reset form fields
+  Object.assign(form, {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    company: '',
+    reason: '',
+    message: '',
+    consent: false,
   })
 
-  if (result.success) {
-    status.value = 'success'
-    Object.assign(form, {
-      firstName: '', lastName: '', email: '', phone: '', company: '', reason: '', message: '', consent: false,
-    })
-  } else {
-    status.value = 'error'
-    errorMessage.value = result.error ?? 'Failed to send message. Please try again.'
-  }
+  alert('Form submitted successfully! Check the console for the logged data.')
 }
 
 const carouselTrack = ref<HTMLElement | null>(null)
