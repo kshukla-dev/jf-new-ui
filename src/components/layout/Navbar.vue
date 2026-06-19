@@ -8,9 +8,26 @@ type DropdownKey = 'services' | 'about' | 'insights' | null
 
 const openDropdown = ref<DropdownKey>(null)
 const mobileOpen = ref(false)
+let closeTimer: ReturnType<typeof setTimeout> | null = null
 
 function toggle(key: Exclude<DropdownKey, null>) {
   openDropdown.value = openDropdown.value === key ? null : key
+}
+
+function openHover(key: Exclude<DropdownKey, null>) {
+  if (closeTimer) { clearTimeout(closeTimer); closeTimer = null }
+  openDropdown.value = key
+}
+
+function scheduleClose() {
+  closeTimer = setTimeout(() => {
+    openDropdown.value = null
+    closeTimer = null
+  }, 120)
+}
+
+function cancelClose() {
+  if (closeTimer) { clearTimeout(closeTimer); closeTimer = null }
 }
 
 function close() {
@@ -20,7 +37,7 @@ function close() {
 // Close on outside click
 function handleOutside(e: MouseEvent) {
   const t = e.target as HTMLElement
-  if (!t.closest('.nav-dropdown') && !t.closest('.nav-trigger')) close()
+  if (!t.closest('.nav-dropdown') && !t.closest('.nav-trigger') && !t.closest('.dropdown-wrap')) close()
 }
 
 // Close on Escape
@@ -51,7 +68,7 @@ const previewMap = ref<Record<Exclude<DropdownKey, null>, Preview>>({
   services: {
     eyebrow: 'Featured service',
     title: 'Employer of record',
-    blurb: 'Hire across 160+ countries — without setting up a local entity.',
+    blurb: 'Hire across 160+ countries - without setting up a local entity.',
     image: '/services/service-page/eor.webp',
     href: '/employer-of-record',
     cta: 'Explore EOR',
@@ -59,7 +76,7 @@ const previewMap = ref<Record<Exclude<DropdownKey, null>, Preview>>({
   about: {
     eyebrow: 'Our story',
     title: '50+ years, 160+ countries',
-    blurb: 'From the Netherlands to every continent — the team behind 700+ global hires.',
+    blurb: 'From the Netherlands to every continent - the team behind 700+ global hires.',
     image: '/services/service-page/advantags.webp',
     href: '/about-us',
     cta: 'Meet the team',
@@ -100,7 +117,7 @@ const currentPreview = computed(() =>
     <div class="container nav-inner">
       <!-- Logo (left) -->
       <RouterLink to="/" class="logo" @click="close">
-        Jackson &amp; Frank
+        JACKSON &amp; FRANK
       </RouterLink>
 
       <!-- Center nav -->
@@ -109,6 +126,8 @@ const currentPreview = computed(() =>
           class="nav-trigger"
           :class="{ active: openDropdown === 'services' }"
           @click="toggle('services')"
+          @mouseenter="openHover('services')"
+          @mouseleave="scheduleClose"
           aria-haspopup="true"
           :aria-expanded="openDropdown === 'services'"
         >
@@ -119,6 +138,8 @@ const currentPreview = computed(() =>
           class="nav-trigger"
           :class="{ active: openDropdown === 'insights' }"
           @click="toggle('insights')"
+          @mouseenter="openHover('insights')"
+          @mouseleave="scheduleClose"
           aria-haspopup="true"
           :aria-expanded="openDropdown === 'insights'"
         >
@@ -129,6 +150,8 @@ const currentPreview = computed(() =>
           class="nav-trigger"
           :class="{ active: openDropdown === 'about' }"
           @click="toggle('about')"
+          @mouseenter="openHover('about')"
+          @mouseleave="scheduleClose"
           aria-haspopup="true"
           :aria-expanded="openDropdown === 'about'"
         >
@@ -153,7 +176,7 @@ const currentPreview = computed(() =>
 
     <!-- Full-width dropdown panel (positioned below the nav, spans the container) -->
     <Transition name="dropdown">
-      <div v-if="openDropdown" class="dropdown-wrap">
+      <div v-if="openDropdown" class="dropdown-wrap" @mouseenter="cancelClose" @mouseleave="scheduleClose">
         <div class="container">
           <div class="nav-dropdown">
             <!-- Left: items grid -->

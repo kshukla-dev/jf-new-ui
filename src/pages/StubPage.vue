@@ -11,7 +11,7 @@ const cluster = computed(() => (route.meta?.cluster as string | undefined) ?? nu
 <template>
   <section class="stub container">
     <span class="tag">{{ cluster ?? 'Page' }}</span>
-    <h1 class="section-title">{{ title }} <em>— coming soon</em></h1>
+    <h1 class="section-title">{{ title }} <em>- coming soon</em></h1>
     <p class="lede">
       This page is part of the full Jackson &amp; Frank site clone and will be ported next.
       The data already lives in <code>src/data/</code>; only the layout still needs to be built.

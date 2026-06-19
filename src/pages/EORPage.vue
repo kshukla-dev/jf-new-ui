@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     question: 'How quickly can we start hiring with EOR?',
-    answer: 'Most clients onboard first hires in about 48–72 hours after scope is clear — far faster than incorporating and standing up payroll locally.'
+    answer: 'Most clients onboard first hires in about 48–72 hours after scope is clear - far faster than incorporating and standing up payroll locally.'
   },
   {
     question: 'Do we need a local entity for Employer of Record?',
@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     question: 'Who manages day-to-day work?',
-    answer: 'You do. The EOR handles legal employment, payroll, and employment compliance execution — not how people do their jobs.'
+    answer: 'You do. The EOR handles legal employment, payroll, and employment compliance execution - not how people do their jobs.'
   },
   {
     question: 'What compliance does the EOR cover?',
@@ -458,7 +458,7 @@ const topCountries = [
         <div class="eor-countries-header">
           <span class="eor-eyebrow">Global coverage</span>
           <h2>Hire in <em>160+ Countries</em></h2>
-          <p class="eor-countries-sub">From Amsterdam to Singapore, New York to Mumbai — if the talent is there, we'll get them hired compliantly.</p>
+          <p class="eor-countries-sub">From Amsterdam to Singapore, New York to Mumbai - if the talent is there, we'll get them hired compliantly.</p>
         </div>
         <div class="eor-countries-grid">
           <div class="ecg-item" v-for="country in topCountries" :key="country.code">

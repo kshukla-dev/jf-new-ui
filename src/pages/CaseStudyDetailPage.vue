@@ -15,7 +15,7 @@ const others = computed(() =>
 )
 
 watch(study, (s) => {
-  if (s) document.title = `${s.title} — Jackson & Frank`
+  if (s) document.title = `${s.title} - Jackson & Frank`
 }, { immediate: true })
 watch(slug, () => window.scrollTo({ top: 0, behavior: 'smooth' }))
 </script>

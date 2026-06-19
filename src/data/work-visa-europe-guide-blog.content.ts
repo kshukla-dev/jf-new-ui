@@ -1,5 +1,5 @@
 /**
- * HTML body for manual blog: Work visa in Europe — complete guide 2025.
+ * HTML body for manual blog: Work visa in Europe - complete guide 2025.
  */
 export const workVisaEuropeGuide2026BlogHtml = `
 <div class="info">

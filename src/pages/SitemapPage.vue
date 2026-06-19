@@ -34,7 +34,7 @@ const groups = [
     ],
   },
   {
-    title: 'Countries — EOR',
+    title: 'Countries - EOR',
     links: [
       { label: 'The Netherlands', to: '/netherlands' },
       { label: 'Germany', to: '/germany' },
@@ -52,7 +52,7 @@ const groups = [
     ],
   },
   {
-    title: 'Countries — Contractor',
+    title: 'Countries - Contractor',
     links: [
       { label: 'The Netherlands', to: '/netherlands-contractor' },
       { label: 'Germany', to: '/germany-contractor' },

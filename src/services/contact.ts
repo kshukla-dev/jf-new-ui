@@ -1,4 +1,4 @@
-// Contact form submission — posts to the live jacksonandfrank.com CMS API.
+// Contact form submission - posts to the live jacksonandfrank.com CMS API.
 // Mirrors the payload shape used by jf_website_2.0 (snake_case fields).
 
 const API_BASE =
@@ -40,7 +40,7 @@ export async function submitContactForm(
   }
 }
 
-// Newsletter unsubscribe — used by /unsubscribe page.
+// Newsletter unsubscribe - used by /unsubscribe page.
 export async function unsubscribeNewsletter(email: string): Promise<ContactSubmitResult> {
   try {
     const res = await fetch(`${API_BASE}/newsletter/unsubscribe`, {

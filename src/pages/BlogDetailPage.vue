@@ -148,7 +148,7 @@ async function loadBlog(currentSlug: string) {
   blog.value = post
 
   // Update document title for SEO
-  document.title = `${post.meta_title || post.title} — Jackson & Frank`
+  document.title = `${post.meta_title || post.title} - Jackson & Frank`
 
   // Fetch related articles (up to 4)
   try {
@@ -191,7 +191,7 @@ watch(slug, (s) => {
 
   <!-- ============= NOT FOUND ============= -->
   <div v-else-if="notFound" class="container blog-detail-404">
-    <span class="tag">404 — Article not found</span>
+    <span class="tag">404 - Article not found</span>
     <h1 class="section-title">We couldn't find that <em>article</em></h1>
     <p>The link may be outdated or the post may have moved.</p>
     <RouterLink to="/blog" class="btn-primary">

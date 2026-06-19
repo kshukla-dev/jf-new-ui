@@ -19,7 +19,7 @@ function load() {
   if (config.value) {
     data.value = loadCountryData(config.value.dataKey)
     if (data.value) {
-      document.title = `${data.value.metadata.title} — Jackson & Frank`
+      document.title = `${data.value.metadata.title} - Jackson & Frank`
     }
   } else {
     data.value = null
@@ -111,7 +111,7 @@ const stats = [
         </div>
       </div>
       <div class="service-hero-visual">
-        <img :src="config.image" :alt="`${config.name} — Jackson & Frank`" />
+        <img :src="config.image" :alt="`${config.name} - Jackson & Frank`" />
         <div class="service-hero-badge">
           <strong>{{ isEor ? '2–3 day onboarding' : '24h payouts' }}</strong>
           <span>{{ isEor ? `Compliant hiring in ${config.name}` : `Contractor payments in ${config.name}` }}</span>
@@ -142,7 +142,7 @@ const stats = [
         <div class="definition-text">
           <p v-if="isEor">
             Jackson &amp; Frank acts as your legal employer in {{ config.name }}, handling
-            employment contracts, payroll, taxes, and statutory benefits — so you can hire
+            employment contracts, payroll, taxes, and statutory benefits - so you can hire
             without opening a local entity. Your team focuses on the work; we handle local
             compliance.
           </p>

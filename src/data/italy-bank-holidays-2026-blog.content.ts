@@ -24,11 +24,11 @@ export const italyBankHolidays2026BlogHtml = `
     <tr><td>Country</td><td><strong>Italy</strong></td></tr>
     <tr><td>Total National Holidays</td><td><strong>12 festività nazionali</strong></td></tr>
     <tr><td>Regional Holidays</td><td><strong>1 patron saint day per municipality</strong> (varies by location)</td></tr>
-    <tr><td>Paid Leave Entitlement</td><td><strong>Yes — guaranteed by law</strong></td></tr>
+    <tr><td>Paid Leave Entitlement</td><td><strong>Yes - guaranteed by law</strong></td></tr>
     <tr><td>Weekend Overlap in 2026</td><td><strong>4 holidays</strong> fall on Saturday or Sunday (No substitute day)</td></tr>
     <tr><td>Legal Framework</td><td>Article 2109 Civil Code + Law 260/1949</td></tr>
     <tr><td>Premium for Working</td><td><strong>30-60% additional pay</strong> (per CCNL agreement)</td></tr>
-    <tr><td>Most Important Period</td><td><strong>Ferragosto</strong> (August 15) — peak summer shutdown</td></tr>
+    <tr><td>Most Important Period</td><td><strong>Ferragosto</strong> (August 15) - peak summer shutdown</td></tr>
   </tbody>
 </table>
 
@@ -56,7 +56,7 @@ export const italyBankHolidays2026BlogHtml = `
     <tr><td>25 Apr</td><td>Saturday</td><td>Liberation Day</td><td><em>Festa della Liberazione</em></td><td>National</td></tr>
     <tr><td>1 May</td><td>Friday</td><td>Labour Day</td><td><em>Festa del Lavoro</em></td><td>National</td></tr>
     <tr><td>2 Jun</td><td>Saturday</td><td>Republic Day</td><td><em>Festa della Repubblica</em></td><td>National</td></tr>
-    <tr><td>15 Aug</td><td>Saturday</td><td>Assumption of Mary</td><td><em>Ferragosto</em></td><td>National — Major</td></tr>
+    <tr><td>15 Aug</td><td>Saturday</td><td>Assumption of Mary</td><td><em>Ferragosto</em></td><td>National - Major</td></tr>
     <tr><td>1 Nov</td><td>Sunday</td><td>All Saints' Day</td><td><em>Ognissanti</em></td><td>National</td></tr>
     <tr><td>8 Dec</td><td>Tuesday</td><td>Immaculate Conception</td><td><em>Immacolata Concezione</em></td><td>National</td></tr>
     <tr><td>25 Dec</td><td>Friday</td><td>Christmas Day</td><td><em>Natale</em></td><td>National</td></tr>
@@ -195,10 +195,10 @@ export const italyBankHolidays2026BlogHtml = `
 <p>Italian workplace culture commonly features <strong>ponti</strong> (bridges), where employees take an extra day off to create a long weekend when a public holiday falls on a Thursday or Tuesday. While not legally mandated, many Italian businesses voluntarily grant or encourage these extended breaks.</p>
 <p><strong>Potential Bridge Opportunities in 2026:</strong></p>
 <ul>
-<li><strong>Easter Bridge:</strong> April 5-6 (Easter Sunday and Monday) — potential for a 4-day weekend with Friday April 3 as bridge day</li>
-<li><strong>Liberation Day:</strong> April 25 (Saturday) — already a weekend, no bridge needed</li>
-<li><strong>Labour Day:</strong> May 1 (Friday) — potential 3-day weekend</li>
-<li><strong>Immaculate Conception:</strong> December 8 (Tuesday) — Monday December 7 as potential bridge day (note: this is also Milan's patron saint day)</li>
+<li><strong>Easter Bridge:</strong> April 5-6 (Easter Sunday and Monday) - potential for a 4-day weekend with Friday April 3 as bridge day</li>
+<li><strong>Liberation Day:</strong> April 25 (Saturday) - already a weekend, no bridge needed</li>
+<li><strong>Labour Day:</strong> May 1 (Friday) - potential 3-day weekend</li>
+<li><strong>Immaculate Conception:</strong> December 8 (Tuesday) - Monday December 7 as potential bridge day (note: this is also Milan's patron saint day)</li>
 </ul>
 
 <p>Employers who choose to offer bridge days should communicate the policy clearly in advance, specify whether the days will be deducted from annual leave allowances or granted as additional discretionary leave, and document the arrangement in writing.</p>
@@ -214,9 +214,9 @@ export const italyBankHolidays2026BlogHtml = `
 <h2>Sources and Legal References</h2>
 <ul>
 <li><strong>Italian Civil Code, Article 2109:</strong> <a href="https://www.normattiva.it" target="_blank" rel="noopener noreferrer">www.normattiva.it</a></li>
-<li><strong>Law 260/1949 — Public Holidays Recognition:</strong> <a href="https://www.normattiva.it" target="_blank" rel="noopener noreferrer">www.normattiva.it</a></li>
+<li><strong>Law 260/1949 - Public Holidays Recognition:</strong> <a href="https://www.normattiva.it" target="_blank" rel="noopener noreferrer">www.normattiva.it</a></li>
 <li><strong>Ministry of Labour and Social Policies:</strong> <a href="https://www.lavoro.gov.it" target="_blank" rel="noopener noreferrer">www.lavoro.gov.it</a></li>
 <li><strong>National Labour Inspectorate (INL) Guidelines:</strong> <a href="https://www.ispettorato.gov.it" target="_blank" rel="noopener noreferrer">www.ispettorato.gov.it</a></li>
-<li><strong>CNEL — National Council for Economics and Labour:</strong> <a href="https://www.cnel.it" target="_blank" rel="noopener noreferrer">www.cnel.it</a></li>
+<li><strong>CNEL - National Council for Economics and Labour:</strong> <a href="https://www.cnel.it" target="_blank" rel="noopener noreferrer">www.cnel.it</a></li>
 </ul>
 `;

@@ -65,7 +65,7 @@ export const europeHiringRoutesDecisionMatrixHtml = `
     <tr><td>Control over payroll and benefits</td><td>Full</td><td>Limited</td><td>Full (with local obligations)</td></tr>
     <tr><td>Scalability</td><td>Strong once established</td><td>Efficient at low headcount</td><td>Variable</td></tr>
     <tr><td>Tax and PE sensitivity</td><td>Low risk if structured correctly</td><td>Generally low risk</td><td>Requires careful structuring</td></tr>
-    <tr><td>Best fit</td><td>Permanent teams, broader local operations</td><td>First hires, speed, <a href="/employer-of-record">market testing</a></td><td>Direct employer model, limited headcount, no entity yet — <a href="/blog/hire-global-talent-abroad-without-needing-a-local-company">direct employment without a local entity</a></td></tr>
+    <tr><td>Best fit</td><td>Permanent teams, broader local operations</td><td>First hires, speed, <a href="/employer-of-record">market testing</a></td><td>Direct employer model, limited headcount, no entity yet - <a href="/blog/hire-global-talent-abroad-without-needing-a-local-company">direct employment without a local entity</a></td></tr>
   </tbody>
 </table>
 </div>

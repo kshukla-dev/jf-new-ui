@@ -98,8 +98,7 @@ const getCountryImage = (name: string) => {
         </p>
         <button class="btn-primary-gold">
           Get the guide <span class="arrow">→</span>
-        </button>
-      </div>
+        </button>      </div>
     </div>
     
     <div class="container trust-banner-wrap">
@@ -266,7 +265,7 @@ const getCountryImage = (name: string) => {
       <div class="entities-title-block">
         <span class="tag-centered">OUR ENTITIES &amp; LOCATIONS</span>
         <h2 class="entities-main-title">A truly global presence.<br><span class="gold-text">Built for borderless teams.</span></h2>
-        <p class="entities-subtitle">Our own legal entities in 40+ countries allow you to hire, pay, and support talent compliantly—wherever your business grows.</p>
+        <p class="entities-subtitle">Our own legal entities in 40+ countries allow you to hire, pay, and support talent compliantly-wherever your business grows.</p>
       </div>
       <RouterLink to="/contact" class="btn-outline-gold">View all locations <span aria-hidden>→</span></RouterLink>
     </div>
@@ -355,20 +354,7 @@ const getCountryImage = (name: string) => {
             </div>
           </RouterLink>
           
-          <RouterLink to="/contact" class="fe-more">
-            <div class="fe-more-left">
-              <div class="fe-plus-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              </div>
-              <div class="fe-more-text">
-                <span>And more locations worldwide</span>
-                <span class="fe-more-sub">Expanding to serve you better</span>
-              </div>
-            </div>
-            <div class="fe-globe-watermark">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
-            </div>
-          </RouterLink>
+         
         </div>
       </div>
     </div>
@@ -377,7 +363,9 @@ const getCountryImage = (name: string) => {
     <div class="coming-soon-section">
       <h3 class="cs-title">COMING SOON LOCATIONS</h3>
       <div class="cs-grid">
-        <div v-for="c in comingSoon" :key="c.name" class="cs-card" :style="{ backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.95)), url(${getCountryImage(c.name)})` }">
+        <div v-for="c in comingSoon" :key="c.name" class="cs-card" :style="{ backgroundImage: `url(${getCountryImage(c.name)})` }">
+          <div class="cs-card-overlay"></div>
+          <div class="cs-card-content">
           <div class="cs-card-header">
             <div class="cs-flag-wrap">
               <img v-if="getFlagUrl(c.name)" :src="getFlagUrl(c.name)" :alt="c.name + ' flag'" class="cs-flag-img" />
@@ -386,20 +374,17 @@ const getCountryImage = (name: string) => {
             <span class="cs-country-name">{{ c.name }}</span>
           </div>
           <p class="cs-card-text">Full country guide and<br>local EOR details.</p>
+          <div class="cs-location-pill">
+           {{ c.address || c.name }}
+          </div>
           <button class="btn-notify">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             Notify me
           </button>
+          </div>
         </div>
         
-        <!-- Request a location card -->
-        <RouterLink to="/contact?reason=request_location" class="cs-card cs-card-request">
-          <div class="cs-request-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-          </div>
-          <span class="cs-request-title">Don't see your country?</span>
-          <span class="cs-request-link">Request a location <span aria-hidden>→</span></span>
-        </RouterLink>
+
       </div>
     </div>
   </section>
@@ -1017,6 +1002,10 @@ const getCountryImage = (name: string) => {
   background: #fdfaf5;
   transform: translateX(4px);
 }
+.fe-item:hover .fe-desc {
+  color: #b09559;
+  font-weight: 700;
+}
 .fe-item-left {
   display: flex;
   align-items: center;
@@ -1163,11 +1152,54 @@ const getCountryImage = (name: string) => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  cursor:pointer;
+}
+.cs-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.88), rgba(255,255,255,0.93));
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  border-radius: 12px;
+}
+.cs-card:hover .cs-card-overlay {
+  opacity: 0.35;
+}
+.cs-card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 0;
 }
 .cs-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(176, 149, 89, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  border-color: #b09559;
+}
+.cs-location-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  padding: 4px 10px;
+  width: fit-content;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  margin-bottom: 8px;
+  backdrop-filter: blur(4px);
+}
+.cs-card:hover .cs-location-pill {
+  opacity: 1;
+  transform: translateY(0);
 }
 .cs-card-header {
   display: flex;

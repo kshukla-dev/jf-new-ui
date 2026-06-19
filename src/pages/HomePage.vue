@@ -22,7 +22,7 @@ const topServices = (services.services ?? []).slice(0, 3).map((s) => ({
   image: serviceImageBySlug[s.id] ?? '/services/service-page/about.webp',
 }))
 
-// Testimonials — featured (with photo) + 2 secondary tiles
+// Testimonials - featured (with photo) + 2 secondary tiles
 const featuredTestimonial = testimonials.testimonials[0]
 const topTestimonials = testimonials.testimonials.slice(1, 3)
 
@@ -126,7 +126,7 @@ function toggleFaq(i: number) {
   openFaq.value = openFaq.value === i ? -1 : i
 }
 
-// Latest blogs (sorted by publish date desc) — featured + side list
+// Latest blogs (sorted by publish date desc) - featured + side list
 const sortedBlogs = computed(() =>
   [...blogs.posts].sort((a, b) => +new Date(b.publish_date) - +new Date(a.publish_date))
 )
@@ -147,7 +147,7 @@ const trustAvatars = [
 ]
 
 // Brand strip = JF country presence (replaces fake brand names).
-// Full list — rendered twice in the template for a seamless marquee loop.
+// Full list - rendered twice in the template for a seamless marquee loop.
 const countries = [
   'Netherlands', 'Germany', 'United Kingdom', 'France', 'Italy', 'Spain',
   'Belgium', 'Poland', 'Czech Republic', 'India', 'UAE', 'China', 'Hong Kong',
@@ -180,9 +180,13 @@ const globalDestinations = [
           <em>We handle the rest.</em>
         </h1>
         <p class="service-hero-lede">
-          Jackson &amp; Frank makes global hiring effortless. From onboarding to payroll and compliance — we take care of everything.
+          Jackson &amp; Frank makes global hiring effortless. From onboarding to payroll and compliance - we take care of everything.
         </p>
-
+        <div class="hero-pill-row">
+          <a href="/eor" class="hero-pill">EOR</a>
+          <a href="/compliance" class="hero-pill">Compliance</a>
+          <a href="/payroll" class="hero-pill">Payroll</a>
+        </div>
         <div class="cta-row">
           <RouterLink class="btn-primary" to="/contact">
             Get started today <span class="arrow">→</span>
@@ -228,15 +232,14 @@ const globalDestinations = [
 
   <!-- ============= INTRO BLURB ============= -->
   <section class="intro-blurb container">
-    <div></div>
     <p>
       Jackson &amp; Frank is a global HR partner trusted by 700+ companies. We handle the
-      <em>compliance</em>, contracts, and payroll so you can hire anywhere — without setting up a
+      <em>compliance</em>, contracts, and payroll so you can hire anywhere - without setting up a
       single local entity.
     </p>
   </section>
 
-  <!-- ============= BRAND STRIP (country presence — infinite marquee) ============= -->
+  <!-- ============= BRAND STRIP (country presence - infinite marquee) ============= -->
   <section class="brand-strip">
     <div class="brand-strip-inner">
       <span class="brand-label">Trusted in 160+ countries</span>
@@ -288,7 +291,7 @@ const globalDestinations = [
           <p class="ge-subtitle">We help you hire, pay, and manage talent in 160+ countries with local expertise and fully compliant solutions.</p>
           <div class="ge-cta">
             <RouterLink to="/contact" class="btn-primary ge-btn">Explore all countries <span class="arrow">→</span></RouterLink>
-            <a href="#" class="ge-btn-outline">How it works <span class="play-icon">▶</span></a>
+            <a href="/global-hiring-guide" class="ge-btn-outline">How it works <span class="play-icon">▶</span></a>
           </div>
         </div>
         
@@ -298,29 +301,6 @@ const globalDestinations = [
           <div class="ge-map-svg-wrap">
             <!-- Premium light world map image -->
             <img src="/global-map.jpg" alt="Global presence map" class="ge-world-img" />
-          
-            <!-- Stats bar at bottom of map -->
-            <div class="ge-map-stats">
-              <div class="ge-map-stat">
-                <strong>160+</strong>
-                <span>Countries</span>
-              </div>
-              <div class="ge-map-stat-divider"></div>
-              <div class="ge-map-stat">
-                <strong>700+</strong>
-                <span>Businesses</span>
-              </div>
-              <div class="ge-map-stat-divider"></div>
-              <div class="ge-map-stat">
-                <strong>48h</strong>
-                <span>Avg. onboarding</span>
-              </div>
-              <div class="ge-map-stat-divider"></div>
-              <div class="ge-map-stat">
-                <strong>98%</strong>
-                <span>Client retention</span>
-              </div>
-            </div>
 
             <div class="ge-float-card card-eu">
             <span class="ge-fc-img" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&q=80&w=100');"></span>
@@ -346,6 +326,29 @@ const globalDestinations = [
           
           </div>
 
+          <!-- Stats bar outside and slightly below the map -->
+          <div class="ge-map-stats">
+            <div class="ge-map-stat">
+              <strong>160+</strong>
+              <span>Countries</span>
+            </div>
+            <div class="ge-map-stat-divider"></div>
+            <div class="ge-map-stat">
+              <strong>700+</strong>
+              <span>Businesses</span>
+            </div>
+            <div class="ge-map-stat-divider"></div>
+            <div class="ge-map-stat">
+              <strong>48h</strong>
+              <span>Avg. onboarding</span>
+            </div>
+            <div class="ge-map-stat-divider"></div>
+            <div class="ge-map-stat">
+              <strong>98%</strong>
+              <span>Client retention</span>
+            </div>
+          </div>
+<!--
           <div class="ge-popular-dest">
             <h5>Popular destinations</h5>
             <ul>
@@ -355,6 +358,8 @@ const globalDestinations = [
             </ul>
             <RouterLink to="/contact" class="ge-link">+ 155 more</RouterLink>
           </div>
+
+          --->
         </div>
       </div>
       
@@ -405,18 +410,16 @@ const globalDestinations = [
           Why choose <br/> <span class="sa-highlight">Jackson &amp; Frank?</span>
         </h2>
         <p class="sa-body">
-          Global expansion doesn't have to be complex. We combine local expertise with proven technology to help you hire, pay, and manage talent anywhere in the world—compliantly and effortlessly.
+          Global expansion doesn't have to be complex. We combine local expertise with proven technology to help you hire, pay, and manage talent anywhere in the world-compliantly and effortlessly.
         </p>
         <div class="sa-cta-row">
           <RouterLink to="/advantages" class="btn-primary">
-            More about us <span class="arrow">→</span>
-          </RouterLink>
-          <a href="#" class="sa-btn-story">
-            Our story
+            More about us 
             <div class="sa-play-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             </div>
-          </a>
+          </RouterLink>
+        
         </div>
       </div>
       
@@ -487,7 +490,7 @@ const globalDestinations = [
         </div>
         <div class="sa-feat-content">
           <h4>Payroll Excellence</h4>
-          <p>Accurate, on-time payroll processing across countries—every time.</p>
+          <p>Accurate, on-time payroll processing across countries-every time.</p>
         </div>
       </div>
       <div class="sa-feat-card">
@@ -688,7 +691,7 @@ const globalDestinations = [
           <p>
             Behind every successful global expansion is a partner that turns complexity into
             clarity. Jackson &amp; Frank was built by two leaders who handle employment, payroll,
-            and compliance in 160+ countries — so you can focus on growth.
+            and compliance in 160+ countries - so you can focus on growth.
           </p>
           <RouterLink to="/contact" class="btn-primary">
             Talk to our team <span class="arrow">→</span>
@@ -1021,7 +1024,7 @@ const globalDestinations = [
 .home-hero .cta-row {
   display: flex;
   gap: 16px;
-  margin-top: 40px;
+  margin-top: 20px;
   flex-wrap: wrap;
 }
 
@@ -1162,17 +1165,16 @@ const globalDestinations = [
    ============================================================ */
 .intro-blurb {
   padding: 60px 0 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
 .intro-blurb p {
   font-family: var(--serif);
   font-size: 28px;
   line-height: 1.35;
   color: var(--ink);
-  grid-column: 2;
-  max-width: 540px;
+  max-width: 800px;
 }
 .intro-blurb p em {
   font-style: italic;
@@ -2023,8 +2025,32 @@ const globalDestinations = [
   opacity: 0.8;
 }
 
+.hero-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(163, 136, 82, 0.25);
+  color: #1f2937;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.hero-pill:hover {
+  background: #f7eed9;
+  border-color: #c8a56b;
+  color: #111827;
+}
 /* ============================================================
-   BLOG — featured + side list layout
+   BLOG - featured + side list layout
    ============================================================ */
 .blog-layout {
   display: grid;
@@ -2325,7 +2351,7 @@ const globalDestinations = [
   .structure-features {
     grid-template-columns: 1fr 1fr;
   }
-  /* Image sits below copy on mobile — cap height + keep cards on the edges */
+  /* Image sits below copy on mobile - cap height + keep cards on the edges */
   .structure-visual {
     aspect-ratio: 16 / 12;
     max-width: 520px;
@@ -2430,7 +2456,7 @@ const globalDestinations = [
 /* Stats Bar */
 .ge-map-stats {
   position: absolute;
-  bottom: 24px;
+  bottom: -32px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;

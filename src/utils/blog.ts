@@ -1,4 +1,4 @@
-// Blog content sanitizers — applied to CMS HTML at render time.
+// Blog content sanitizers - applied to CMS HTML at render time.
 // Ports the same logic from jf_website_2.0/lib/utils/blog.utils.ts so legacy
 // CMS posts render with correct alt text and up-to-date stats.
 
@@ -23,7 +23,7 @@ const S_OPEN = '(?:<strong\\b[^>]*>\\s*)?'
 const S_CLOSE = '(?:\\s*</strong>)?'
 
 const STAT_CORRECTIONS: ReadonlyArray<{ pattern: RegExp; replacement: string }> = [
-  // Footer sentence variants — "300+ companies, and 1,000+ employees across 15+ countries"
+  // Footer sentence variants - "300+ companies, and 1,000+ employees across 15+ countries"
   {
     pattern: new RegExp(
       `${S_OPEN}300\\s*\\+\\s*companies${S_CLOSE}\\s*,\\s*and\\s+${S_OPEN}1[,.]?000\\s*\\+\\s*employees${S_CLOSE}\\s+across\\s+${S_OPEN}15\\s*\\+\\s*countries${S_CLOSE}`,

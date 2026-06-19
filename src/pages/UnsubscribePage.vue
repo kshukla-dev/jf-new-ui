@@ -35,7 +35,7 @@ async function submit(e: Event) {
 
       <template v-if="status === 'ok'">
         <p class="unsub-msg ok">
-          You've been unsubscribed. We're sorry to see you go — you can resubscribe
+          You've been unsubscribed. We're sorry to see you go - you can resubscribe
           anytime from our blog.
         </p>
         <RouterLink to="/blog" class="btn-primary">Back to the blog <span class="arrow">→</span></RouterLink>

@@ -1,5 +1,5 @@
 /* ============================================================
-   jf-vue global styles — Halden Miller aesthetic, JF content.
+   jf-vue global styles - Halden Miller aesthetic, JF content.
    Cream/serif look from homepage.html, JF navy as the accent.
    ============================================================ */
 
@@ -160,8 +160,8 @@ p {
 }
 
 .btn-primary {
-  background: var(--ink);
-  color: var(--bg);
+     background: #b09559;
+    color: black;
 }
 
 .btn-primary:hover {

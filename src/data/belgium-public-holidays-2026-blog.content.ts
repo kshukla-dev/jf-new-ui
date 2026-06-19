@@ -24,10 +24,10 @@ export const belgiumPublicHolidays2026BlogHtml = `
     <tr><td>Statutory public holidays</td><td><strong>10</strong> (<em>jours fériés légaux</em> / <em>wettelijke feestdagen</em>)</td></tr>
     <tr><td>Year covered</td><td><strong>2026</strong></td></tr>
     <tr><td>Governed by</td><td>Belgian Public Holiday Act of 4 January 1974 + Royal Decree of 18 April 1974</td></tr>
-    <tr><td>Paid time off legally required?</td><td>Yes — Public Holiday Act 1974</td></tr>
+    <tr><td>Paid time off legally required?</td><td>Yes - Public Holiday Act 1974</td></tr>
     <tr><td>Holidays on non-working days in 2026</td><td><strong>2 substitute days required</strong> (Assumption 15 Aug + All Saints 1 Nov)</td></tr>
     <tr><td>Employer posting deadline</td><td><strong>15 December 2025</strong> (signed workplace notice)</td></tr>
-    <tr><td>Official government source</td><td><a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/public-holidays" target="_blank" rel="noopener noreferrer">employment.belgium.be — public holidays</a></td></tr>
+    <tr><td>Official government source</td><td><a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/public-holidays" target="_blank" rel="noopener noreferrer">employment.belgium.be - public holidays</a></td></tr>
   </tbody>
 </table>
 
@@ -101,7 +101,7 @@ export const belgiumPublicHolidays2026BlogHtml = `
 <h3>The substitute day cascade system</h3>
 <p>When a public holiday falls on a Sunday or on a day that is normally not worked in the company (usually Saturday), it must be replaced by a paid substitute day. The public holiday then loses its character as a public holiday for scheduling purposes, and the substitute day becomes the actual paid public holiday. The substitute day is determined through a strict cascade:</p>
 <ol>
-<li><strong>By the joint committee (<em>comité paritaire</em>)</strong> for the relevant sector — this takes absolute priority. The joint committee must notify the Minister of Labour before 1 October of the preceding year.</li>
+<li><strong>By the joint committee (<em>comité paritaire</em>)</strong> for the relevant sector - this takes absolute priority. The joint committee must notify the Minister of Labour before 1 October of the preceding year.</li>
 <li><strong>Failing this, by the works council</strong> (<em>conseil d&apos;entreprise</em> / <em>ondernemingsraad</em>) within the company.</li>
 <li><strong>Failing this, through agreement with the trade union delegation</strong> (<em>délégation syndicale</em>).</li>
 <li><strong>Failing this, through a collective agreement</strong> between the employer and all employees.</li>
@@ -136,17 +136,17 @@ export const belgiumPublicHolidays2026BlogHtml = `
 <div class="blog-cta-banner" role="region" aria-label="Contact Jackson and Frank about hiring in Belgium">
   <div class="blog-cta-banner__inner">
     <p class="blog-cta-banner__title">Hiring in Belgium?</p>
-    <p class="blog-cta-banner__text">Jackson &amp; Frank handles substitute days, <em>comité paritaire</em> compliance, the 15 December workplace posting requirement, the ONVA/RJV annual leave system, and Belgian payroll across borders — from EOR to fully outsourced HR and payroll across Belgium and the Benelux.</p>
+    <p class="blog-cta-banner__text">Jackson &amp; Frank handles substitute days, <em>comité paritaire</em> compliance, the 15 December workplace posting requirement, the ONVA/RJV annual leave system, and Belgian payroll across borders - from EOR to fully outsourced HR and payroll across Belgium and the Benelux.</p>
     <a class="blog-cta-banner__btn" href="/contact">Talk to our Belgium team</a>
   </div>
 </div>
 
 <h2>Sources</h2>
 <ul>
-<li><strong>Belgian Federal Public Service Employment — public holidays (posting obligations):</strong> <a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/public-holidays" target="_blank" rel="noopener noreferrer">employment.belgium.be</a></li>
-<li><strong>Belgian FPS Employment — regulation on public holidays (Public Holiday Act 1974 + Royal Decree 1974):</strong> <a href="https://employment.belgium.be/en/regulation-public-holidays" target="_blank" rel="noopener noreferrer">employment.belgium.be/en/regulation-public-holidays</a></li>
-<li><strong>Belgian FPS Employment — working time and rest periods:</strong> <a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/working-time-and" target="_blank" rel="noopener noreferrer">employment.belgium.be</a></li>
-<li><strong>Belgium.be — National Day and feast days of Communities and Regions:</strong> <a href="https://www.belgium.be/en/about_belgium/country/belgium_in_nutshell/symbols/national_holiday" target="_blank" rel="noopener noreferrer">belgium.be</a></li>
-<li><strong>Belgian FPS Employment — minimum paid annual holidays:</strong> <a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/minimum-paid" target="_blank" rel="noopener noreferrer">employment.belgium.be</a></li>
+<li><strong>Belgian Federal Public Service Employment - public holidays (posting obligations):</strong> <a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/public-holidays" target="_blank" rel="noopener noreferrer">employment.belgium.be</a></li>
+<li><strong>Belgian FPS Employment - regulation on public holidays (Public Holiday Act 1974 + Royal Decree 1974):</strong> <a href="https://employment.belgium.be/en/regulation-public-holidays" target="_blank" rel="noopener noreferrer">employment.belgium.be/en/regulation-public-holidays</a></li>
+<li><strong>Belgian FPS Employment - working time and rest periods:</strong> <a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/working-time-and" target="_blank" rel="noopener noreferrer">employment.belgium.be</a></li>
+<li><strong>Belgium.be - National Day and feast days of Communities and Regions:</strong> <a href="https://www.belgium.be/en/about_belgium/country/belgium_in_nutshell/symbols/national_holiday" target="_blank" rel="noopener noreferrer">belgium.be</a></li>
+<li><strong>Belgian FPS Employment - minimum paid annual holidays:</strong> <a href="https://employment.belgium.be/en/themes/international/posting/working-conditions-be-respected-case-posting-belgium/minimum-paid" target="_blank" rel="noopener noreferrer">employment.belgium.be</a></li>
 </ul>
 `;

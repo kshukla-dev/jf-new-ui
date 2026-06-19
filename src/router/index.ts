@@ -61,7 +61,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/sitemaps', name: 'sitemaps', component: SitemapPage, meta: { title: 'Sitemap' } },
   { path: '/unsubscribe', name: 'unsubscribe', component: UnsubscribePage, meta: { title: 'Unsubscribe' } },
 
-  // Country pages (EOR + Contractor variants) — all driven by CountryPage + country-config.ts
+  // Country pages (EOR + Contractor variants) - all driven by CountryPage + country-config.ts
   { path: '/belgium', name: 'belgium', component: CountryPage, meta: { title: 'Belgium EOR', cluster: 'Country' } },
   { path: '/belgium-contractor', name: 'belgium-contractor', component: CountryPage, meta: { title: 'Belgium Contractor', cluster: 'Country' } },
   { path: '/china', name: 'china', component: CountryPage, meta: { title: 'China EOR', cluster: 'Country' } },
@@ -104,5 +104,5 @@ export const router = createRouter({
 // Update document.title based on route meta
 router.afterEach((to) => {
   const title = (to.meta?.title as string | undefined) ?? 'Jackson & Frank'
-  document.title = `${title} — Jackson & Frank`
+  document.title = `${title} - Jackson & Frank`
 })
