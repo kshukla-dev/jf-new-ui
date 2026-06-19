@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { fetchAllBlogs, fetchCategories } from '@/services/blog'
 import { formatBlogDate } from '@/utils/blog'
 import type { BlogPost, Category } from '@/types/blog'
@@ -347,6 +348,9 @@ async function submitNewsletter(e: Event) {
         <RouterLink to="/resources" class="btn-primary">Browse Resources &rarr;</RouterLink>
       </div>
     </section>
+
+    <!-- ============= CTA ============= -->
+    <GlobalCTA title="Ready to scale your global workforce?" />
   </div>
 </template>
 

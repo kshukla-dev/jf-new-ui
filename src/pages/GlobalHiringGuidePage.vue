@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import ghg from '@/data/global-hiring.json'
+
+const activeEntity = ref(0)
 
 interface Country {
   name: string
@@ -84,6 +87,45 @@ const getCountryImage = (name: string) => {
     'Mexico': '/countries/eor-spain.webp'
   }
   return map[name] || '/countries/eor-spain.webp'
+}
+
+const getShortAddress = (name: string) => {
+  const map: Record<string, string> = {
+    'The Netherlands': 'Amsterdam, Netherlands',
+    'India': 'Bengaluru, Karnataka, India',
+    'Poland': 'Poznań, Poland',
+    'United Kingdom': 'London, United Kingdom',
+    'Germany': 'Berlin, Germany',
+    'Italy': 'Milan, Italy',
+    'Czech Republic': 'Prague, Czech Republic',
+    'France': 'Paris, France',
+    'Belgium': 'Sint-Agatha-Berchem, Belgium',
+    'Spain': 'Seville, Spain',
+    'UAE': 'Sharjah, UAE',
+    'Hong Kong': 'Tsim Sha Tsui, Hong Kong',
+    'China': 'Shanghai, China'
+  }
+  return map[name] || name
+}
+
+const getCountryDetails = (name: string) => {
+  const defaults = { type: 'Private Limited', currency: 'USD', time: '2-4 weeks' }
+  const map: Record<string, { type: string, currency: string, time: string }> = {
+    'The Netherlands': { type: 'B.V.', currency: 'EUR', time: '2-4 weeks' },
+    'India': { type: 'Private Limited', currency: 'INR', time: '3-6 weeks' },
+    'Poland': { type: 'Sp. z o.o.', currency: 'PLN', time: '2-4 weeks' },
+    'United Kingdom': { type: 'LTD', currency: 'GBP', time: '1-3 weeks' },
+    'Germany': { type: 'GmbH', currency: 'EUR', time: '3-5 weeks' },
+    'Italy': { type: 'S.r.l.', currency: 'EUR', time: '2-4 weeks' },
+    'Czech Republic': { type: 's.r.o.', currency: 'CZK', time: '2-4 weeks' },
+    'France': { type: 'SAS', currency: 'EUR', time: '2-4 weeks' },
+    'Belgium': { type: 'BV', currency: 'EUR', time: '2-4 weeks' },
+    'Spain': { type: 'S.L.', currency: 'EUR', time: '2-4 weeks' },
+    'UAE': { type: 'LLC', currency: 'AED', time: '2-4 weeks' },
+    'Hong Kong': { type: 'Limited', currency: 'HKD', time: '1-3 weeks' },
+    'China': { type: 'WFOE', currency: 'CNY', time: '4-8 weeks' }
+  }
+  return map[name] || defaults
 }
 </script>
 
@@ -330,26 +372,69 @@ const getCountryImage = (name: string) => {
         </div>
         <div class="fe-list">
           <RouterLink
-            v-for="c in available.slice(0, 5)"
+            v-for="(c, index) in available"
             :key="c.name"
             :to="c.href || '/contact'"
             class="fe-item"
+            :class="{ 'is-open': activeEntity === index }"
+            @mouseenter="activeEntity = index"
           >
-            <div class="fe-item-left">
-              <div class="fe-flag-wrap">
-                <img v-if="getFlagUrl(c.name)" :src="getFlagUrl(c.name)" :alt="c.name + ' flag'" class="fe-flag-img" />
-                <span v-else class="fe-flag-emoji">{{ getFlag(c.name) }}</span>
+            <div class="fe-item-header">
+              <div class="fe-item-left">
+                <div class="fe-flag-wrap">
+                  <img v-if="getFlagUrl(c.name)" :src="getFlagUrl(c.name)" :alt="c.name + ' flag'" class="fe-flag-img" />
+                  <span v-else class="fe-flag-emoji">{{ getFlag(c.name) }}</span>
+                </div>
+                <div class="fe-info">
+                  <span class="fe-name">{{ c.name }}</span>
+                  <span class="fe-desc">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b09559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px; vertical-align: -1px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    {{ getShortAddress(c.name) }}
+                  </span>
+                </div>
               </div>
-              <div class="fe-info">
-                <span class="fe-name">{{ c.name }}</span>
-                <span class="fe-desc">Entity &bull; {{ c.name === 'The Netherlands' ? 'Amsterdam' : (c.name === 'India' ? 'Bengaluru' : (c.name === 'United Kingdom' ? 'London' : (c.name === 'Germany' ? 'Berlin' : 'Singapore'))) }}</span>
+              
+              <div class="fe-item-right-wrap">
+                <span class="fe-active-badge">Active</span>
+                <div class="fe-arrow">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
               </div>
             </div>
-            
-            <div class="fe-item-right-wrap">
-              <span class="fe-active-badge">Active</span>
-              <div class="fe-arrow">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+
+            <div class="fe-item-details">
+              <div class="fe-details-stats">
+                <div class="fe-detail-box">
+                  <div class="fe-detail-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                  </div>
+                  <div class="fe-detail-text">
+                    <span class="fe-detail-label">Entity type</span>
+                    <span class="fe-detail-val">{{ getCountryDetails(c.name).type }}</span>
+                  </div>
+                </div>
+                <div class="fe-detail-box">
+                  <div class="fe-detail-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="18" x2="12" y2="22"></line><line x1="12" y1="2" x2="12" y2="6"></line></svg>
+                  </div>
+                  <div class="fe-detail-text">
+                    <span class="fe-detail-label">Currency</span>
+                    <span class="fe-detail-val">{{ getCountryDetails(c.name).currency }}</span>
+                  </div>
+                </div>
+                <div class="fe-detail-box">
+                  <div class="fe-detail-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  </div>
+                  <div class="fe-detail-text">
+                    <span class="fe-detail-label">Setup time</span>
+                    <span class="fe-detail-val">{{ getCountryDetails(c.name).time }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="fe-details-address">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b09559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fe-pin-icon-address"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <p>{{ c.address }}</p>
               </div>
             </div>
           </RouterLink>
@@ -414,19 +499,7 @@ const getCountryImage = (name: string) => {
     </div>
   </section>
 
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>Start hiring <em>globally</em> today</h2>
-      <p>Join 700+ companies hiring across 160+ countries with Jackson &amp; Frank.</p>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact?reason=general_inquiry" class="btn-primary">
-          Book a demo <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/cost-calculator" class="btn-secondary">Estimate cost</RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Start hiring globally today" />
 </template>
 
 <style scoped>
@@ -443,15 +516,14 @@ const getCountryImage = (name: string) => {
   margin-right: -50vw;
   width: 100vw;
   box-sizing: border-box;
-  padding: 40px 0 96px;
   display: block;
   background-color: #fdfbf7;
-  background-image: linear-gradient(90deg, #fdfbf7 0%, rgba(253, 251, 247, 0%) 35%, rgba(253, 251, 247, 0.4) 65%, rgba(253, 251, 247, 0) 100%), url(/case-study/global-hiring-guide.png);
-  background-size: 70% auto;
-  background-position: right 5% center;
+  background-image: linear-gradient(90deg, #fdfbf7 0%, rgb(253 251 247 / 0%) 30%, rgba(253, 251, 247, 0.6) 55%, rgba(253, 251, 247, 0) 100%), url(/case-study/global-hiring-guide.png);
+  background-size: 62% auto;
+  background-position: right 32px center;
   background-repeat: no-repeat;
   color: var(--ink);
-  min-height: 620px;
+  min-height: 700px;
   overflow: hidden;
 }
 
@@ -539,7 +611,7 @@ const getCountryImage = (name: string) => {
    ============================================================ */
 .trust-banner-wrap {
   
-  margin-top: 5rem;
+  margin-top: 12rem;
 }
 
 .trust-banner {
@@ -985,26 +1057,120 @@ const getCountryImage = (name: string) => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.fe-list::-webkit-scrollbar {
+  width: 6px;
+}
+.fe-list::-webkit-scrollbar-track {
+  background: rgba(176,149,89,0.1);
+  border-radius: 4px;
+}
+.fe-list::-webkit-scrollbar-thumb {
+  background: #ebdcb7;
+  border-radius: 4px;
+}
+.fe-list::-webkit-scrollbar-thumb:hover {
+  background: #c39a5c;
 }
 .fe-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
+  flex-direction: column;
+  padding: 16px;
   border: 1px solid #d3c6ba99;
-  border-radius: 10px;
+  border-radius: 12px;
   text-decoration: none;
   color: #111;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  background: #fff;
 }
-.fe-item:hover {
+.fe-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.fe-item:hover, .fe-item.is-open {
   border-color: #ebdcb7;
   background: #fdfaf5;
-  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(176,149,89,0.05);
 }
-.fe-item:hover .fe-desc {
+.fe-item:hover .fe-name, .fe-item.is-open .fe-name {
   color: #b09559;
-  font-weight: 700;
+}
+.fe-item-details {
+  display: none;
+}
+.fe-item.is-open .fe-item-details {
+  display: block;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ebdcb744;
+}
+.fe-arrow svg {
+  transition: transform 0.3s ease;
+}
+.fe-item.is-open .fe-arrow svg {
+  transform: rotate(-90deg);
+}
+
+.fe-details-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.fe-detail-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  border-right: 1px solid #ebdcb744;
+}
+.fe-detail-box:last-child {
+  border-right: none;
+}
+.fe-detail-icon {
+  color: #b09559;
+  background: #fcf9f2;
+  border: 1px solid #ebdcb788;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.fe-detail-text {
+  display: flex;
+  flex-direction: column;
+}
+.fe-detail-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+.fe-detail-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+.fe-details-address {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+.fe-details-address svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.fe-details-address p {
+  margin: 0;
 }
 .fe-item-left {
   display: flex;

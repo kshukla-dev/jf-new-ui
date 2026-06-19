@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import about from '@/data/about-us.json'
@@ -241,19 +242,7 @@ onUnmounted(() => {
   </section>
 
   <!-- ============= CTA ============= -->
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>Let's build your global team <em>together</em></h2>
-      <p>Join 700+ companies who trust Jackson &amp; Frank to make global hiring simple.</p>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact" class="btn-primary">
-          Start the conversation <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/advantages" class="btn-secondary">Why choose us</RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Let's build your team" />
 </template>
 
 <style scoped>

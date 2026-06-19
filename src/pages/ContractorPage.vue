@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import contractor from '@/data/contractor.json'
@@ -166,26 +167,7 @@ const trustAvatars = [
   </section>
 
   <!-- ============= WARM CTA ============= -->
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>{{ contractor.cta.title }}</h2>
-      <p>{{ contractor.cta.description }}</p>
-      <div class="cta-warm-features">
-        <span v-for="f in contractor.cta.features" :key="f" class="cta-feature">
-          <span class="cta-feature-mark" aria-hidden>✓</span> {{ f }}
-        </span>
-      </div>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact?reason=contractor_management" class="btn-primary">
-          {{ contractor.cta.primaryButtonText }} <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/employer-of-record" class="btn-secondary">
-          Compare with EOR
-        </RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Ready to simplify contractor management?" />
 </template>
 
 <style scoped>

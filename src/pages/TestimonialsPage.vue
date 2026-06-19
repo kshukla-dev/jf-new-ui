@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import tp from '@/data/testimonials-page.json'
@@ -265,19 +266,7 @@ const trustAvatars = [
     </div>
   </section>
 
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>Become our next <em>success story</em></h2>
-      <p>Join 700+ companies expanding globally with Jackson &amp; Frank.</p>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact" class="btn-primary">
-          Start the conversation <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/case-studies" class="btn-secondary">See case studies</RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Become our next success story" />
 </template>
 
 <style scoped>

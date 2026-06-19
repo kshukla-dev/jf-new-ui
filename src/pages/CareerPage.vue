@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import career from '@/data/career.json'
@@ -147,19 +148,7 @@ function getRoleTheme(dept: string) {
     </div>
   </section>
 
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Join us</span>
-      <h2>Don't see the right <em>role?</em></h2>
-      <p>We're always looking for talented people. Send us your details and we'll be in touch.</p>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact?reason=careers" class="btn-primary">
-          Get in touch <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/about-us" class="btn-secondary">About our culture</RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Don't see the right role?" />
 </template>
 
 <style scoped>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import payroll from '@/data/payroll.json'
@@ -205,24 +206,7 @@ const trustAvatars = [
   </section>
 
   <!-- ============= WARM CTA ============= -->
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>{{ payroll.cta.title }}</h2>
-      <p>{{ payroll.cta.description }}</p>
-      <div class="cta-warm-features">
-        <span v-for="f in payroll.cta.features" :key="f" class="cta-feature">
-          <span class="cta-feature-mark" aria-hidden>✓</span> {{ f }}
-        </span>
-      </div>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact?reason=payroll_services" class="btn-primary">
-          {{ payroll.cta.primaryButtonText }} <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/cost-calculator" class="btn-secondary">Estimate cost</RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Ready to streamline your global payroll?" />
 </template>
 
 <style scoped>

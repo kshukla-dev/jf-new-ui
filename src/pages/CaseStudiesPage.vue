@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import caseData from '@/data/case-studies.json'
@@ -305,19 +306,7 @@ const testiAvatars = ["/testimonials/priya.jpg", "/testimonials/James.jpg", "/te
     </div>
   </section>
 
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>Write your own <em>success story</em></h2>
-      <p>Tell us your target countries and timeline - we'll outline a tailored approach.</p>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact" class="btn-primary">
-          Get a custom proposal <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/testimonials" class="btn-secondary">Read testimonials</RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Write your own success story" />
 </template>
 
 <style scoped>

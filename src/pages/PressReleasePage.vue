@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import ev from '@/data/china-europe-event.json'
 
 const carouselRef = ref<HTMLElement | null>(null)
@@ -348,6 +349,8 @@ onMounted(() => {
 
   </section>
 
+  <!-- ============= CTA ============= -->
+  <GlobalCTA title="Ready to scale from China to Europe?" />
 
 </template>
 

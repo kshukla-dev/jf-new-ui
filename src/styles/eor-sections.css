@@ -353,8 +353,16 @@
   padding: 0;
   margin: 0;
   border-radius: 0;
-  display: inline;
+  display: inline-block;
   font-weight: 600;
+}
+
+.ect-good::first-letter {
+  color: #22c55e;
+}
+
+.ect-bad::first-letter {
+  color: #ef4444;
 }
 
 /* ===== AUDIENCE CARDS ===== */

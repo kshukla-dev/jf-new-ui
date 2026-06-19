@@ -878,8 +878,30 @@
 
 @media (max-width: 640px) {
   .cta-feature-grid-redesigned {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .cta-card-new {
+    padding: 16px 12px;
+  }
+
+  .cta-icon-circle {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 10px;
+  }
+
+  .cta-card-new h3 {
+    font-size: 20px;
+  }
+
+  .cta-card-new p {
+    font-size: 12px;
+  }
+
+  .cta-card-divider {
+    margin: 8px auto;
   }
 
   .cta-actions-redesigned {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GlobalCTA from '@/components/sections/GlobalCTA.vue'
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import advantages from '@/data/advantages.json'
@@ -160,19 +161,7 @@ const filteredFaqs = computed(() => {
     </div>
   </section>
 
-  <section class="cta-warm-wrap">
-    <div class="cta-warm">
-      <span class="cta-tag">Get started</span>
-      <h2>Ready to work with a <em>real partner?</em></h2>
-      <p>See how our advantages translate into smoother global expansion for your team.</p>
-      <div class="cta-warm-buttons">
-        <RouterLink to="/contact" class="btn-primary">
-          Talk to our team <span class="arrow">→</span>
-        </RouterLink>
-        <RouterLink to="/testimonials" class="btn-secondary">Read client stories</RouterLink>
-      </div>
-    </div>
-  </section>
+  <GlobalCTA title="Ready to work" />
 </template>
 
 <style scoped>
